@@ -23,5 +23,21 @@ namespace AsyJobTests.Jobs
             //Assert
             Assert.That(spyJob.Result?.RunCount, Is.EqualTo(1));
         }
+
+        [Test]
+        public void RunJob_Async_ShouldRunJobInNewThred()
+        {
+            //Arrange
+            var sut = new JobRunnerService();
+            var sleepJob = new SleepJob("SLEEP_1", new SleepInput(2000));
+            //Act
+            sut.RunJob(sleepJob);
+            //Assert
+                //Check if JobRunnerService blocked the current thread.
+                //In that case, the JobStatus would be Done.
+            Assert.That(sleepJob.Status, Is.Not.EqualTo(ProgressStatus.Done), "The JobRunnerService probably blocked");
+            JobTestUtils.WaitForJobCompletion(sleepJob);
+            Assert.That(sleepJob.Status, Is.EqualTo(ProgressStatus.Done));
+        }
     }
 }

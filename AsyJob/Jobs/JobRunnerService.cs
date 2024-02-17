@@ -9,7 +9,8 @@
     {
         public void RunJob(Job job)
         {
-            job.Run();
+            var jobThread = new Thread(() => job.Run());
+            jobThread.Start();
         }
     }
 }
