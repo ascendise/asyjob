@@ -3,9 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34511.84
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsyJob", "AsyJob\AsyJob.csproj", "{CE46996C-403C-4DA9-857F-C543BDEDBAF5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AsyJob", "AsyJob\AsyJob.csproj", "{CE46996C-403C-4DA9-857F-C543BDEDBAF5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsyJobTests", "AsyJobTests\AsyJobTests.csproj", "{7D16C5C8-C9E0-4A1A-8B4B-C6B94D75C3CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AsyJobTests", "AsyJobTests\AsyJobTests.csproj", "{7D16C5C8-C9E0-4A1A-8B4B-C6B94D75C3CA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FFA1AA4F-12CB-4C03-BC47-5556C44252D9}"
+	ProjectSection(SolutionItems) = preProject
+		.runsettings = .runsettings
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
