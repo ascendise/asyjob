@@ -5,12 +5,13 @@
         void RunJob(Job job);
     }
 
-    public class JobRunnerService : IJobRunner
+    public class JobRunnerService(IJobPool pool) : IJobRunner
     {
+        private readonly IJobPool _pool = pool;
+
         public void RunJob(Job job)
         {
-            var jobThread = new Thread(() => job.Run());
-            jobThread.Start();
+            _pool.RunJob(job);
         }
     }
 }

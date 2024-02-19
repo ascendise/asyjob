@@ -15,7 +15,8 @@ namespace AsyJobTests.Jobs
         public void RunJob_DummyJob_ShouldRunJob()
         {
             //Arrange
-            var sut = new JobRunnerService();
+            var fakeJobPool = new FakeJobPool();
+            var sut = new JobRunnerService(fakeJobPool);
             var spyJob = new SpyJob("TEST_1");
             //Act
             sut.RunJob(spyJob);
@@ -25,19 +26,16 @@ namespace AsyJobTests.Jobs
         }
 
         [Test]
-        public void RunJob_Async_ShouldRunJobInNewThred()
+        public void RunJob_JobPool_ShouldRunTheJobThroughTheJobPool()
         {
             //Arrange
-            var sut = new JobRunnerService();
-            var sleepJob = new SleepJob("SLEEP_1", new SleepInput(2000));
+            var fakeJobPool = new FakeJobPool();
+            var sut = new JobRunnerService(fakeJobPool);
+            var dummyJob = new DummyJob("JOB_1");
             //Act
-            sut.RunJob(sleepJob);
+            sut.RunJob(dummyJob);
             //Assert
-                //Check if JobRunnerService blocked the current thread.
-                //In that case, the JobStatus would be Done.
-            Assert.That(sleepJob.Status, Is.Not.EqualTo(ProgressStatus.Done), "The JobRunnerService probably blocked");
-            JobTestUtils.WaitForJobCompletion(sleepJob);
-            Assert.That(sleepJob.Status, Is.EqualTo(ProgressStatus.Done));
+            Assert.That(fakeJobPool.JobThreads, Has.Count.EqualTo(1)); 
         }
     }
 }
