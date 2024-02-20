@@ -16,8 +16,17 @@
         void RunJob(Job job);
     }
 
-    public class JobPool
+    public class JobPool(IJobRepository jobRepo) : IJobPool
     {
+        private readonly IJobRepository _jobRepo = jobRepo;
+        private readonly ICollection<Thread> _jobThreads = new List<Thread>();
 
+        public void RunJob(Job job)
+        {
+            _jobRepo.SaveJob(job);
+            var thread = new Thread(job.Run);
+            _jobThreads.Add(thread);
+            thread.Start();
+        }
     }
 }
