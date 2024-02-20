@@ -19,5 +19,15 @@ namespace AsyJobTests.Jobs.Test_Doubles
             this._jobs.Add(job);
             return Task.CompletedTask;
         }
+
+        public Task<IEnumerable<Job>> FetchAllJobs()
+        {
+            return Task.FromResult(_jobs as IEnumerable<Job>);
+        }
+
+        public Task<Job> FetchJob(string id)
+        {
+            return Task.FromResult(_jobs.First(j => j.Id == id));
+        }
     }
 }

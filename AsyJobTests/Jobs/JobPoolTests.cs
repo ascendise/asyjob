@@ -50,9 +50,9 @@ namespace AsyJobTests.Jobs
             //Act
             sut.RunJob(job);
             //Assert
-            Assert.That(job.Status, Is.Not.EqualTo(ProgressStatus.Done), 
+            Assert.That(job.Status, Is.Not.EqualTo(ProgressStatus.Done),
                 "Job was completed, which means RunJob didn't return until job was finished.");
         }
-       
+
     }
 }
