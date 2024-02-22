@@ -54,5 +54,18 @@ namespace AsyJobTests.Jobs
                 "Job was completed, which means RunJob didn't return until job was finished.");
         }
 
+        [Test]
+        public async Task FetchJob_JobExists_ShouldReturnJob()
+        {
+            //Arrange
+            var repo = new FakeJobRepository([new DummyJob("DUMMY_1")]);
+            var sut = new JobPool(repo);
+            //Act
+            var job = await sut.FetchJob<DummyJob>("DUMMY_1");
+            //Assert
+            Assert.That(job, Is.Not.Null);
+            Assert.That(job.Id, Is.EqualTo("DUMMY_1"));
+        }
+
     }
 }
