@@ -4,8 +4,22 @@ namespace AsyJob.Jobs
 {
     public interface IJobRepository
     {
+        /// <summary>
+        /// Stores the job inside the repository
+        /// </summary>
+        /// <param name="job"></param>
+        /// <returns></returns>
         Task SaveJob(Job job);
+        /// <summary>
+        /// Returns all jobs inside the repository
+        /// </summary>
+        /// <returns></returns>
         Task<IEnumerable<Job>> FetchAllJobs();
+        /// <summary>
+        /// Returns job with matching id or null, if no job was found
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         Task<Job?> FetchJob(string id);
     }
 
