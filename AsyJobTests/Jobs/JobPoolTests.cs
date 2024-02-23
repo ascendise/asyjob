@@ -116,5 +116,17 @@ namespace AsyJobTests.Jobs
             Assert.That(job, Is.Null);
         }
 
+        [Test]
+        public async Task FetchJob_JobExistsButWrongType_ShouldReturnNull()
+        {
+            //Arrange
+            var repo = new FakeJobRepository([new DummyJob("J1")]);
+            var sut = await JobPool.StartJobPool(repo);
+            //Act
+            var job = await sut.FetchJob<SpyJob>("J1");
+            //Assert
+            Assert.That(job, Is.Null);
+        }
+
     }
 }
