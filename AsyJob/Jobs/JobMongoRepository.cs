@@ -6,7 +6,7 @@ namespace AsyJob.Jobs
     {
         Task SaveJob(Job job);
         Task<IEnumerable<Job>> FetchAllJobs();
-        Task<Job> FetchJob(string id);
+        Task<Job?> FetchJob(string id);
     }
 
     public class JobMongoRepository(IConfiguration config) : IJobRepository
@@ -33,11 +33,11 @@ namespace AsyJob.Jobs
             return await cursor.ToListAsync();
         }
 
-        public async Task<Job> FetchJob(string id)
+        public async Task<Job?> FetchJob(string id)
         {
             var collection = GetJobCollection();
             var cursor = await collection.FindAsync(j => j.Id == id);
-            return await cursor.FirstAsync();
+            return await cursor.FirstOrDefaultAsync();
         }
     }
 }

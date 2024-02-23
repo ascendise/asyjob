@@ -61,10 +61,22 @@ namespace AsyJobTests.Jobs
             var repo = new FakeJobRepository([new DummyJob("DUMMY_1")]);
             var sut = new JobPool(repo);
             //Act
-            var job = await sut.FetchJob<DummyJob>("DUMMY_1");
+            var job = await sut.FetchJob<Job>("DUMMY_1");
             //Assert
             Assert.That(job, Is.Not.Null);
             Assert.That(job.Id, Is.EqualTo("DUMMY_1"));
+        }
+
+        [Test]
+        public async Task FetchJob_JobDoesNotExist_ShouldReturnNull()
+        {
+            //Arrange
+            var repo = new FakeJobRepository();
+            var sut = new JobPool(repo);
+            //Act
+            var job = await sut.FetchJob<Job>("DOES_NOT_EXIST_1");
+            //Assert
+            Assert.That(job, Is.Null);
         }
 
     }
