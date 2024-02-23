@@ -11,13 +11,37 @@ namespace AsyJobTests.Jobs
     internal class JobPoolTests
     {
 
+        [Test]
+        public async Task StartJobPool_NoJobs_ShouldCreateEmptyJobPool()
+        {
+            //Arrange 
+            var repo = new FakeJobRepository();
+            //Act
+            var sut = await JobPool.StartJobPool(repo);
+            //Assert
+            Assert.That(sut.Threads, Has.Count.EqualTo(0));
+        }
 
         [Test]
-        public void RunJob_Persistance_ShouldStoreJob()
+        public async Task StartJobPool_HasExistingJobs_ShouldStartExistingJobs()
+        {
+            //Arrange
+            var repo = new FakeJobRepository([
+                new DummyJob("1"),
+                new DummyJob("2")
+            ]);
+            //Act
+            var sut = await JobPool.StartJobPool(repo);
+            //Assert
+            Assert.That(sut.Threads, Has.Count.EqualTo(2));
+        }
+
+        [Test]
+        public async Task RunJob_Persistance_ShouldStoreJob()
         {
             //Arrange
             var repo = new FakeJobRepository();
-            var sut = new JobPool(repo);
+            var sut = await JobPool.StartJobPool(repo);
             var job = new DummyJob("JOB_1");
             //Act
             sut.RunJob(job);
@@ -26,11 +50,11 @@ namespace AsyJobTests.Jobs
         }
 
         [Test]
-        public void RunJob_Job_ShouldRunJob()
+        public async Task RunJob_Job_ShouldRunJob()
         {
             //Arrange
             var repo = new FakeJobRepository();
-            var sut = new JobPool(repo);
+            var sut = await JobPool.StartJobPool(repo);
             var spyJob = new SpyJob("SPY_1");
             //Act   
             sut.RunJob(spyJob);
@@ -41,11 +65,11 @@ namespace AsyJobTests.Jobs
 
 
         [Test]
-        public void RunJob_Async_ShouldRunJobInNewThread()
+        public async Task RunJob_Async_ShouldRunJobInNewThread()
         {
             //Arrange
             var repo = new FakeJobRepository();
-            var sut = new JobPool(repo);
+            var sut = await JobPool.StartJobPool(repo);
             var job = new SleepJob("SLEEP_1", new SleepInput(int.MaxValue));
             //Act
             sut.RunJob(job);
@@ -59,7 +83,7 @@ namespace AsyJobTests.Jobs
         {
             //Arrange
             var repo = new FakeJobRepository([new DummyJob("DUMMY_1")]);
-            var sut = new JobPool(repo);
+            var sut = await JobPool.StartJobPool(repo);
             //Act
             var job = await sut.FetchJob<Job>("DUMMY_1");
             //Assert
@@ -72,7 +96,7 @@ namespace AsyJobTests.Jobs
         {
             //Arrange
             var repo = new FakeJobRepository();
-            var sut = new JobPool(repo);
+            var sut = await JobPool.StartJobPool(repo);
             //Act
             var job = await sut.FetchJob<Job>("DOES_NOT_EXIST_1");
             //Assert

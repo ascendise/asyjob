@@ -1,4 +1,6 @@
-﻿namespace AsyJob.Jobs
+﻿using System.Collections.ObjectModel;
+
+namespace AsyJob.Jobs
 {
 
     /// <summary>
@@ -25,17 +27,38 @@
         Task<T?> FetchJob<T>(string jobId) where T : Job;
     }
 
-    public class JobPool(IJobRepository jobRepo) : IJobPool
+    public class JobPool : IJobPool
     {
-        private readonly IJobRepository _jobRepo = jobRepo;
+        public IReadOnlyList<Thread> Threads { get => _jobThreads; }
+        private readonly IJobRepository _jobRepo;
         private readonly List<Thread> _jobThreads = [];
+
+        private JobPool(IJobRepository jobRepo)
+        {
+            _jobRepo = jobRepo;
+        }
+
+        public static async Task<JobPool> StartJobPool(IJobRepository jobRepo)
+        {
+            var jobPool = new JobPool(jobRepo);
+            foreach(var job in await jobRepo.FetchAllJobs())
+            {
+                jobPool.RunNewJobThread(job);
+            }
+            return jobPool;
+        }
+
+        private void RunNewJobThread(Job job)
+        {
+            var thread = new Thread(job.Run);
+            _jobThreads.Add(thread);
+            thread.Start();
+        }
 
         public void RunJob(Job job)
         {
             _jobRepo.SaveJob(job);
-            var thread = new Thread(job.Run);
-            _jobThreads.Add(thread);
-            thread.Start();
+            RunNewJobThread(job);
         }
 
         public async Task<T?> FetchJob<T>(string jobId) where T : Job
