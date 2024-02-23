@@ -8,6 +8,7 @@ namespace AsyJob.Jobs
         /// Stores the job inside the repository
         /// </summary>
         /// <param name="job"></param>
+        /// <exception cref="DuplicateKeyException">thrown when a job with the chosen id already exists</exception>
         /// <returns></returns>
         Task SaveJob(Job job);
         /// <summary>
@@ -30,7 +31,14 @@ namespace AsyJob.Jobs
         public async Task SaveJob(Job job)
         {
             var collection = GetJobCollection();
-            await collection.InsertOneAsync(job);
+            try
+            {
+                await collection.InsertOneAsync(job);
+            }
+            catch(MongoDuplicateKeyException)
+            {
+                throw new DuplicateKeyException($"A job with id {job.Id} already exists!");
+            }
         }
 
         private IMongoCollection<Job> GetJobCollection()

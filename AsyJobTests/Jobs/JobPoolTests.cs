@@ -1,4 +1,5 @@
-﻿using AsyJob.Jobs;
+﻿using AsyJob;
+using AsyJob.Jobs;
 using AsyJobTests.Jobs.Test_Doubles;
 using System;
 using System.Collections.Generic;
@@ -76,6 +77,18 @@ namespace AsyJobTests.Jobs
             //Assert
             Assert.That(job.Status, Is.Not.EqualTo(ProgressStatus.Done),
                 "Job was completed, which means RunJob didn't return until job was finished.");
+        }
+
+        [Test]
+        public async Task RunJob_DuplicateJob_ShouldThrowDuplicateKeyException()
+        {
+            //Arrange
+            var job = new DummyJob("J1");
+            var repo = new FakeJobRepository([job]);
+            var sut = await JobPool.StartJobPool(repo);
+            //Act //Assert
+            Assert.Throws<DuplicateKeyException>(() => sut.RunJob(job));
+            Assert.That(sut.RunningThreads, Is.EqualTo(1));
         }
 
         [Test]

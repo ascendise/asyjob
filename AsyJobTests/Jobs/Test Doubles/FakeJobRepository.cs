@@ -1,4 +1,5 @@
-﻿using AsyJob.Jobs;
+﻿using AsyJob;
+using AsyJob.Jobs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,10 @@ namespace AsyJobTests.Jobs.Test_Doubles
 
         public Task SaveJob(Job job)
         {
+            if(_jobs.Any(j => j.Id == job.Id))
+            {
+                throw new DuplicateKeyException();
+            }
             this._jobs.Add(job);
             return Task.CompletedTask;
         }
