@@ -19,7 +19,7 @@ namespace AsyJobTests.Jobs
             //Act
             var sut = await JobPool.StartJobPool(repo);
             //Assert
-            Assert.That(sut.Threads, Has.Count.EqualTo(0));
+            Assert.That(sut.RunningThreads, Is.EqualTo(0));
         }
 
         [Test]
@@ -33,7 +33,7 @@ namespace AsyJobTests.Jobs
             //Act
             var sut = await JobPool.StartJobPool(repo);
             //Assert
-            Assert.That(sut.Threads, Has.Count.EqualTo(2));
+            Assert.That(sut.RunningThreads, Is.EqualTo(2));
         }
 
         [Test]

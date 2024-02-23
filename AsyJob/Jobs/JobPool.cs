@@ -29,9 +29,9 @@ namespace AsyJob.Jobs
 
     public class JobPool : IJobPool
     {
-        public IReadOnlyList<Thread> Threads { get => _jobThreads; }
+        public int RunningThreads { get => _jobs.Count; }
         private readonly IJobRepository _jobRepo;
-        private readonly List<Thread> _jobThreads = [];
+        private readonly Dictionary<string, JobThread> _jobs = [];
 
         private JobPool(IJobRepository jobRepo)
         {
@@ -51,7 +51,7 @@ namespace AsyJob.Jobs
         private void RunNewJobThread(Job job)
         {
             var thread = new Thread(job.Run);
-            _jobThreads.Add(thread);
+            _jobs.Add(job.Id, new JobThread(job, thread));
             thread.Start();
         }
 
@@ -61,10 +61,17 @@ namespace AsyJob.Jobs
             RunNewJobThread(job);
         }
 
-        public async Task<T?> FetchJob<T>(string jobId) where T : Job
+        public Task<T?> FetchJob<T>(string jobId) where T : Job
         {
-            var job = await _jobRepo.FetchJob(jobId) as T;
-            return job;
+            var job = _jobs.GetValueOrDefault(jobId);
+            return Task.FromResult(job.Job as T);
         }
+
+        private readonly struct JobThread(Job job, Thread thread)
+        {
+            public readonly Job Job = job;
+            public readonly Thread Thread = thread;
+        }
+
     }
 }
