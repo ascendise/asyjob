@@ -24,6 +24,10 @@ namespace AsyJob.Jobs
         Task<Job?> FetchJob(string id);
     }
 
+    /// <summary>
+    /// Repository for persisting jobs using the MongoDB.Driver
+    /// </summary>
+    /// <param name="config"></param>
     public class JobMongoRepository(IConfiguration config) : IJobRepository
     {
         private readonly IConfiguration _config = config;

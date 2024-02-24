@@ -2,7 +2,16 @@
 {
     public interface IJobRunner
     {
+        /// <summary>
+        /// Runs the job. May persist
+        /// </summary>
+        /// <param name="job"></param>
         void RunJob(Job job);
+
+        /// <summary>
+        /// Returns all jobs in pool
+        /// </summary>
+        /// <returns></returns>
         Task<IEnumerable<Job>> GetJobs();
     }
 

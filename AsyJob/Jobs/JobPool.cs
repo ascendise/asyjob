@@ -26,7 +26,18 @@ namespace AsyJob.Jobs
         /// <returns></returns>
         Task<T?> FetchJob<T>(string jobId) where T : Job;
 
+        /// <summary>
+        /// Returns all jobs in the pool
+        /// </summary>
+        /// <typeparam name="T">used to get list of specific job type</typeparam>
+        /// <returns></returns>
         Task<IEnumerable<T>> FetchAll<T>() where T : Job;
+
+        /// <summary>
+        /// Returns all jobs in the pool
+        /// </summary>
+        /// <returns></returns>
+        Task<IEnumerable<Job>> FetchAll() => FetchAll<Job>();
     }
 
     public class JobPool : IJobPool
