@@ -155,5 +155,35 @@ namespace AsyJobTests.Jobs
             CollectionAssert.AreEquivalent(jobs, foundJobs);
         }
 
+        [Test]
+        public async Task FetchAll_NoJobs_ShouldReturnEmptyList()
+        {
+            //Arrange
+            var repo = new FakeJobRepository();
+            var sut = await JobPool.StartJobPool(repo);
+            //Act
+            var foundJobs = await sut.FetchAll<Job>();
+            //Assert
+            Assert.That(foundJobs, Is.Empty);
+        }
+
+
+        [Test]
+        public async Task FetchAll_SpecificJobType_ShouldOnlyReturnJobWithThisType()
+        {
+            //Arrange
+            var dummyJobs = new List<DummyJob>() { new("DUMMY_1"), new("DUMMY_2") };
+            var spyJobs = new List<SpyJob>() { new("SPY_1") };
+            var jobs = new List<Job>(dummyJobs);
+            jobs.AddRange(spyJobs);
+            var repo = new FakeJobRepository(jobs);
+            var sut = await JobPool.StartJobPool(repo);
+            //Act
+            var foundJobs = await sut.FetchAll<DummyJob>();
+            //Assert
+            CollectionAssert.AreEquivalent(dummyJobs, foundJobs);
+        }
+
+
     }
 }

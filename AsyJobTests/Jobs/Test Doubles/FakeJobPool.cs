@@ -29,7 +29,8 @@ namespace AsyJobTests.Jobs.Test_Doubles
 
         public Task<IEnumerable<T>> FetchAll<T>() where T : Job
         {
-            IEnumerable<T> jobs = (_jobs as IEnumerable<T>)!;
+            var jobs = _jobs.Where(j => j is T)
+                .Select(j => (j as T)!);
             return Task.FromResult(jobs);
         }
     }

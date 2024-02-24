@@ -83,8 +83,10 @@ namespace AsyJob.Jobs
 
         public Task<IEnumerable<T>> FetchAll<T>() where T : Job
         {
-            var jobs = _jobs.Values.Select(v => v.Job);
-            return Task.FromResult((jobs as IEnumerable<T>)!);
+            var jobs = _jobs.Values.Select(v => v.Job)
+                .Where(j => j is T)
+                .Select(j => (j as T)!);
+            return Task.FromResult(jobs);
         }
 
         private readonly struct JobThread(Job job, Thread? thread)
