@@ -4,6 +4,7 @@ using AsyJobTests.Jobs.Test_Doubles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -38,6 +39,20 @@ namespace AsyJobTests.Jobs
         }
 
         [Test]
+        public async Task StartJobPool_HasFinishedJobs_ShouldNotRestartJobs()
+        {
+            //Arrange
+            var repo = new FakeJobRepository();
+            var job = new DummyJob("1");
+            job.Run();
+            await repo.SaveJob(job);
+            //Act
+            var sut = await JobPool.StartJobPool(repo);
+            //Assert
+            Assert.That(sut.RunningThreads, Is.EqualTo(0));
+        }
+
+        [Test]
         public async Task RunJob_Persistance_ShouldStoreJob()
         {
             //Arrange
@@ -63,7 +78,6 @@ namespace AsyJobTests.Jobs
             //Assert
             Assert.That(spyJob.Result.RunCount, Is.EqualTo(1));
         }
-
 
         [Test]
         public async Task RunJob_Async_ShouldRunJobInNewThread()
@@ -126,6 +140,19 @@ namespace AsyJobTests.Jobs
             var job = await sut.FetchJob<SpyJob>("J1");
             //Assert
             Assert.That(job, Is.Null);
+        }
+
+        [Test]
+        public async Task FetchAll_HasJobs_ShouldReturnListOfJobs()
+        {
+            //Arrange
+            List<Job> jobs = [new DummyJob("J1"), new DummyJob("J2")];
+            var repo = new FakeJobRepository(jobs);
+            var sut = await JobPool.StartJobPool(repo);
+            //Act
+            var foundJobs = await sut.FetchAll<Job>();
+            //Assert
+            CollectionAssert.AreEquivalent(jobs, foundJobs);
         }
 
     }

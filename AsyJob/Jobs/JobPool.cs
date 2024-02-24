@@ -25,11 +25,13 @@ namespace AsyJob.Jobs
         /// <param name="jobId"></param>
         /// <returns></returns>
         Task<T?> FetchJob<T>(string jobId) where T : Job;
+
+        Task<IEnumerable<T>> FetchAll<T>() where T : Job;
     }
 
     public class JobPool : IJobPool
     {
-        public int RunningThreads { get => _jobs.Count; }
+        public int RunningThreads { get => _jobs.Select(p => p.Value.Thread).Where(v => v != null).Count(); }
         private readonly IJobRepository _jobRepo;
         private readonly Dictionary<string, JobThread> _jobs = [];
 
@@ -43,9 +45,21 @@ namespace AsyJob.Jobs
             var jobPool = new JobPool(jobRepo);
             foreach(var job in await jobRepo.FetchAllJobs())
             {
-                jobPool.RunNewJobThread(job);
+                jobPool.LoadJob(job);
             }
             return jobPool;
+        }
+
+        private void LoadJob(Job job)
+        {
+            if(job.Finished)
+            {
+                _jobs.Add(job.Id, new JobThread(job, null));
+            }
+            else
+            {
+                RunNewJobThread(job);
+            }
         }
 
         private void RunNewJobThread(Job job)
@@ -67,11 +81,17 @@ namespace AsyJob.Jobs
             return Task.FromResult(job.Job as T);
         }
 
-        private readonly struct JobThread(Job job, Thread thread)
+        public Task<IEnumerable<T>> FetchAll<T>() where T : Job
+        {
+            var jobs = _jobs.Values.Select(v => v.Job);
+            return Task.FromResult((jobs as IEnumerable<T>)!);
+        }
+
+        private readonly struct JobThread(Job job, Thread? thread)
         {
             public readonly Job Job = job;
-            public readonly Thread Thread = thread;
+            public readonly Thread? Thread = thread;
         }
 
     }
-}
+} 

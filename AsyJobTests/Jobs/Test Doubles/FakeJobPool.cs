@@ -26,5 +26,11 @@ namespace AsyJobTests.Jobs.Test_Doubles
             var job = _jobs.FirstOrDefault(j => j.Id == jobId) as T;
             return Task.FromResult(job);
         }
+
+        public Task<IEnumerable<T>> FetchAll<T>() where T : Job
+        {
+            IEnumerable<T> jobs = (_jobs as IEnumerable<T>)!;
+            return Task.FromResult(jobs);
+        }
     }
 }
