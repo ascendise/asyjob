@@ -8,6 +8,7 @@ namespace AsyJob.Jobs
         public string Name { get; protected set; } = name;
         public string Description { get; protected set; } = description;
         public ProgressStatus Status { get; protected set; } = ProgressStatus.Created;
+        public bool Finished { get => Status == ProgressStatus.Done || Status == ProgressStatus.Error; }
         /// <summary>
         /// If the job failed and the ProgressStatus is set to Error, then the property Error
         /// contains the exception that was caught inside the job.
