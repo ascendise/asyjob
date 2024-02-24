@@ -2,6 +2,7 @@
 using AsyJobTests.Jobs.Test_Doubles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Primitives;
+using NUnit.Framework.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +39,20 @@ namespace AsyJobTests.Jobs
             sut.RunJob(dummyJob);
             //Assert
             Assert.That(fakeJobPool.JobThreads, Has.Count.EqualTo(1)); 
+        }
+
+        [Test]
+        public async Task GetJobs_WithJobs_ShouldReturnAllJobs()
+        {
+            //Arrange
+            var fakeJobPool = new FakeJobPool();
+            fakeJobPool.RunJob(new DummyJob("J1"));
+            fakeJobPool.RunJob(new DummyJob("J2"));
+            var sut = new JobRunnerService(fakeJobPool);
+            //Act
+            var jobs = await sut.GetJobs();
+            //Assert
+            Assert.That(jobs.Count(), Is.EqualTo(2));
         }
     }
 }

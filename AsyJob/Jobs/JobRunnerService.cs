@@ -3,6 +3,7 @@
     public interface IJobRunner
     {
         void RunJob(Job job);
+        Task<IEnumerable<Job>> GetJobs();
     }
 
     public class JobRunnerService(IJobPool pool) : IJobRunner
@@ -12,6 +13,11 @@
         public void RunJob(Job job)
         {
             _pool.RunJob(job);
+        }
+
+        public Task<IEnumerable<Job>> GetJobs()
+        {
+            return _pool.FetchAll<Job>();
         }
     }
 }
