@@ -9,7 +9,7 @@ namespace AsyJobTests.Jobs.Test_Doubles
 {
     internal class SleepJob(string id, string name, SleepInput data, string description = "") : Job(id, name, description), IInput<SleepInput>
     {
-        public SleepInput Data { get; private set; } = data;
+        public SleepInput Input { get; private set; } = data;
 
         public SleepJob(string id, SleepInput data, string description = "") : this(id, id, data, description)
         {
@@ -17,7 +17,7 @@ namespace AsyJobTests.Jobs.Test_Doubles
 
         protected override void OnRun()
         {
-            Thread.Sleep(Data.Time);
+            Thread.Sleep(Input.Time);
         }
     }
 

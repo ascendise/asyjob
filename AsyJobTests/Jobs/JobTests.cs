@@ -29,8 +29,8 @@ namespace AsyJobTests.Jobs
             //Act
             spyJob.Run();
             //Assert
-            Assert.That(spyJob.Result.RunCount, Is.EqualTo(1));
-            var run = spyJob.Result.Runs.First();
+            Assert.That(spyJob.Output.RunCount, Is.EqualTo(1));
+            var run = spyJob.Output.Runs.First();
             Assert.Multiple(() =>
             {
                 Assert.That(run.OnCreation.Status, Is.EqualTo(ProgressStatus.Created));

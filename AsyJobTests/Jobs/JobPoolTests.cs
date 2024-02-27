@@ -76,7 +76,7 @@ namespace AsyJobTests.Jobs
             sut.RunJob(spyJob);
             JobTestUtils.WaitForJobCompletion(spyJob);
             //Assert
-            Assert.That(spyJob.Result.RunCount, Is.EqualTo(1));
+            Assert.That(spyJob.Output.RunCount, Is.EqualTo(1));
         }
 
         [Test]

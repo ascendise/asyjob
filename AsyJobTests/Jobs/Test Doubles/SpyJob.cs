@@ -12,7 +12,7 @@ namespace AsyJobTests.Jobs.Test_Doubles
 {
     internal class SpyJob : Job, IOutput<SpyJob.SpyResult>
     {
-        public SpyResult Result { get; private set; } = new();
+        public SpyResult Output { get; private set; } = new();
         private SpyJobState? _onCreation;
         private SpyJobState? _onPreRun;
         private SpyJobState? _onRun;
@@ -47,7 +47,7 @@ namespace AsyJobTests.Jobs.Test_Doubles
                 _onRun ?? throw invalidState,
                 _onPostRun ?? throw invalidState
             );
-            Result.AddJobRun(jobRun);
+            Output.AddJobRun(jobRun);
         }
 
         internal class SpyResult
