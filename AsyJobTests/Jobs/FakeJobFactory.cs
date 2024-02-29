@@ -17,9 +17,16 @@ namespace AsyJobTests.Jobs
             return new FakeJobFactoryOutputJob(id, name, type, FactoryName, description);
         }
 
+    }
+
+    internal class FakeJobWithInputFactory(string factoryName, string jobType) : IJobWithInputFactory
+    {
+        public string FactoryName { get; } = factoryName;
+        public string JobType { get; } = jobType;
+
         public Job CreateJob<TInput>(string type, string id, TInput input, string name = "", string description = "")
         {
-           return new FakeJobFactoryOutputExtendedJob<TInput>(id, name, input, type, FactoryName, description); 
+            return new FakeJobFactoryOutputExtendedJob<TInput>(id, name, input, type, FactoryName, description); 
         }
     }
 
