@@ -3,16 +3,11 @@ using System.Security.Cryptography;
 
 namespace AsyJob.Jobs
 {
-    public class DiceRollJob : Job, IInput<DiceRollInput>, IOutput<DiceRollOutput>
+    public class DiceRollJob(string id, string name, DiceRollInput input, string description = "") : Job(id, name, description), IInput<DiceRollInput>, IOutput<DiceRollOutput>
     {
-        public DiceRollJob(string id, string name, DiceRollInput input, string description = "") : base(id, name, description)
-        {
-            Input = input;
-        }
-
         public DiceRollJob(string id, DiceRollInput input, string description = "") : this(id, id, input, description) { }
 
-        public DiceRollInput Input { get; private set; } 
+        public DiceRollInput Input { get; private set; } = input;
 
         public DiceRollOutput? Output { get; private set; }
 
