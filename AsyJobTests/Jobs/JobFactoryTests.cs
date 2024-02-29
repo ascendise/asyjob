@@ -17,9 +17,10 @@ namespace AsyJobTests.Jobs
             //Arrange
             var job1Factory = new FakeJobFactory("Job1Factory", "Job1");
             var job2Factory = new FakeJobFactory("Job2Factory", "Job2");
-            var sut = new JobFactory([job1Factory, job2Factory], null);
+            var guidProvider = new FakeGuidProvider([Guid.NewGuid()]);
+            var sut = new JobFactory([job1Factory, job2Factory], null, guidProvider);
             //Act
-            var createdJob = sut.CreateJob("Job1", "1");
+            var createdJob = sut.CreateJob("Job1");
             //Assert
             Assert.That(createdJob, Is.Not.Null);
             Assert.That(createdJob, Is.InstanceOf<FakeJobFactoryOutputJob>());
@@ -35,10 +36,11 @@ namespace AsyJobTests.Jobs
         public void CreateJob_NoMatchingFactoryNoInput_ShouldThrowException()
         {
             //Arrange
-            var jobFactory = new FakeJobFactory("JobFactory", "NoJob");
-            var sut = new JobFactory([jobFactory], null);
+            var jobFactory = new FakeJobFactory("JobFactory", "NoJob");  
+            var guidProvider = new FakeGuidProvider([Guid.NewGuid()]);
+            var sut = new JobFactory([jobFactory], null, guidProvider);
             //Act //Assert
-            Assert.Throws<NoMatchingJobFactoryException>(() => sut.CreateJob("SomeJob", "1"));
+            Assert.Throws<NoMatchingJobFactoryException>(() => sut.CreateJob("SomeJob"));
         }
 
         [Test]
@@ -47,9 +49,10 @@ namespace AsyJobTests.Jobs
             //Arrange
             var job1Factory = new FakeJobWithInputFactory("Job1Factory", "Job1");
             var job2Factory = new FakeJobWithInputFactory("Job2Factory", "Job2");
-            var sut = new JobFactory(null, [job1Factory, job2Factory]);
+            var guidProvider = new FakeGuidProvider([Guid.NewGuid()]);
+            var sut = new JobFactory(null, [job1Factory, job2Factory], guidProvider);
             //Act
-            var createdJob = sut.CreateJob<FakeFactoryJobInput>("Job1", "1", new(14));
+            var createdJob = sut.CreateJob<FakeFactoryJobInput>("Job1", new(14));
             //Assert
             Assert.That(createdJob, Is.Not.Null);
             Assert.That(createdJob, Is.InstanceOf<FakeJobFactoryOutputExtendedJob>());
@@ -67,9 +70,10 @@ namespace AsyJobTests.Jobs
         {
             //Arrange
             var jobFactory = new FakeJobWithInputFactory("JobFactory", "NoJob");
-            var sut = new JobFactory(null, null);
+            var guidProvider = new FakeGuidProvider([Guid.NewGuid()]);
+            var sut = new JobFactory(null, null, guidProvider);
             //Act //Assert
-            Assert.Throws<NoMatchingJobFactoryException>(() => sut.CreateJob<FakeFactoryJobInput>("SomeJob", "1", new(14)));
+            Assert.Throws<NoMatchingJobFactoryException>(() => sut.CreateJob<FakeFactoryJobInput>("SomeJob", new(14)));
         }
 
         [Test]
@@ -77,9 +81,46 @@ namespace AsyJobTests.Jobs
         {
             //Arrange
             var jobFactory = new FakeJobWithInputFactory("JobFactory", "Job");
-            var sut = new JobFactory(null, [jobFactory]);
+            var guidProvider = new FakeGuidProvider([Guid.NewGuid()]);
+            var sut = new JobFactory(null, [jobFactory], guidProvider);
             //Act //Assert
             Assert.Throws<JobInputMismatchException>(() => sut.CreateJob<string>("Job", "1", "This is not the expected input"));
+        }
+
+        [Test]
+        public void CreateJob_UniqueId_ShouldGenerateUniqueId()
+        {
+            //Arrange
+            var jobFactory = new FakeJobFactory("JobFactory", "Job");
+            var guid = "9E5C66CE-8419-4DB6-AD03-B4EF4568FA83";
+            var guidProvider = new FakeGuidProvider([Guid.Parse(guid)]);
+            var sut = new JobFactory([jobFactory], null, guidProvider);
+            //Act
+            var createdJob = sut.CreateJob("Job");
+            //Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(createdJob.Id, Is.EqualTo(guid));
+                Assert.That(createdJob.Name, Is.EqualTo($"JOB-{guid}"));
+            });
+        }
+
+        [Test]
+        public void CreateJob_WithInputUniqueId_ShouldGenerateUniqueId()
+        {
+            //Arrange
+            var jobFactory = new FakeJobWithInputFactory("JobFactory", "Job");
+            var guid = "9E5C66CE-8419-4DB6-AD03-B4EF4568FA83";
+            var guidProvider = new FakeGuidProvider([Guid.Parse(guid)]);
+            var sut = new JobFactory(null, [jobFactory], guidProvider);
+            //Act
+            var createdJob = sut.CreateJob<FakeFactoryJobInput>("Job", new(12));
+            //Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(createdJob.Id, Is.EqualTo(guid));
+                Assert.That(createdJob.Name, Is.EqualTo($"JOB-{guid}"));
+            });
         }
     }
 }
