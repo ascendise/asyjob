@@ -1,4 +1,5 @@
 ﻿using AsyJob.Jobs;
+using AsyJobTests.Jobs.Test_Doubles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,10 +25,13 @@ namespace AsyJobTests.Jobs
         public string FactoryName { get; } = factoryName;
         public string JobType { get; } = jobType;
 
-        public Job CreateJob<TInput>(string type, string id, TInput input, string name = "", string description = "")
-        {
-            return new FakeJobFactoryOutputExtendedJob<TInput>(id, name, input, type, FactoryName, description); 
-        }
+        public Job CreateJob<TInput>(string type, string id, TInput input, string name = "", string description = "") 
+            => input switch
+            {
+                FakeFactoryJobInput jobInput => new FakeJobFactoryOutputExtendedJob(id, name, jobInput, type, FactoryName, description),
+                _ => throw new JobInputMismatchException(typeof(FakeFactoryJobInput), typeof(TInput)),
+            };
+
     }
 
     internal class FakeJobFactoryOutputJob(string id, string name, string jobType, string factoryName, string description = "") 
@@ -37,10 +41,10 @@ namespace AsyJobTests.Jobs
         public string FactoryName { get; set; } = factoryName;
     }
 
-    internal class FakeJobFactoryOutputExtendedJob<TInput>(string id, string name, TInput input, string jobType, string factoryName, string description = "")
-        : FakeJobFactoryOutputJob(id, name, jobType, factoryName, description), IInput<TInput>
+    internal class FakeJobFactoryOutputExtendedJob(string id, string name, FakeFactoryJobInput input, string jobType, string factoryName, string description = "")
+        : FakeJobFactoryOutputJob(id, name, jobType, factoryName, description), IInput<FakeFactoryJobInput>
     {
-        public TInput Input { get; } = input;
+        public FakeFactoryJobInput Input { get; } = input;
     }
 
 }

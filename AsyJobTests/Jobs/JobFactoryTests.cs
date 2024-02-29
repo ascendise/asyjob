@@ -49,11 +49,11 @@ namespace AsyJobTests.Jobs
             var job2Factory = new FakeJobWithInputFactory("Job2Factory", "Job2");
             var sut = new JobFactory(null, [job1Factory, job2Factory]);
             //Act
-            var createdJob = sut.CreateJob<DummyInput>("Job1", "1", new(14));
+            var createdJob = sut.CreateJob<FakeFactoryJobInput>("Job1", "1", new(14));
             //Assert
             Assert.That(createdJob, Is.Not.Null);
-            Assert.That(createdJob, Is.InstanceOf<FakeJobFactoryOutputExtendedJob<DummyInput>>());
-            var fakeJob = (createdJob as FakeJobFactoryOutputExtendedJob<DummyInput>)!;
+            Assert.That(createdJob, Is.InstanceOf<FakeJobFactoryOutputExtendedJob>());
+            var fakeJob = (createdJob as FakeJobFactoryOutputExtendedJob)!;
             Assert.Multiple(() =>
             {
                 Assert.That(fakeJob.FactoryName, Is.EqualTo("Job1Factory"));
@@ -63,13 +63,23 @@ namespace AsyJobTests.Jobs
         }
 
         [Test]
-        public void CreateJob_NoFactoriesWithInput_ShouldCreateCorrectJob()
+        public void CreateJob_NoFactoriesWithInput_ShouldThrowException()
         {
             //Arrange
             var jobFactory = new FakeJobWithInputFactory("JobFactory", "NoJob");
             var sut = new JobFactory(null, null);
             //Act //Assert
-            Assert.Throws<NoMatchingJobFactoryException>(() => sut.CreateJob<DummyInput>("SomeJob", "1", new(14)));
+            Assert.Throws<NoMatchingJobFactoryException>(() => sut.CreateJob<FakeFactoryJobInput>("SomeJob", "1", new(14)));
+        }
+
+        [Test]
+        public void CreateJob_FactoryWithWrongInput_ShouldThrowException()
+        {
+            //Arrange
+            var jobFactory = new FakeJobWithInputFactory("JobFactory", "Job");
+            var sut = new JobFactory(null, [jobFactory]);
+            //Act //Assert
+            Assert.Throws<JobInputMismatchException>(() => sut.CreateJob<string>("Job", "1", "This is not the expected input"));
         }
     }
 }
