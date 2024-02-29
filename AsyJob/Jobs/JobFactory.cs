@@ -1,4 +1,6 @@
-﻿namespace AsyJob.Jobs
+﻿using ZstdSharp;
+
+namespace AsyJob.Jobs
 {
     public interface IJobFactory
     {
@@ -14,8 +16,8 @@
 
         public Job CreateJob(string type, string id, string name = "", string description = "")
         {
-            var factory = _jobFactories.Single(f => f.JobType.Equals(type, StringComparison.OrdinalIgnoreCase));
-            return factory.CreateJob(type, id, name, description);
+            var factory = _jobFactories.FirstOrDefault(f => f.JobType.Equals(type, StringComparison.OrdinalIgnoreCase));
+            return factory == null ? throw new NoMatchingJobFactoryException(type) : factory.CreateJob(type, id, name, description);
         }
 
         public Job CreateJob<TInput>(string type, string id, TInput input, string name = "", string description = "")

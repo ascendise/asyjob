@@ -29,5 +29,15 @@ namespace AsyJobTests.Jobs
                 Assert.That(fakeJob.JobType, Is.EqualTo("Job1"));
             });
         }
+
+        [Test]
+        public void CreateJob_NoMatchingFactoryNoInput_ShouldThrowException()
+        {
+            //Arrange
+            var jobFactory = new FakeJobFactory("JobFactory", "NoJob");
+            var sut = new JobFactory([jobFactory]);
+            //Act //Assert
+            Assert.Throws<NoMatchingJobFactoryException>(() => sut.CreateJob("SomeJob", "1"));
+        }
     }
 }
