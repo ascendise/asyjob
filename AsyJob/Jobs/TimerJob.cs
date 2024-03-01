@@ -2,6 +2,14 @@
 
 namespace AsyJob.Jobs
 {
+    /// <summary>
+    /// Example job used for demonstrating asynchronousy
+    /// Sleeps for the specified time and then returns
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="name"></param>
+    /// <param name="input"></param>
+    /// <param name="description"></param>
     public class TimerJob(string id, string name, TimerInput input, string description = "") 
         : Job(id, name, description), IInput<TimerInput>, IOutput<TimerOutput>
     {

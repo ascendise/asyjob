@@ -3,6 +3,15 @@ using System.Security.Cryptography;
 
 namespace AsyJob.Jobs
 {
+    /// <summary>
+    /// Example job for representing input and output
+    /// This job simulates a dice roll, with a user-defined dice.
+    /// It outputs a random result, in the range of the dice.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="name"></param>
+    /// <param name="input"></param>
+    /// <param name="description"></param>
     public class DiceRollJob(string id, string name, DiceRollInput input, string description = "") : Job(id, name, description), IInput<DiceRollInput>, IOutput<DiceRollOutput>
     {
         public DiceRollJob(string id, DiceRollInput input, string description = "") : this(id, id, input, description) { }

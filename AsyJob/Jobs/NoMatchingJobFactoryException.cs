@@ -1,7 +1,9 @@
 ﻿namespace AsyJob.Jobs
 {
-    public class NoMatchingJobFactoryException : Exception
+    /// <summary>
+    /// Thrown when the client tries to create a job with a type, that is not supported by any <see cref="IJobFactory"/>
+    /// </summary>
+    public class NoMatchingJobFactoryException(string jobType) : Exception($"No matching job factory for {jobType}")
     {
-        public NoMatchingJobFactoryException(string jobType) : base($"No matching job factory for {jobType}") { }
     }
 }
