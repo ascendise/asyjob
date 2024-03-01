@@ -9,8 +9,11 @@ namespace AsyJob.Jobs
     /// </summary>
     [Route("api/jobs")]
     [ApiController]
-    public class JobController : ControllerBase
+    public class JobController(IJobRunner jobRunner, JobFactory jobFactory) : ControllerBase
     {
+        private readonly IJobRunner _jobRunner = jobRunner;
+        private readonly JobFactory _jobFactory = jobFactory;
+
         /// <summary>
         /// Creates a new job and runs it.
         /// </summary>
@@ -19,7 +22,18 @@ namespace AsyJob.Jobs
         [HttpPost]
         public Task<JobResponseDto> RunJob(JobRequestDto jobRequest)
         {
-            return Task.FromResult((null as JobResponseDto)!);
+            Job job = CreateJob(jobRequest);
+            _jobRunner.RunJob(job);
+            return Task.FromResult(new JobResponseDto(job));
+        }
+
+        private Job CreateJob(JobRequestDto jobRequest)
+        {
+            if (jobRequest.Input == null)
+            {
+                return _jobFactory.CreateJob(jobRequest.JobType, jobRequest.Name, jobRequest.Description);
+            }
+            return _jobFactory.CreateJob<object>(jobRequest.JobType, jobRequest.Name, jobRequest.Description);
         }
     }
 }

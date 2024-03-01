@@ -1,12 +1,11 @@
 ﻿using AsyJob.Jobs;
-using AsyJobTests.Jobs.Test_Doubles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AsyJobTests.Jobs
+namespace AsyJobTests.Jobs.Test_Doubles
 {
     internal class FakeJobFactory(string factoryName, string jobType) : IJobFactory
     {
