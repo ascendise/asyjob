@@ -34,7 +34,7 @@ namespace AsyJobTests.Jobs
             });
         }
 
-        //TODO: Enable after fixed factories [Test]
+        [Test]
         public async Task RunJob_WithInput_ShouldRunJobInCorrectState()
         {
             //Arrange

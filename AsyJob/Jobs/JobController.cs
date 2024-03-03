@@ -33,7 +33,7 @@ namespace AsyJob.Jobs
             {
                 return _jobFactory.CreateJob(jobRequest.JobType, jobRequest.Name, jobRequest.Description);
             }
-            return _jobFactory.CreateJob(jobRequest.JobType, jobRequest.Name, jobRequest.Description);
+            return _jobFactory.CreateJobWithInput(jobRequest.JobType, jobRequest.Input, jobRequest.Name, jobRequest.Description);
         }
     }
 }
