@@ -6,8 +6,8 @@
     /// </summary>
     /// <param name="expected"></param>
     /// <param name="actual"></param>
-    public class JobInputMismatchException(Type expected, Type actual)
-        : Exception($"Expected type {expected.Name}, but was {actual.Name}")
+    public class JobInputMismatchException(string expectedName, Type expectedType)
+        : Exception($"Value {expectedName} of type {expectedType.Name}")
     {
     }
 }

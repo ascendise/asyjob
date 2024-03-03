@@ -1,4 +1,7 @@
-﻿using AsyJob.Jobs;
+﻿using AsyJob;
+using AsyJob.Jobs;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.CSharp.RuntimeBinder;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,13 +27,13 @@ namespace AsyJobTests.Jobs.Test_Doubles
         public string FactoryName { get; } = factoryName;
         public string JobType { get; } = jobType;
 
-        public Job CreateJob<TInput>(string type, string id, TInput input, string name = "", string description = "") 
-            => input switch
-            {
-                FakeFactoryJobInput jobInput => new FakeJobFactoryOutputExtendedJob(id, name, jobInput, type, FactoryName, description),
-                _ => throw new JobInputMismatchException(typeof(FakeFactoryJobInput), typeof(TInput)),
-            };
 
+        public Job CreateJobWithInput(string type, string id, dynamic input, string name = "", string description = "")
+        {
+            var checknum = DynamicExtensions.TryGetValue<int?>(input, "CheckNum") ?? throw new JobInputMismatchException(nameof(input.CheckNum), typeof(int));
+            var jobInput = new FakeFactoryJobInput(checknum);
+            return new FakeJobFactoryOutputExtendedJob(id, name, jobInput, type, FactoryName, description);
+        }
     }
 
     internal class FakeJobFactoryOutputJob(string id, string name, string jobType, string factoryName, string description = "") 

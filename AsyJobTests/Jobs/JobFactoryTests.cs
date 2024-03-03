@@ -52,7 +52,7 @@ namespace AsyJobTests.Jobs
             var guidProvider = new FakeGuidProvider([Guid.NewGuid()]);
             var sut = new JobFactory(null, [job1Factory, job2Factory], guidProvider);
             //Act
-            var createdJob = sut.CreateJob<FakeFactoryJobInput>("Job1", new(14));
+            var createdJob = sut.CreateJobWithInput("Job1", new FakeFactoryJobInput(14));
             //Assert
             Assert.That(createdJob, Is.Not.Null);
             Assert.That(createdJob, Is.InstanceOf<FakeJobFactoryOutputExtendedJob>());
@@ -73,7 +73,7 @@ namespace AsyJobTests.Jobs
             var guidProvider = new FakeGuidProvider([Guid.NewGuid()]);
             var sut = new JobFactory(null, null, guidProvider);
             //Act //Assert
-            Assert.Throws<NoMatchingJobFactoryException>(() => sut.CreateJob<FakeFactoryJobInput>("SomeJob", new(14)));
+            Assert.Throws<NoMatchingJobFactoryException>(() => sut.CreateJobWithInput("SomeJob", new FakeFactoryJobInput(14)));
         }
 
         [Test]
@@ -84,7 +84,7 @@ namespace AsyJobTests.Jobs
             var guidProvider = new FakeGuidProvider([Guid.NewGuid()]);
             var sut = new JobFactory(null, [jobFactory], guidProvider);
             //Act //Assert
-            Assert.Throws<JobInputMismatchException>(() => sut.CreateJob<string>("Job", "1", "This is not the expected input"));
+            Assert.Throws<JobInputMismatchException>(() => sut.CreateJobWithInput("Job", "1"));
         }
 
         [Test]
@@ -114,7 +114,7 @@ namespace AsyJobTests.Jobs
             var guidProvider = new FakeGuidProvider([Guid.Parse(guid)]);
             var sut = new JobFactory(null, [jobFactory], guidProvider);
             //Act
-            var createdJob = sut.CreateJob<FakeFactoryJobInput>("Job", new(12));
+            var createdJob = sut.CreateJobWithInput("Job", new FakeFactoryJobInput(12));
             //Assert
             Assert.Multiple(() =>
             {
