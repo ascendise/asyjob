@@ -2,7 +2,9 @@
 using AsyJobTests.Jobs.Test_Doubles;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -59,6 +61,31 @@ namespace AsyJobTests.Jobs
                 Assert.That(fakeJobWithInput.Input.CheckNum, Is.EqualTo(checkNum));
 
             });
+        }
+
+        [Test]
+        public void RunJob_WithWrongInput_ShouldThrowException()
+        {
+            //Arrange
+            var fakeJobFactory = new FakeJobWithInputFactory("FakeJobWithInputFactory", "FakeJob");
+            var jobFactory = new JobFactory(null, [fakeJobFactory], new GuidProvider());
+            var runner = new JobRunnerService(new FakeJobPool());
+            var sut = new JobController(runner, jobFactory);
+            var jobRequest = new JobRequestDto("FakeJob", "Job", "", "definetlyNotTheExpectedInput");
+            //Act //Assert
+            Assert.ThrowsAsync<JobInputMismatchException>(() => sut.RunJob(jobRequest));
+        }
+
+        [Test]
+        public void RunJob_UnknowJobType_ShouldThrowException()
+        {
+            //Arrange
+            var jobFactory = new JobFactory(null, null, new GuidProvider());
+            var runner = new JobRunnerService(new FakeJobPool());
+            var sut = new JobController(runner, jobFactory);
+            var jobRequest = new JobRequestDto("UnknownJob", "Job");
+            //Act //Assert
+            Assert.ThrowsAsync<NoMatchingJobFactoryException>(() => sut.RunJob(jobRequest));
         }
     }
 }

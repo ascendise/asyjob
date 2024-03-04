@@ -18,6 +18,8 @@ namespace AsyJob.Jobs
         /// Creates a new job and runs it.
         /// </summary>
         /// <param name="jobRequest"></param>
+        /// <exception cref="JobInputMismatchException">Thrown when input does not match the job</exception>
+        /// <exception cref="NoMatchingJobFactoryException">Thrown when no job factory for <see cref="JobRequestDto.JobType"/> exists </exception>
         /// <returns></returns>
         [HttpPost]
         public Task<JobResponseDto> RunJob(JobRequestDto jobRequest)
