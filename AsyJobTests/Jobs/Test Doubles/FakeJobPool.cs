@@ -13,6 +13,16 @@ namespace AsyJobTests.Jobs.Test_Doubles
         private readonly List<Thread> _jobThreads = []; 
         private readonly List<Job> _jobs = [];
 
+        public static FakeJobPool InitializePool(IEnumerable<Job> initJobs)
+        {
+            var pool = new FakeJobPool();
+            foreach(var job in initJobs)
+            {
+                pool.RunJob(job);
+            }
+            return pool;
+        }
+
         public void RunJob(Job job)
         {
             var jobThread = new Thread(job.Run);

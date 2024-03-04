@@ -37,5 +37,12 @@ namespace AsyJob.Jobs
             }
             return _jobFactory.CreateJobWithInput(jobRequest.JobType, jobRequest.Input, jobRequest.Name, jobRequest.Description);
         }
+
+        [HttpGet("{jobId}")]
+        public async Task<JobResponseDto> FetchJob(string jobid)
+        {
+            var job = (await _jobRunner.GetJobs()).SingleOrDefault(j => j.Id == jobid);
+            return job != null ? new JobResponseDto(job) : throw new KeyNotFoundException();
+        }
     }
 }

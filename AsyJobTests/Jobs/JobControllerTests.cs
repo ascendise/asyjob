@@ -87,5 +87,33 @@ namespace AsyJobTests.Jobs
             //Act //Assert
             Assert.ThrowsAsync<NoMatchingJobFactoryException>(() => sut.RunJob(jobRequest));
         }
+
+
+        [Test]
+        public async Task FetchJob_ValidId_ShouldReturnCorrectJob()
+        {
+            //Arrange
+            var pool = FakeJobPool.InitializePool([new DummyJob("DUMMY1")]);
+            var runner = new JobRunnerService(pool);
+            var sut = new JobController(runner, null!);
+            //Act
+            var response = await sut.FetchJob("DUMMY1");
+            //Assert
+            Assert.That(response, Is.Not.Null);
+            Assert.That(response.Job, Is.InstanceOf<DummyJob>());
+            Assert.That(response.Job.Id, Is.EqualTo("DUMMY1"));
+        }
+
+        [Test]
+        public void FetchJob_InvalidId_ShouldThrowException()
+        {
+            //Arrange
+            var pool = FakeJobPool.InitializePool([new DummyJob("DUMMY1")]);
+            var runner = new JobRunnerService(pool);
+            var sut = new JobController(runner, null!);
+            //Act //Assert
+            Assert.ThrowsAsync<KeyNotFoundException>(() => sut.FetchJob("SOME_OTHER_ID"));
+        }
+
     }
 }
