@@ -13,6 +13,11 @@
         /// </summary>
         /// <returns></returns>
         Task<IEnumerable<Job>> GetJobs();
+
+        /// <summary>
+        /// Returns job with matching id or null
+        /// </summary>
+        Task<Job?> GetJob(string jobId);
     }
 
     public class JobRunnerService(IJobPool pool) : IJobRunner
@@ -27,6 +32,11 @@
         public Task<IEnumerable<Job>> GetJobs()
         {
             return _pool.FetchAll<Job>();
+        }
+
+        public Task<Job?> GetJob(string jobId)
+        {
+            return _pool.FetchJob<Job>(jobId);
         }
     }
 }

@@ -54,5 +54,29 @@ namespace AsyJobTests.Jobs
             //Assert
             Assert.That(jobs.Count(), Is.EqualTo(2));
         }
+
+        [Test]
+        public async Task GetJob_ExistingId_ShouldReturnJob()
+        {
+            //Arrange
+            var fakeJobPool = FakeJobPool.InitializePool([new DummyJob("J1")]);
+            var sut = new JobRunnerService(fakeJobPool);
+            //Act
+            var job = await sut.GetJob("J1");
+            //Assert
+            Assert.That(job, Is.Not.Null);
+        }
+
+        [Test]
+        public async Task GetJob_NoExistingId_ShouldReturnNull()
+        {
+            //Arrange
+            var fakeJobPool = FakeJobPool.InitializePool([new DummyJob("J1")]);
+            var sut = new JobRunnerService(fakeJobPool);
+            //Act
+            var job = await sut.GetJob("Wabbajack");
+            //Assert
+            Assert.That(job, Is.Null);
+        }
     }
 }

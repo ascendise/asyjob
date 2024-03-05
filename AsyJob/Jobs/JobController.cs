@@ -39,9 +39,9 @@ namespace AsyJob.Jobs
         }
 
         [HttpGet("{jobId}")]
-        public async Task<JobResponseDto> FetchJob(string jobid)
+        public async Task<JobResponseDto> FetchJob(string jobId)
         {
-            var job = (await _jobRunner.GetJobs()).SingleOrDefault(j => j.Id == jobid);
+            var job = await _jobRunner.GetJob(jobId);
             return job != null ? new JobResponseDto(job) : throw new KeyNotFoundException();
         }
     }

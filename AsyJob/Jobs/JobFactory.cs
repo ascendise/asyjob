@@ -3,6 +3,7 @@ using ZstdSharp;
 
 namespace AsyJob.Jobs
 {
+
     /// <summary>
     /// Interface for specific job factories
     /// The job factory is responsible for making one specific type of job that matches the <see cref="JobType"/>.
@@ -15,7 +16,7 @@ namespace AsyJob.Jobs
         /// Create a new <see cref="Job"/> with the specified type
         /// </summary>
         Job CreateJob(string type, string id, string name = "", string description = "");
-    }
+    }   
 
     /// <summary>
     /// Interface for specific job factories
@@ -28,6 +29,7 @@ namespace AsyJob.Jobs
         /// <summary>
         /// Create a new <see cref="Job"/> with the specified type
         /// </summary>
+        /// <exception cref="JobInputMismatchException">Thrown when the input does not match the expected structure</exception>
         Job CreateJobWithInput(string type, string id, dynamic input, string name = "", string description = "");
     }
 

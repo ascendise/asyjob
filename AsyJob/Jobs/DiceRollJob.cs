@@ -44,4 +44,16 @@ namespace AsyJob.Jobs
         /// </summary>
         public int Result { get; set; } = result;
     }
+
+    public class DiceRollJobFactory : IJobWithInputFactory
+    {
+        public string JobType { get; } = nameof(DiceRollJob);
+
+        public Job CreateJobWithInput(string type, string id, dynamic input, string name = "", string description = "")
+        {
+            int sides = DynamicExtensions.TryGetValue(input, nameof(DiceRollInput.Sides))
+                ?? throw new JobInputMismatchException(nameof(DiceRollInput.Sides), typeof(int));
+            return new DiceRollJob(id, name, new(sides), description);
+        }
+    }
 }
