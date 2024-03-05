@@ -5,7 +5,7 @@
         public string Name { get; private set; } = name;
         public string Description { get; private set; } = description;
         public string JobType { get; private set; } = jobtype;
-        public dynamic? Input { get; private set; } = input;
+        public object? Input { get; private set; } = input;
     }
 
     public class JobResponseDto(Job job)

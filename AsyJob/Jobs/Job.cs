@@ -1,8 +1,10 @@
-﻿using System.Runtime.InteropServices;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using System.Runtime.InteropServices;
 
 namespace AsyJob.Jobs
 {
-    public abstract class Job(string id, string name, string description = "")
+    [BsonIgnoreExtraElements]
+    public class Job(string id, string name, string description = "")
     {
         public string Id { get; private set; } = id;
         public string Name { get; private set; } = name;
