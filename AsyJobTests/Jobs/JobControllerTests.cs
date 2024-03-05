@@ -3,6 +3,7 @@ using AsyJobTests.Jobs.Test_Doubles;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Dynamic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -46,7 +47,9 @@ namespace AsyJobTests.Jobs
             var jobRunner = new JobRunnerService(new FakeJobPool());
             var sut = new JobController(jobRunner, jobFactory);
             var checkNum = 14;
-            var jobRequest = new JobRequestDto("FakeJob", "MyJob1", "LoremIpsum", new FakeFactoryJobInput(checkNum));
+            dynamic input = new ExpandoObject();
+            input.CheckNum = 14;
+            var jobRequest = new JobRequestDto("FakeJob", "MyJob1", "LoremIpsum", input);
             //Act
             var response = await sut.RunJob(jobRequest);
             //Assert
@@ -71,7 +74,9 @@ namespace AsyJobTests.Jobs
             var jobFactory = new JobFactory(null, [fakeJobFactory], new GuidProvider());
             var runner = new JobRunnerService(new FakeJobPool());
             var sut = new JobController(runner, jobFactory);
-            var jobRequest = new JobRequestDto("FakeJob", "Job", "", "definetlyNotTheExpectedInput");
+            dynamic wrongInput = new ExpandoObject();
+            wrongInput.Wrong = "1!1";
+            var jobRequest = new JobRequestDto("FakeJob", "Job", "", wrongInput);
             //Act //Assert
             Assert.ThrowsAsync<JobInputMismatchException>(() => sut.RunJob(jobRequest));
         }
