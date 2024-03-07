@@ -1,19 +1,17 @@
-﻿using System.Runtime.InteropServices;
-
-namespace AsyJob.Jobs
+﻿namespace AsyJob.Lib.Jobs
 {
     public abstract class Job(string id, string name, string description = "")
     {
-        public string Id { get; protected set; } = id;
-        public string Name { get; protected set; } = name;
-        public string Description { get; protected set; } = description;
-        public ProgressStatus Status { get; protected set; } = ProgressStatus.Created;
+        public string Id { get; private set; } = id;
+        public string Name { get; private set; } = name;
+        public string Description { get; private set; } = description;
+        public ProgressStatus Status { get; private set; } = ProgressStatus.Created;
         public bool Finished { get => Status == ProgressStatus.Done || Status == ProgressStatus.Error; }
         /// <summary>
         /// If the job failed and the ProgressStatus is set to Error, then the property Error
         /// contains the exception that was caught inside the job.
         /// </summary>
-        public Exception? Error { get; protected set; }
+        public Exception? Error { get; private set; }
 
         public Job(string id, string description = "") : this(id, id, description) { }
 
@@ -32,11 +30,11 @@ namespace AsyJob.Jobs
                 OnRun();
                 OnPostRun();
                 Status = ProgressStatus.Done;
-            } 
-            catch(Exception ex)
+            }
+            catch (Exception ex)
             {
-                this.Status = ProgressStatus.Error;
-                this.Error = ex;
+                Status = ProgressStatus.Error;
+                Error = ex;
             }
         }
 
@@ -59,30 +57,4 @@ namespace AsyJob.Jobs
         /// </summary>
         protected virtual void OnPostRun() { }
     }
-
-    public enum ProgressStatus
-    {
-        Created, Waiting, Running, Done, Error
-    }
-
-    /// <summary>
-    /// Extends a job to allow output of a calculation
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public interface IInput<T>
-    {
-        T Data { get; }
-    }
-
-    /// <summary>
-    /// Extends a job to allow input data to influence the calculation.
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public interface IOutput<T>
-    {
-        /// <summary>
-        /// Result of the job. If calculation of result is not finished, the result may be null
-        /// </summary>
-        T? Result { get; }
-    }
-} 
+}

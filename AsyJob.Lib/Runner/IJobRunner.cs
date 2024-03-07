@@ -1,4 +1,6 @@
-﻿namespace AsyJob.Jobs
+﻿using AsyJob.Lib.Jobs;
+
+namespace AsyJob.Lib.Runner
 {
     public interface IJobRunner
     {
@@ -13,20 +15,10 @@
         /// </summary>
         /// <returns></returns>
         Task<IEnumerable<Job>> GetJobs();
-    }
 
-    public class JobRunnerService(IJobPool pool) : IJobRunner
-    {
-        private readonly IJobPool _pool = pool;
-
-        public void RunJob(Job job)
-        {
-            _pool.RunJob(job);
-        }
-
-        public Task<IEnumerable<Job>> GetJobs()
-        {
-            return _pool.FetchAll<Job>();
-        }
+        /// <summary>
+        /// Returns job with matching id or null
+        /// </summary>
+        Task<Job?> GetJob(string jobId);
     }
 }

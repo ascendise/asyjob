@@ -1,17 +1,23 @@
-﻿using AsyJob.Jobs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AsyJob.Lib.Jobs;
+using AsyJob.Lib.Runner;
 
-namespace AsyJobTests.Jobs.Test_Doubles
+namespace AsyJob.Lib.Tests.TestDoubles
 {
-    internal class FakeJobPool : IJobPool
+    public class FakeJobPool : IJobPool
     {
         public IReadOnlyList<Thread> JobThreads { get => _jobThreads; }
-        private readonly List<Thread> _jobThreads = []; 
+        private readonly List<Thread> _jobThreads = [];
         private readonly List<Job> _jobs = [];
+
+        public static FakeJobPool InitializePool(IEnumerable<Job> initJobs)
+        {
+            var pool = new FakeJobPool();
+            foreach (var job in initJobs)
+            {
+                pool.RunJob(job);
+            }
+            return pool;
+        }
 
         public void RunJob(Job job)
         {

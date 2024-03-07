@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AsyJobTests
+﻿namespace AsyJob.Tests
 {
     /// <summary>
     /// Used in test double classes to avoid mix up with exceptions thrown from the system under test

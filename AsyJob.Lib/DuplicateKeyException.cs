@@ -1,4 +1,4 @@
-﻿namespace AsyJob
+﻿namespace AsyJob.Lib
 {
     public class DuplicateKeyException : Exception
     {

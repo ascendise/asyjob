@@ -1,13 +1,9 @@
-﻿using AsyJob.Jobs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AsyJob.Lib.Jobs;
+using AsyJob.Tests;
 
-namespace AsyJobTests.Jobs.Test_Doubles
+namespace AsyJob.Lib.Tests.TestDoubles
 {
-    internal class ErrorJob : Job
+    public class ErrorJob : Job
     {
         public ErrorJob(string id, string description = "") : base(id, description)
         {

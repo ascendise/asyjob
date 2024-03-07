@@ -1,14 +1,9 @@
-﻿using AsyJob;
-using AsyJob.Jobs;
-using AsyJobTests.Jobs.Test_Doubles;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AsyJob.Lib.Jobs;
+using AsyJob.Lib.Runner;
+using AsyJob.Lib.Tests.TestDoubles;
+using AsyJobTests.Jobs;
 
-namespace AsyJobTests.Jobs
+namespace AsyJob.Lib.Tests.Runner
 {
     internal class JobPoolTests
     {
@@ -76,7 +71,7 @@ namespace AsyJobTests.Jobs
             sut.RunJob(spyJob);
             JobTestUtils.WaitForJobCompletion(spyJob);
             //Assert
-            Assert.That(spyJob.Result.RunCount, Is.EqualTo(1));
+            Assert.That(spyJob.Output.RunCount, Is.EqualTo(1));
         }
 
         [Test]
