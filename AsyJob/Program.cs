@@ -1,4 +1,6 @@
 using AsyJob.Jobs;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,14 @@ builder.Services.AddSingleton<IJobPool, JobPool>(sp =>
     var repo = sp.GetService<IJobRepository>();
     return Task.Run(() => JobPool.StartJobPool(repo!)).Result;
 });
+
+//MongoDB
+//Tell BsonMapper which Subtypes for Job exist for deserialization
+//https://stackoverflow.com/a/24344620/10281237
+//TODO: Load all jobs dynamically
+BsonClassMap.RegisterClassMap<Job>();
+BsonClassMap.RegisterClassMap<DiceRollJob>();
+BsonClassMap.RegisterClassMap<TimerJob>();
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

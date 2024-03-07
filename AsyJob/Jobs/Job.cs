@@ -3,8 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace AsyJob.Jobs
 {
-    [BsonIgnoreExtraElements]
-    public class Job(string id, string name, string description = "")
+    public abstract class Job(string id, string name, string description = "")
     {
         public string Id { get; private set; } = id;
         public string Name { get; private set; } = name;
