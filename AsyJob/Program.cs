@@ -14,7 +14,7 @@ builder.Services.AddTransient<IJobWithInputFactory, TimerJobFactory>();
 builder.Services.AddTransient<IJobWithInputFactory, DiceRollJobFactory>();
 builder.Services.AddTransient<JobFactory>();
 builder.Services.AddTransient<IJobRepository, JobMongoRepository>();
-builder.Services.AddTransient<IJobRunner, JobRunnerService>();
+builder.Services.AddTransient<IJobRunner, JobRunner>();
 builder.Services.AddSingleton<IJobPool, JobPool>(sp =>
 {
     var repo = sp.GetService<IJobRepository>();

@@ -57,30 +57,4 @@
         /// </summary>
         protected virtual void OnPostRun() { }
     }
-
-    public enum ProgressStatus
-    {
-        Created, Waiting, Running, Done, Error
-    }
-
-    /// <summary>
-    /// Extends a job to allow input data to influence the calculation.
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public interface IInput<T>
-    {
-        T Input { get; }
-    }
-
-    /// <summary>
-    /// Extends a job to allow output of a calculation
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public interface IOutput<T>
-    {
-        /// <summary>
-        /// Result of the job. If calculation of output is not finished, the output may be null
-        /// </summary>
-        T? Output { get; }
-    }
 }

@@ -15,7 +15,7 @@ namespace AsyJobTests.Jobs
             var guid = "19D5D496-6046-485B-8E22-92E3923A4DCB";
             var fakeJobFactory = new FakeJobFactory("FakeJobFactory", "FakeJob");
             var jobFactory = new JobFactory([fakeJobFactory], null, new FakeGuidProvider([new(guid)]));
-            var jobRunner = new JobRunnerService(new FakeJobPool());
+            var jobRunner = new JobRunner(new FakeJobPool());
             var sut = new JobController(jobRunner, jobFactory);
             var jobRequest = new JobRequestDto("FakeJob", "MyJob1", "LoremIpsum");
             //Act
@@ -38,7 +38,7 @@ namespace AsyJobTests.Jobs
             var fakeJobFactory = new FakeJobWithInputFactory("FakeJobWithInputFactory", "FakeJob");
             var guid = "19D5D496-6046-485B-8E22-92E3923A4DCB";
             var jobFactory = new JobFactory(null, [fakeJobFactory], new FakeGuidProvider([new(guid)]));
-            var jobRunner = new JobRunnerService(new FakeJobPool());
+            var jobRunner = new JobRunner(new FakeJobPool());
             var sut = new JobController(jobRunner, jobFactory);
             var checkNum = 14;
             dynamic input = new ExpandoObject();
@@ -66,7 +66,7 @@ namespace AsyJobTests.Jobs
             //Arrange
             var fakeJobFactory = new FakeJobWithInputFactory("FakeJobWithInputFactory", "FakeJob");
             var jobFactory = new JobFactory(null, [fakeJobFactory], new GuidProvider());
-            var runner = new JobRunnerService(new FakeJobPool());
+            var runner = new JobRunner(new FakeJobPool());
             var sut = new JobController(runner, jobFactory);
             dynamic wrongInput = new ExpandoObject();
             wrongInput.Wrong = "1!1";
@@ -80,7 +80,7 @@ namespace AsyJobTests.Jobs
         {
             //Arrange
             var jobFactory = new JobFactory(null, null, new GuidProvider());
-            var runner = new JobRunnerService(new FakeJobPool());
+            var runner = new JobRunner(new FakeJobPool());
             var sut = new JobController(runner, jobFactory);
             var jobRequest = new JobRequestDto("UnknownJob", "Job");
             //Act //Assert
@@ -93,7 +93,7 @@ namespace AsyJobTests.Jobs
         {
             //Arrange
             var pool = FakeJobPool.InitializePool([new DummyJob("DUMMY1")]);
-            var runner = new JobRunnerService(pool);
+            var runner = new JobRunner(pool);
             var sut = new JobController(runner, null!);
             //Act
             var response = await sut.FetchJob("DUMMY1");
@@ -108,7 +108,7 @@ namespace AsyJobTests.Jobs
         {
             //Arrange
             var pool = FakeJobPool.InitializePool([new DummyJob("DUMMY1")]);
-            var runner = new JobRunnerService(pool);
+            var runner = new JobRunner(pool);
             var sut = new JobController(runner, null!);
             //Act //Assert
             Assert.ThrowsAsync<KeyNotFoundException>(() => sut.FetchJob("SOME_OTHER_ID"));

@@ -5,7 +5,7 @@ using NUnit.Framework.Internal;
 
 namespace AsyJob.Lib.Tests.Runner
 {
-    internal class JobRunnerServiceTests
+    internal class JobRunnerTests
     {
 
         [Test]
@@ -13,7 +13,7 @@ namespace AsyJob.Lib.Tests.Runner
         {
             //Arrange
             var fakeJobPool = new FakeJobPool();
-            var sut = new JobRunnerService(fakeJobPool);
+            var sut = new JobRunner(fakeJobPool);
             var spyJob = new SpyJob("TEST_1");
             //Act
             sut.RunJob(spyJob);
@@ -27,7 +27,7 @@ namespace AsyJob.Lib.Tests.Runner
         {
             //Arrange
             var fakeJobPool = new FakeJobPool();
-            var sut = new JobRunnerService(fakeJobPool);
+            var sut = new JobRunner(fakeJobPool);
             var dummyJob = new DummyJob("JOB_1");
             //Act
             sut.RunJob(dummyJob);
@@ -42,7 +42,7 @@ namespace AsyJob.Lib.Tests.Runner
             var fakeJobPool = new FakeJobPool();
             fakeJobPool.RunJob(new DummyJob("J1"));
             fakeJobPool.RunJob(new DummyJob("J2"));
-            var sut = new JobRunnerService(fakeJobPool);
+            var sut = new JobRunner(fakeJobPool);
             //Act
             var jobs = await sut.GetJobs();
             //Assert
@@ -54,7 +54,7 @@ namespace AsyJob.Lib.Tests.Runner
         {
             //Arrange
             var fakeJobPool = FakeJobPool.InitializePool([new DummyJob("J1")]);
-            var sut = new JobRunnerService(fakeJobPool);
+            var sut = new JobRunner(fakeJobPool);
             //Act
             var job = await sut.GetJob("J1");
             //Assert
@@ -66,7 +66,7 @@ namespace AsyJob.Lib.Tests.Runner
         {
             //Arrange
             var fakeJobPool = FakeJobPool.InitializePool([new DummyJob("J1")]);
-            var sut = new JobRunnerService(fakeJobPool);
+            var sut = new JobRunner(fakeJobPool);
             //Act
             var job = await sut.GetJob("Wabbajack");
             //Assert

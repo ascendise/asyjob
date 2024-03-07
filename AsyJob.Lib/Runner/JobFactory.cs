@@ -3,42 +3,13 @@
 namespace AsyJob.Lib.Runner
 {
 
-    /// <summary>
-    /// Interface for specific job factories
-    /// The job factory is responsible for making one specific type of job that matches the <see cref="JobType"/>.
-    /// </summary>
-    public interface IJobFactory
-    {
-        public string JobType { get; }
-
-        /// <summary>
-        /// Create a new <see cref="Job"/> with the specified type
-        /// </summary>
-        Job CreateJob(string type, string id, string name = "", string description = "");
-    }
-
-    /// <summary>
-    /// Interface for specific job factories
-    /// The job factory is responsible for making one specific type of job that matches the <see cref="JobType"/>.
-    /// </summary>
-    public interface IJobWithInputFactory
-    {
-        public string JobType { get; }
-
-        /// <summary>
-        /// Create a new <see cref="Job"/> with the specified type
-        /// </summary>
-        /// <exception cref="JobInputMismatchException">Thrown when the input does not match the expected structure</exception>
-        Job CreateJobWithInput(string type, string id, dynamic input, string name = "", string description = "");
-    }
-
     public class JobFactory(
         IEnumerable<IJobFactory>? jobFactories,
         IEnumerable<IJobWithInputFactory>? jobWithInputFactories,
         IGuidProvider guidProvider
     )
     {
-        public string JobType => "Job";
+        public static string JobType => "Job";
         private readonly IEnumerable<IJobFactory> _jobFactories = jobFactories ?? [];
         private readonly IEnumerable<IJobWithInputFactory> _jobWithInputFactories = jobWithInputFactories ?? [];
         private readonly IGuidProvider _guidProvider = guidProvider;
