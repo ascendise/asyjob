@@ -43,9 +43,21 @@ namespace AsyJobTests
             dynamic obj = new ExpandoObject();
             obj.MyValue = 14;
             //Act
-            var value = DynamicExtensions.TryGetValue<string>(obj, "MyValue");
+            var value = DynamicExtensions.TryGetValue<string?>(obj, "MyValue");
             //Assert
             Assert.That(value, Is.Null);
+        }
+
+        [Test]
+        public void TryGetValue_LongToInt_ShouldReturnCastValue()
+        {
+            //Arrange
+            dynamic obj = new ExpandoObject();
+            obj.Long = (long)123;
+            //Act
+            var loong = DynamicExtensions.TryGetValue<int?>(obj, "Long");
+            //Assert
+            Assert.That(loong, Is.EqualTo(123));
         }
     }
 }

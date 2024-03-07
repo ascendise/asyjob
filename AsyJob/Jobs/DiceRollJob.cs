@@ -51,7 +51,7 @@ namespace AsyJob.Jobs
 
         public Job CreateJobWithInput(string type, string id, dynamic input, string name = "", string description = "")
         {
-            var sides = DynamicExtensions.TryGetValue<int>(input, nameof(DiceRollInput.Sides))
+            int sides = DynamicExtensions.TryGetValue<int>(input, nameof(DiceRollInput.Sides))
                 ?? throw new JobInputMismatchException(nameof(DiceRollInput.Sides), typeof(int));
             return new DiceRollJob(id, name, new(sides), description);
         }
