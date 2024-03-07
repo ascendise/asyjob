@@ -1,4 +1,5 @@
 ﻿using AsyJob.Jobs;
+using AsyJob.Lib.Jobs.Factory;
 using AsyJob.Lib.Runner;
 using AsyJob.Lib.Tests.TestDoubles;
 using System.Dynamic;

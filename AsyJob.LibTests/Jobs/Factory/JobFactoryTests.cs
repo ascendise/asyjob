@@ -1,7 +1,7 @@
-﻿using AsyJob.Lib.Runner;
+﻿using AsyJob.Lib.Jobs.Factory;
 using AsyJob.Lib.Tests.TestDoubles;
 
-namespace AsyJob.Lib.Tests.Runner
+namespace AsyJob.Lib.Tests.Jobs.Factory
 {
     internal class JobFactoryTests
     {

@@ -1,4 +1,5 @@
 ﻿using AsyJob.Lib.Jobs;
+using AsyJob.Lib.Jobs.Factory;
 using AsyJob.Lib.Runner;
 
 namespace AsyJob.Jobs

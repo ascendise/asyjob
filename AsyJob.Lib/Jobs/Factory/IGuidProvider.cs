@@ -1,4 +1,4 @@
-﻿namespace AsyJob.Lib.Runner
+﻿namespace AsyJob.Lib.Jobs.Factory
 {
     /// <summary>
     /// Provider for Guids

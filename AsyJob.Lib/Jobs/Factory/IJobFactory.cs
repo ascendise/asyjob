@@ -1,6 +1,4 @@
-﻿using AsyJob.Lib.Jobs;
-
-namespace AsyJob.Lib.Runner
+﻿namespace AsyJob.Lib.Jobs.Factory
 {
     /// <summary>
     /// Interface for specific job factories

@@ -1,4 +1,4 @@
-﻿namespace AsyJob.Lib.Runner
+﻿namespace AsyJob.Lib.Jobs.Factory
 {
     /// <summary>
     /// Thrown when the client tries to create a job with a type, that is not supported by any <see cref="IJobWithInputFactory"/>

@@ -1,4 +1,4 @@
-﻿using AsyJob.Lib.Runner;
+﻿using AsyJob.Lib.Jobs.Factory;
 
 namespace AsyJob.Lib.Tests.TestDoubles
 {
