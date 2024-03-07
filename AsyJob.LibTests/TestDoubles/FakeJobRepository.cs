@@ -1,14 +1,9 @@
-﻿using AsyJob;
-using AsyJob.Jobs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AsyJob.Lib.Jobs;
+using AsyJob.Lib.Runner;
 
-namespace AsyJobTests.Jobs.Test_Doubles
+namespace AsyJob.Lib.Tests.TestDoubles
 {
-    internal class FakeJobRepository(List<Job> jobs) : IJobRepository
+    public class FakeJobRepository(List<Job> jobs) : IJobRepository
     {
         public IReadOnlyCollection<Job> Jobs { get => _jobs; }
         private readonly List<Job> _jobs = jobs;
@@ -17,11 +12,11 @@ namespace AsyJobTests.Jobs.Test_Doubles
 
         public Task SaveJob(Job job)
         {
-            if(_jobs.Any(j => j.Id == job.Id))
+            if (_jobs.Any(j => j.Id == job.Id))
             {
                 throw new DuplicateKeyException();
             }
-            this._jobs.Add(job);
+            _jobs.Add(job);
             return Task.CompletedTask;
         }
 

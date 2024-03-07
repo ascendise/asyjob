@@ -1,6 +1,6 @@
 ﻿using Microsoft.CSharp.RuntimeBinder;
 
-namespace AsyJob
+namespace AsyJob.Lib
 {
     public static class DynamicExtensions
     {

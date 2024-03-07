@@ -1,4 +1,4 @@
-﻿namespace AsyJob.Jobs
+﻿namespace AsyJob.Lib.Runner
 {
     /// <summary>
     /// Thrown when the input provided by the client is not valid for the requested job type

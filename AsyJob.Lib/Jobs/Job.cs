@@ -1,7 +1,4 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-using System.Runtime.InteropServices;
-
-namespace AsyJob.Jobs
+﻿namespace AsyJob.Lib.Jobs
 {
     public abstract class Job(string id, string name, string description = "")
     {
@@ -33,11 +30,11 @@ namespace AsyJob.Jobs
                 OnRun();
                 OnPostRun();
                 Status = ProgressStatus.Done;
-            } 
-            catch(Exception ex)
+            }
+            catch (Exception ex)
             {
-                this.Status = ProgressStatus.Error;
-                this.Error = ex;
+                Status = ProgressStatus.Error;
+                Error = ex;
             }
         }
 
@@ -86,4 +83,4 @@ namespace AsyJob.Jobs
         /// </summary>
         T? Output { get; }
     }
-} 
+}

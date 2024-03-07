@@ -1,5 +1,4 @@
-﻿
-namespace AsyJob.Jobs
+﻿namespace AsyJob.Lib.Runner
 {
     /// <summary>
     /// Implementation of IGuidProvider using builting <see cref="Guid"/>
@@ -7,6 +6,6 @@ namespace AsyJob.Jobs
     public class GuidProvider : IGuidProvider
     {
         public Guid GetGuid()
-            => Guid.NewGuid(); 
+            => Guid.NewGuid();
     }
 }

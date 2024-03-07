@@ -1,12 +1,7 @@
-﻿using AsyJob.Jobs;
-using AsyJobTests.Jobs.Test_Doubles;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AsyJob.Lib.Runner;
+using AsyJob.Lib.Tests.TestDoubles;
 
-namespace AsyJobTests.Jobs
+namespace AsyJob.Lib.Tests.Runner
 {
     internal class JobFactoryTests
     {
@@ -36,7 +31,7 @@ namespace AsyJobTests.Jobs
         public void CreateJob_NoMatchingFactoryNoInput_ShouldThrowException()
         {
             //Arrange
-            var jobFactory = new FakeJobFactory("JobFactory", "NoJob");  
+            var jobFactory = new FakeJobFactory("JobFactory", "NoJob");
             var guidProvider = new FakeGuidProvider([Guid.NewGuid()]);
             var sut = new JobFactory([jobFactory], null, guidProvider);
             //Act //Assert

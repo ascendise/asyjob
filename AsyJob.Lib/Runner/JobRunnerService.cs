@@ -1,4 +1,6 @@
-﻿namespace AsyJob.Jobs
+﻿using AsyJob.Lib.Jobs;
+
+namespace AsyJob.Lib.Runner
 {
     public interface IJobRunner
     {

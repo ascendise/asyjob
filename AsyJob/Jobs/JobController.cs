@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AsyJob.Lib.Jobs;
+using AsyJob.Lib.Runner;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AsyJob.Jobs

@@ -1,19 +1,12 @@
-﻿using AsyJob;
-using AsyJob.Jobs;
-using Microsoft.AspNetCore.Mvc.Routing;
-using Microsoft.CSharp.RuntimeBinder;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AsyJob.Lib.Jobs;
+using AsyJob.Lib.Runner;
 
-namespace AsyJobTests.Jobs.Test_Doubles
+namespace AsyJob.Lib.Tests.TestDoubles
 {
-    internal class FakeJobFactory(string factoryName, string jobType) : IJobFactory
+    public class FakeJobFactory(string factoryName, string jobType) : IJobFactory
     {
         public string FactoryName { get; } = factoryName;
-        public string JobType { get; } = jobType; 
+        public string JobType { get; } = jobType;
 
         public Job CreateJob(string type, string id, string name = "", string description = "")
         {
@@ -22,7 +15,7 @@ namespace AsyJobTests.Jobs.Test_Doubles
 
     }
 
-    internal class FakeJobWithInputFactory(string factoryName, string jobType) : IJobWithInputFactory
+    public class FakeJobWithInputFactory(string factoryName, string jobType) : IJobWithInputFactory
     {
         public string FactoryName { get; } = factoryName;
         public string JobType { get; } = jobType;
@@ -36,17 +29,23 @@ namespace AsyJobTests.Jobs.Test_Doubles
         }
     }
 
-    internal class FakeJobFactoryOutputJob(string id, string name, string jobType, string factoryName, string description = "") 
+    public class FakeJobFactoryOutputJob(string id, string name, string jobType, string factoryName, string description = "")
         : Job(id, name, description)
     {
         public string JobType { get; set; } = jobType;
         public string FactoryName { get; set; } = factoryName;
     }
 
-    internal class FakeJobFactoryOutputExtendedJob(string id, string name, FakeFactoryJobInput input, string jobType, string factoryName, string description = "")
+    public class FakeJobFactoryOutputExtendedJob(string id, string name, FakeFactoryJobInput input, string jobType, string factoryName, string description = "")
         : FakeJobFactoryOutputJob(id, name, jobType, factoryName, description), IInput<FakeFactoryJobInput>
     {
         public FakeFactoryJobInput Input { get; } = input;
     }
+
+    public class FakeFactoryJobInput(int checknum)
+    {
+        public int CheckNum { get; } = checknum;
+    }
+
 
 }

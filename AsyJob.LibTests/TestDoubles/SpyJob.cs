@@ -1,16 +1,9 @@
-﻿using AsyJob.Jobs;
-using Microsoft.VisualStudio.TestPlatform.Common;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AsyJob.Lib.Jobs;
+using AsyJob.Tests;
 
-namespace AsyJobTests.Jobs.Test_Doubles
+namespace AsyJob.Lib.Tests.TestDoubles
 {
-    internal class SpyJob : Job, IOutput<SpyJob.SpyResult>
+    public class SpyJob : Job, IOutput<SpyJob.SpyResult>
     {
         public SpyResult Output { get; private set; } = new();
         private SpyJobState? _onCreation;
@@ -24,22 +17,22 @@ namespace AsyJobTests.Jobs.Test_Doubles
 
         public SpyJob(string id, string name, string description = "") : base(id, name, description)
         {
-            _onCreation = new SpyJobState(this.Status, this.Error);
+            _onCreation = new SpyJobState(Status, Error);
         }
 
         protected override void OnPreRun()
         {
-            _onPreRun = new SpyJobState(this.Status, this.Error);
+            _onPreRun = new SpyJobState(Status, Error);
         }
 
         protected override void OnRun()
         {
-            _onRun = new SpyJobState(this.Status, this.Error);
+            _onRun = new SpyJobState(Status, Error);
         }
 
         protected override void OnPostRun()
         {
-            _onPostRun = new SpyJobState(this.Status, this.Error);
+            _onPostRun = new SpyJobState(Status, Error);
             var invalidState = new TestException("The Spy Job has missing states");
             var jobRun = new SpyJobRun(
                 _onCreation ?? throw invalidState,
@@ -50,7 +43,7 @@ namespace AsyJobTests.Jobs.Test_Doubles
             Output.AddJobRun(jobRun);
         }
 
-        internal class SpyResult
+        public class SpyResult
         {
             public int RunCount { get => Runs.Count; }
             public List<SpyJobRun> Runs { get; private set; } = [];
@@ -59,7 +52,7 @@ namespace AsyJobTests.Jobs.Test_Doubles
                 => Runs.Add(run);
         }
 
-        internal readonly struct SpyJobRun(SpyJobState onCreation, SpyJobState onPreRun, SpyJobState onRun, SpyJobState onPostRun)
+        public readonly struct SpyJobRun(SpyJobState onCreation, SpyJobState onPreRun, SpyJobState onRun, SpyJobState onPostRun)
         {
             public SpyJobState OnCreation { get; } = onCreation;
             public SpyJobState OnPreRun { get; } = onPreRun;
@@ -67,7 +60,7 @@ namespace AsyJobTests.Jobs.Test_Doubles
             public SpyJobState OnPostRun { get; } = onPostRun;
         }
 
-        internal readonly struct SpyJobState(ProgressStatus status, Exception? error)
+        public readonly struct SpyJobState(ProgressStatus status, Exception? error)
         {
             public ProgressStatus Status { get; } = status;
             public Exception? Error { get; } = error;

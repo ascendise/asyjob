@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using AsyJob.Lib.Jobs;
+using AsyJob.Lib.Runner;
 
 namespace AsyJob.Jobs
 {
@@ -10,7 +11,7 @@ namespace AsyJob.Jobs
     /// <param name="name"></param>
     /// <param name="input"></param>
     /// <param name="description"></param>
-    public class TimerJob(string id, string name, TimerInput input, string description = "") 
+    public class TimerJob(string id, string name, TimerInput input, string description = "")
         : Job(id, name, description), IInput<TimerInput>, IOutput<TimerOutput>
     {
         public TimerJob(string id, TimerInput input, string description = "") : this(id, id, input, description) { }
@@ -26,7 +27,7 @@ namespace AsyJob.Jobs
 
         protected override void OnRun()
         {
-            Thread.Sleep(Input.Delay); 
+            Thread.Sleep(Input.Delay);
         }
 
         protected override void OnPostRun()

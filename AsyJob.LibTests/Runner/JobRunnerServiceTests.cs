@@ -1,15 +1,9 @@
-﻿using AsyJob.Jobs;
-using AsyJobTests.Jobs.Test_Doubles;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Primitives;
+﻿using AsyJob.Lib.Runner;
+using AsyJob.Lib.Tests.TestDoubles;
+using AsyJobTests.Jobs;
 using NUnit.Framework.Internal;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace AsyJobTests.Jobs
+namespace AsyJob.Lib.Tests.Runner
 {
     internal class JobRunnerServiceTests
     {
@@ -38,7 +32,7 @@ namespace AsyJobTests.Jobs
             //Act
             sut.RunJob(dummyJob);
             //Assert
-            Assert.That(fakeJobPool.JobThreads, Has.Count.EqualTo(1)); 
+            Assert.That(fakeJobPool.JobThreads, Has.Count.EqualTo(1));
         }
 
         [Test]

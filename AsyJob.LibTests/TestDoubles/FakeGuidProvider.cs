@@ -1,20 +1,15 @@
-﻿using AsyJob.Jobs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AsyJob.Lib.Runner;
 
-namespace AsyJobTests.Jobs.Test_Doubles
+namespace AsyJob.Lib.Tests.TestDoubles
 {
-    internal class FakeGuidProvider : IGuidProvider
+    public class FakeGuidProvider : IGuidProvider
     {
         public Guid[] Guids { get; set; }
         private int _lastIndex = -1;
 
         public FakeGuidProvider(Guid[] guids)
         {
-            if(guids.Length == 0)
+            if (guids.Length == 0)
             {
                 throw new ArgumentException($"{nameof(guids)} cannot be empty");
             }
@@ -24,7 +19,7 @@ namespace AsyJobTests.Jobs.Test_Doubles
         public Guid GetGuid()
         {
             _lastIndex++;
-            if(_lastIndex >= Guids.Length)
+            if (_lastIndex >= Guids.Length)
             {
                 _lastIndex = 0;
             }

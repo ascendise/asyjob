@@ -1,13 +1,8 @@
-﻿using AsyJob.Jobs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AsyJob.Lib.Jobs;
 
-namespace AsyJobTests.Jobs.Test_Doubles
+namespace AsyJob.Lib.Tests.TestDoubles
 {
-    internal class SleepJob(string id, string name, SleepInput data, string description = "") : Job(id, name, description), IInput<SleepInput>
+    public class SleepJob(string id, string name, SleepInput data, string description = "") : Job(id, name, description), IInput<SleepInput>
     {
         public SleepInput Input { get; private set; } = data;
 
@@ -21,7 +16,7 @@ namespace AsyJobTests.Jobs.Test_Doubles
         }
     }
 
-    internal class SleepInput(int time)
+    public class SleepInput(int time)
     {
         /// <summary>
         /// Time in milliseconds the task should <see cref="Thread.Sleep(int)"/>

@@ -1,7 +1,6 @@
-﻿using MongoDB.Bson.Serialization.IdGenerators;
-using ZstdSharp;
+﻿using AsyJob.Lib.Jobs;
 
-namespace AsyJob.Jobs
+namespace AsyJob.Lib.Runner
 {
 
     /// <summary>
@@ -11,19 +10,19 @@ namespace AsyJob.Jobs
     public interface IJobFactory
     {
         public string JobType { get; }
-        
+
         /// <summary>
         /// Create a new <see cref="Job"/> with the specified type
         /// </summary>
         Job CreateJob(string type, string id, string name = "", string description = "");
-    }   
+    }
 
     /// <summary>
     /// Interface for specific job factories
     /// The job factory is responsible for making one specific type of job that matches the <see cref="JobType"/>.
     /// </summary>
     public interface IJobWithInputFactory
-    { 
+    {
         public string JobType { get; }
 
         /// <summary>
@@ -34,10 +33,10 @@ namespace AsyJob.Jobs
     }
 
     public class JobFactory(
-        IEnumerable<IJobFactory>? jobFactories, 
+        IEnumerable<IJobFactory>? jobFactories,
         IEnumerable<IJobWithInputFactory>? jobWithInputFactories,
         IGuidProvider guidProvider
-    ) 
+    )
     {
         public string JobType => "Job";
         private readonly IEnumerable<IJobFactory> _jobFactories = jobFactories ?? [];
@@ -57,7 +56,7 @@ namespace AsyJob.Jobs
 
         private static string GetNameOrDefault(string name, string type, string id)
         {
-            if(string.IsNullOrWhiteSpace(name))
+            if (string.IsNullOrWhiteSpace(name))
             {
                 return GenerateJobName(type, id);
             }

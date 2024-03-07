@@ -1,6 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using AsyJob.Lib.Jobs;
 
-namespace AsyJob.Jobs
+namespace AsyJob.Lib.Runner
 {
 
     /// <summary>
@@ -54,7 +54,7 @@ namespace AsyJob.Jobs
         public static async Task<JobPool> StartJobPool(IJobRepository jobRepo)
         {
             var jobPool = new JobPool(jobRepo);
-            foreach(var job in await jobRepo.FetchAllJobs())
+            foreach (var job in await jobRepo.FetchAllJobs())
             {
                 jobPool.LoadJob(job);
             }
@@ -63,7 +63,7 @@ namespace AsyJob.Jobs
 
         private void LoadJob(Job job)
         {
-            if(job.Finished)
+            if (job.Finished)
             {
                 _jobs.Add(job.Id, new JobThread(job, null));
             }
@@ -107,4 +107,4 @@ namespace AsyJob.Jobs
         }
 
     }
-} 
+}

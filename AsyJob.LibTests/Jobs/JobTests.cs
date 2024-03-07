@@ -1,12 +1,7 @@
-﻿using AsyJob.Jobs;
-using AsyJobTests.Jobs.Test_Doubles;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AsyJob.Lib.Jobs;
+using AsyJob.Lib.Tests.TestDoubles;
 
-namespace AsyJobTests.Jobs
+namespace AsyJob.Lib.Tests.Jobs
 {
     internal class JobTests
     {
@@ -15,7 +10,7 @@ namespace AsyJobTests.Jobs
         public void Construction_Creation_ShouldHaveStatusCreated()
         {
             //Arrange //Act
-            var dummyJob = new DummyJob("JOB_1"); 
+            var dummyJob = new DummyJob("JOB_1");
             //Assert
             Assert.That(dummyJob.Status, Is.EqualTo(ProgressStatus.Created));
         }
