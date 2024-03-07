@@ -23,7 +23,7 @@ namespace AsyJob.Jobs
         protected override void OnRun()
         {
             var random = new Random();
-            var roll = random.Next(Input.Sides + 1);
+            var roll = random.Next(Input.Sides) + 1;
             Output = new DiceRollOutput(roll);
         }
     }
