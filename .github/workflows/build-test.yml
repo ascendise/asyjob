@@ -7,7 +7,11 @@ on:
     branches: [ "main" ]
 
 jobs:
+<<<<<<< HEAD
   build-test:
+=======
+  build:
+>>>>>>> 8119334 (workflow for running tests)
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
