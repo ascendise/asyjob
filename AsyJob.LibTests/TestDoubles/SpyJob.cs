@@ -6,7 +6,7 @@ namespace AsyJob.Lib.Tests.TestDoubles
     public class SpyJob : Job, IOutput<SpyJob.SpyResult>
     {
         public SpyResult Output { get; private set; } = new();
-        private SpyJobState? _onCreation;
+        private readonly SpyJobState? _onCreation;
         private SpyJobState? _onPreRun;
         private SpyJobState? _onRun;
         private SpyJobState? _onPostRun;
