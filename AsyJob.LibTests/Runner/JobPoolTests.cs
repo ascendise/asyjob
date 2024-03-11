@@ -101,6 +101,21 @@ namespace AsyJob.Lib.Tests.Runner
         }
 
         [Test]
+        public async Task RunJob_JobFinished_ShouldSaveFinishedState()
+        {
+            //Arrange
+            var job = new DummyJob("D1");
+            var repo = new JsonJobRepository();
+            var sut = await JobPool.StartJobPool(repo);
+            //Act
+            sut.RunJob(job);
+            JobTestUtils.WaitForJobCompletion(job);
+            //Assert
+            var updatedJob = await repo.FetchJob(job.Id);
+            Assert.That(updatedJob?.Status, Is.EqualTo(ProgressStatus.Done));
+        }
+
+        [Test]
         public async Task FetchJob_JobExists_ShouldReturnJob()
         {
             //Arrange
