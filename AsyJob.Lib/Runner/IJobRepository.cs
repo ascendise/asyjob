@@ -12,6 +12,20 @@ namespace AsyJob.Lib.Runner
         /// <returns></returns>
         Task SaveJob(Job job);
         /// <summary>
+        /// Updates the job with the matching <see cref="Job.Id"/>
+        /// </summary>
+        /// <param name="job"></param>
+        /// <exception cref="KeyNotFoundException">thrown when a job with the chosen id was not found</exception>
+        /// <returns></returns>
+        Task<Job> UpdateJob(Job job);
+        /// <summary>
+        /// Deletes the job with the matching <see cref="Job.Id"/>
+        /// If no job with the chosen id exists, nothing happens
+        /// </summary>
+        /// <param name="jobId"></param>
+        /// <returns></returns>
+        Task DeleteJob(string jobId);
+        /// <summary>
         /// Returns all jobs inside the repository
         /// </summary>
         /// <returns></returns>

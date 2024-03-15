@@ -48,5 +48,27 @@ namespace AsyJob.Lib.Tests.TestDoubles
             _jobs.Add(json);
             return Task.CompletedTask;
         }
+
+        public async Task<Job> UpdateJob(Job job)
+        {
+            var jobs = await FetchAllJobs();
+            var jobToUpdate = jobs.FirstOrDefault(j => j.Id == job.Id)
+                ?? throw new KeyNotFoundException();
+            jobToUpdate.Update(job);
+            SaveCollectionToJson(jobs);
+            return jobToUpdate;
+        }
+
+        private void SaveCollectionToJson(IEnumerable<Job> jobs)
+        {
+            _jobs = jobs.Select(j => JsonConvert.SerializeObject(j, s_jsonSettings)).ToList();
+        }
+
+        public async Task DeleteJob(string jobId)
+        {
+            var jobs = await FetchAllJobs();
+            jobs = jobs.Where(j => j.Id != jobId);
+            SaveCollectionToJson(jobs);
+        }
     }
 }

@@ -46,5 +46,19 @@ namespace AsyJob.Jobs
             var cursor = await collection.FindAsync(j => j.Id == id);
             return await cursor.FirstOrDefaultAsync();
         }
+
+        public async Task<Job> UpdateJob(Job job)
+        {
+            var collection = GetJobCollection();
+            var filter = Builders<Job>.Filter
+                .Eq(j => j.Id, job.Id);
+            return await collection.FindOneAndReplaceAsync(filter, job);
+        }
+
+        public async Task DeleteJob(string jobId)
+        {
+            var collection = GetJobCollection();
+            await collection.DeleteOneAsync(j => j.Id == jobId);
+        }
     }
 }

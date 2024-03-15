@@ -1,5 +1,6 @@
 ﻿using AsyJob.Lib.Jobs;
 using AsyJob.Lib.Runner;
+using System.Reflection.Metadata.Ecma335;
 
 namespace AsyJob.Lib.Tests.TestDoubles
 {
@@ -28,6 +29,24 @@ namespace AsyJob.Lib.Tests.TestDoubles
         public Task<Job?> FetchJob(string id)
         {
             return Task.FromResult(_jobs.FirstOrDefault(j => j.Id == id));
+        }
+
+        public Task<Job> UpdateJob(Job job)
+        {
+            var jobToUpdate = _jobs.FirstOrDefault(j => j.Id == job.Id)
+                ?? throw new KeyNotFoundException();
+            jobToUpdate.Update(job);
+            return Task.FromResult(jobToUpdate);
+        }
+
+        public Task DeleteJob(string jobId)
+        {
+            var jobToDelete = _jobs.FirstOrDefault(j => j.Id == jobId);
+            if (jobToDelete != null)
+            {
+                _jobs.Remove(jobToDelete);
+            }
+            return Task.CompletedTask;
         }
     }
 }
