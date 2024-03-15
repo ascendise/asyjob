@@ -27,6 +27,14 @@ namespace AsyJob.Jobs
             var roll = random.Next(Input.Sides) + 1;
             Output = new DiceRollOutput(roll);
         }
+
+        public override void Update(Job job)
+        {
+            base.Update(job);
+            var diceJob = (job as DiceRollJob)!;
+            Input = diceJob.Input;
+            Output = diceJob.Output;
+        }
     }
 
     public class DiceRollInput(int sides)
