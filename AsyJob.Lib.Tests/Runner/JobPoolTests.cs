@@ -114,7 +114,7 @@ namespace AsyJob.Lib.Tests.Runner
             //Assert
             var updatedJob = await repo.FetchJob(job.Id);
             await JobTestUtils.RepeatUntil(
-                async () => updatedJob = await repo.FetchJob(job.Id), 
+                async () => updatedJob = await repo.FetchJob(job.Id),
                 () => updatedJob?.Status == ProgressStatus.Done,
                 10, 100);
             Assert.That(updatedJob!.Status, Is.EqualTo(ProgressStatus.Done));
@@ -133,7 +133,7 @@ namespace AsyJob.Lib.Tests.Runner
             //Assert
             var updatedJob = await repo.FetchJob(job.Id) as UpdateJob;
             await JobTestUtils.RepeatUntil(
-                async () => updatedJob = await repo.FetchJob(job.Id) as UpdateJob, 
+                async () => updatedJob = await repo.FetchJob(job.Id) as UpdateJob,
                 () => (string?)updatedJob?.Value == "NewValue",
                 10, 100);
             Assert.That(updatedJob!.Value, Is.EqualTo("NewValue"));

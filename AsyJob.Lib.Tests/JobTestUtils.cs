@@ -16,7 +16,7 @@ namespace AsyJob.Lib.Tests.Jobs
         {
             var periodicTimer = new PeriodicTimer(TimeSpan.FromMilliseconds(delayMillis));
             int tryCount = 0;
-            while(tryCount < maxRetry && !until() && await periodicTimer.WaitForNextTickAsync())
+            while (tryCount < maxRetry && !until() && await periodicTimer.WaitForNextTickAsync())
             {
                 repeat();
                 tryCount++;

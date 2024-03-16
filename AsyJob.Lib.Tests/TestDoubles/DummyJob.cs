@@ -4,7 +4,7 @@ namespace AsyJob.Lib.Tests.TestDoubles
 {
     public class DummyJob : Job
     {
-        private DummyJob(): base("", "") { }
+        private DummyJob() : base("", "") { }
 
         public DummyJob(string id, string description = "") : base(id, description)
         {

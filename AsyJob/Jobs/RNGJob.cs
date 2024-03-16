@@ -7,7 +7,7 @@ namespace AsyJob.Jobs
     {
         public RNGInput Input { get; private set; } = input;
         public RNGOutput? Output { get; private set; }
-        
+
         public RNGJob(RNGInput input, string id, string description = "") : this(input, id, id, description)
         {
         }
@@ -24,7 +24,7 @@ namespace AsyJob.Jobs
             }
         }
     }
-    
+
     public class RNGInput(int periodMillis = 100, int iterations = 1000, long min = long.MinValue, long max = long.MaxValue)
     {
         public int PeriodMillis { get; } = periodMillis;

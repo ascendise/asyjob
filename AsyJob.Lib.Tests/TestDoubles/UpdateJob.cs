@@ -19,9 +19,11 @@ namespace AsyJob.Lib.Tests.TestDoubles
         /// <summary>
         /// Anytime this value gets updated, an Update-event is raised
         /// </summary>
-        public object Value {
-            get => _value; 
-            set {
+        public object Value
+        {
+            get => _value;
+            set
+            {
                 _value = value;
                 RaiseUpdateEvent(new(this));
             }

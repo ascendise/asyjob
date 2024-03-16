@@ -64,7 +64,7 @@ namespace AsyJob.Lib.Jobs
         /// or, if an exception was thrown during execution of the job, <see cref="ProgressStatus.Error"/>
         /// </summary>
         protected virtual void OnPostRun() { }
-        
+
         /// <summary>
         /// Updates the current jobs value.
         /// This method only allows <see cref="Job"/>s of the same type. So a DiceRollJob would only accept DiceRollJobs as argument
@@ -72,7 +72,7 @@ namespace AsyJob.Lib.Jobs
         /// <param name="job"></param>
         public virtual void Update(Job job)
         {
-            if(job.GetType() != GetType())
+            if (job.GetType() != GetType())
             {
                 throw new ArgumentException("Need to be the same type", nameof(job));
             }
