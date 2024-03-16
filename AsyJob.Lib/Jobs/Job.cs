@@ -15,6 +15,12 @@ namespace AsyJob.Lib.Jobs
         /// </summary>
         public Exception? Error { get; private set; }
 
+        /// <summary>
+        /// Might be called by a job to signal to the Job Pool that the job has new values and the store has to be updated
+        /// If this event is never raised, the job only gets persisted on creation and after execution by default.
+        /// </summary>
+        public event UpdateEventHandler OnUpdate;
+
         public Job(string id, string description = "") : this(id, id, description) { }
 
         /// <summary>
@@ -76,5 +82,17 @@ namespace AsyJob.Lib.Jobs
             Status = job.Status;
             Error = job.Error;
         }
+
+        protected void RaiseUpdateEvent(UpdateEventArgs e)
+        {
+            OnUpdate?.Invoke(this, e);
+        }
     }
+
+    public class UpdateEventArgs(Job job) : EventArgs
+    {
+        public Job Job { get; private set; } = job;
+    }
+
+    public delegate void UpdateEventHandler(object sender, UpdateEventArgs e);
 }

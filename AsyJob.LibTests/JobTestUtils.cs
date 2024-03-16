@@ -20,6 +20,7 @@ namespace AsyJobTests.Jobs
             while(tryCount < maxRetry && !until() && await periodicTimer.WaitForNextTickAsync())
             {
                 repeat();
+                tryCount++;
             }
         }
     }
