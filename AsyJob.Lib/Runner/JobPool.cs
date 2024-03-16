@@ -43,7 +43,10 @@ namespace AsyJob.Lib.Runner
             {
                 job.Run();
                 await _jobRepo.UpdateJob(job);
-            });
+            })
+            {
+                Name = job.Name
+            };
             _jobs.Add(job.Id, new JobThread(job, thread));
             thread.Start();
         }

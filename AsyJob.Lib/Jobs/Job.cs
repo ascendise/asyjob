@@ -19,7 +19,7 @@ namespace AsyJob.Lib.Jobs
         /// Might be called by a job to signal to the Job Pool that the job has new values and the store has to be updated
         /// If this event is never raised, the job only gets persisted on creation and after execution by default.
         /// </summary>
-        public event UpdateEventHandler OnUpdate;
+        public event UpdateEventHandler? OnUpdate;
 
         public Job(string id, string description = "") : this(id, id, description) { }
 
