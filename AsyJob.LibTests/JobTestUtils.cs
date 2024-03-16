@@ -1,4 +1,5 @@
 ﻿using AsyJob.Lib.Jobs;
+using System.Net.NetworkInformation;
 
 namespace AsyJobTests.Jobs
 {
@@ -11,6 +12,15 @@ namespace AsyJobTests.Jobs
                 //Loop until finished
             }
         }
-    }
 
+        public static async Task RepeatUntil(Action repeat, Func<bool> until, int maxRetry = 10, int delayMillis = 0)
+        {
+            var periodicTimer = new PeriodicTimer(TimeSpan.FromMilliseconds(delayMillis));
+            int tryCount = 0;
+            while(tryCount < maxRetry && !until() && await periodicTimer.WaitForNextTickAsync())
+            {
+                repeat();
+            }
+        }
+    }
 }

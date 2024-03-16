@@ -112,6 +112,10 @@ namespace AsyJob.Lib.Tests.Runner
             JobTestUtils.WaitForJobCompletion(job);
             //Assert
             var updatedJob = await repo.FetchJob(job.Id);
+            await JobTestUtils.RepeatUntil(
+                async () => updatedJob = await repo.FetchJob(job.Id), 
+                () => updatedJob?.Status == ProgressStatus.Done,
+                10, 100);
             Assert.That(updatedJob?.Status, Is.EqualTo(ProgressStatus.Done));
         }
 

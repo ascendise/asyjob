@@ -38,7 +38,11 @@ namespace AsyJob.Lib.Runner
 
         private void RunNewJobThread(Job job)
         {
-            var thread = new Thread(job.Run);
+            var thread = new Thread(async () =>
+            {
+                job.Run();
+                await _jobRepo.UpdateJob(job);
+            });
             _jobs.Add(job.Id, new JobThread(job, thread));
             thread.Start();
         }

@@ -35,10 +35,16 @@ namespace AsyJob.Lib.Tests.TestDoubles
 
         public Task<IEnumerable<Job>> FetchAllJobs()
         {
-            var jobs = _jobs.Select(j => JsonConvert.DeserializeObject<Job>(j, s_jsonSettings) 
-                ?? throw new TestException("Malformed json"));
-            return Task.FromResult(jobs);
+            var jobs = GetJobs();
+            return Task.FromResult(jobs.AsEnumerable());
         }
+
+        private List<Job> GetJobs()
+        {
+            return _jobs.Select(j => JsonConvert.DeserializeObject<Job>(j, s_jsonSettings)
+                ?? throw new TestException("Malformed json")).ToList();
+        }
+
         public async Task<Job?> FetchJob(string id)
             => (await FetchAllJobs()).Where(j => j.Id == id).FirstOrDefault();
 
@@ -49,14 +55,14 @@ namespace AsyJob.Lib.Tests.TestDoubles
             return Task.CompletedTask;
         }
 
-        public async Task<Job> UpdateJob(Job job)
+        public Task<Job> UpdateJob(Job job)
         {
-            var jobs = await FetchAllJobs();
+            var jobs = GetJobs();
             var jobToUpdate = jobs.FirstOrDefault(j => j.Id == job.Id)
                 ?? throw new KeyNotFoundException();
             jobToUpdate.Update(job);
             SaveCollectionToJson(jobs);
-            return jobToUpdate;
+            return Task.FromResult(jobToUpdate);
         }
 
         private void SaveCollectionToJson(IEnumerable<Job> jobs)
