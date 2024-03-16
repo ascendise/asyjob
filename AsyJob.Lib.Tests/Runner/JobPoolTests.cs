@@ -1,7 +1,8 @@
 ﻿using AsyJob.Lib.Jobs;
 using AsyJob.Lib.Runner;
+using AsyJob.Lib.Tests.Jobs;
 using AsyJob.Lib.Tests.TestDoubles;
-using AsyJobTests.Jobs;
+using NUnit.Framework.Internal;
 
 namespace AsyJob.Lib.Tests.Runner
 {
@@ -98,6 +99,44 @@ namespace AsyJob.Lib.Tests.Runner
             //Act //Assert
             Assert.Throws<DuplicateKeyException>(() => sut.RunJob(job));
             Assert.That(sut.RunningThreads, Is.EqualTo(1));
+        }
+
+        [Test]
+        public async Task RunJob_JobFinished_ShouldSaveFinishedState()
+        {
+            //Arrange
+            var job = new DummyJob("D1");
+            var repo = new JsonJobRepository();
+            var sut = await JobPool.StartJobPool(repo);
+            //Act
+            sut.RunJob(job);
+            JobTestUtils.WaitForJobCompletion(job);
+            //Assert
+            var updatedJob = await repo.FetchJob(job.Id);
+            await JobTestUtils.RepeatUntil(
+                async () => updatedJob = await repo.FetchJob(job.Id),
+                () => updatedJob?.Status == ProgressStatus.Done,
+                10, 100);
+            Assert.That(updatedJob!.Status, Is.EqualTo(ProgressStatus.Done));
+        }
+
+        [Test]
+        public async Task RunJob_JobUpdateDuringRun_ShouldUpdateState()
+        {
+            //Arrange
+            var job = new UpdateJob("OldValue", "UJ1");
+            var repo = new JsonJobRepository();
+            var sut = await JobPool.StartJobPool(repo);
+            //Act
+            sut.RunJob(job);
+            job.Value = "NewValue";
+            //Assert
+            var updatedJob = await repo.FetchJob(job.Id) as UpdateJob;
+            await JobTestUtils.RepeatUntil(
+                async () => updatedJob = await repo.FetchJob(job.Id) as UpdateJob,
+                () => (string?)updatedJob?.Value == "NewValue",
+                10, 100);
+            Assert.That(updatedJob!.Value, Is.EqualTo("NewValue"));
         }
 
         [Test]

@@ -4,7 +4,7 @@ using AsyJob.Lib.Runner;
 using AsyJob.Lib.Tests.TestDoubles;
 using System.Dynamic;
 
-namespace AsyJobTests.Jobs
+namespace AsyJob.Tests.Jobs
 {
     internal class JobControllerTests
     {

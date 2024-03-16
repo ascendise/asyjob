@@ -1,7 +1,7 @@
 ﻿using AsyJob;
 using System.Dynamic;
 
-namespace AsyJobTests
+namespace AsyJob.Tests
 {
     internal class DynamicExtensionTests
     {

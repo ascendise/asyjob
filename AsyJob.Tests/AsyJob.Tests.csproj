@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AsyJob.Lib.Tests\AsyJob.Lib.Tests.csproj" />
     <ProjectReference Include="..\AsyJob.LibTests\AsyJob.Lib.Tests.csproj" />
     <ProjectReference Include="..\AsyJob\AsyJob.csproj" />
   </ItemGroup>

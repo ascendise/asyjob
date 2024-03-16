@@ -50,5 +50,34 @@ namespace AsyJob.Lib.Tests.Jobs
                 Assert.That(errorJob.Error, Is.Not.Null);
             });
         }
+
+        [Test]
+        public void Update_CorrectJobType_ShouldUpdateJobWithNewValues()
+        {
+            //Arrange
+            var job = new ValueJob<int>("MyJob1", 31);
+            var newJob = new ValueJob<int>("MyJob2", 42);
+            //Act
+            job.Update(newJob);
+            //Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(job.Id, Is.EqualTo(newJob.Id));
+                Assert.That(job.Name, Is.EqualTo(newJob.Name));
+                Assert.That(job.Description, Is.EqualTo(newJob.Description));
+                Assert.That(job.Status, Is.EqualTo(newJob.Status));
+                Assert.That(job.Value, Is.EqualTo(newJob.Value));
+            });
+        }
+
+        [Test]
+        public void Update_IncorrectType_ShouldUpdateJobWithNewValues()
+        {
+            //Arrange
+            Job dummyJob = new DummyJob("DJ1");
+            Job valueJob = new ValueJob<int>("VJ1", 1337);
+            //Act //Assert
+            Assert.Throws<ArgumentException>(() => valueJob.Update(dummyJob));
+        }
     }
 }

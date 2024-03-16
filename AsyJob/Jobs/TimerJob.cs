@@ -35,6 +35,14 @@ namespace AsyJob.Jobs
         {
             Output!.End = DateTime.Now;
         }
+
+        public override void Update(Job job)
+        {
+            base.Update(job);
+            var timerJob = (job as TimerJob)!;
+            Input = timerJob.Input;
+            Output = timerJob.Output;
+        }
     }
 
     public class TimerInput(int delay)

@@ -1,6 +1,6 @@
 ﻿using AsyJob.Lib.Runner;
+using AsyJob.Lib.Tests.Jobs;
 using AsyJob.Lib.Tests.TestDoubles;
-using AsyJobTests.Jobs;
 using NUnit.Framework.Internal;
 
 namespace AsyJob.Lib.Tests.Runner

@@ -13,6 +13,7 @@ builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Services.AddTransient<IGuidProvider, GuidProvider>();
 builder.Services.AddTransient<IJobWithInputFactory, TimerJobFactory>();
 builder.Services.AddTransient<IJobWithInputFactory, DiceRollJobFactory>();
+builder.Services.AddTransient<IJobWithInputFactory, RNGJobFactory>();
 builder.Services.AddTransient<JobFactory>();
 builder.Services.AddTransient<IJobRepository, JobMongoRepository>();
 builder.Services.AddTransient<IJobRunner, JobRunner>();
@@ -29,6 +30,7 @@ builder.Services.AddSingleton<IJobPool, JobPool>(sp =>
 BsonClassMap.RegisterClassMap<Job>();
 BsonClassMap.RegisterClassMap<DiceRollJob>();
 BsonClassMap.RegisterClassMap<TimerJob>();
+BsonClassMap.RegisterClassMap<RNGJob>();
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

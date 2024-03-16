@@ -1,4 +1,6 @@
-﻿namespace AsyJob.Lib.Jobs
+﻿using System.Runtime.CompilerServices;
+
+namespace AsyJob.Lib.Jobs
 {
     public abstract class Job(string id, string name, string description = "")
     {
@@ -12,6 +14,12 @@
         /// contains the exception that was caught inside the job.
         /// </summary>
         public Exception? Error { get; private set; }
+
+        /// <summary>
+        /// Might be called by a job to signal to the Job Pool that the job has new values and the store has to be updated
+        /// If this event is never raised, the job only gets persisted on creation and after execution by default.
+        /// </summary>
+        public event UpdateEventHandler? OnUpdate;
 
         public Job(string id, string description = "") : this(id, id, description) { }
 
@@ -56,5 +64,35 @@
         /// or, if an exception was thrown during execution of the job, <see cref="ProgressStatus.Error"/>
         /// </summary>
         protected virtual void OnPostRun() { }
+
+        /// <summary>
+        /// Updates the current jobs value.
+        /// This method only allows <see cref="Job"/>s of the same type. So a DiceRollJob would only accept DiceRollJobs as argument
+        /// </summary>
+        /// <param name="job"></param>
+        public virtual void Update(Job job)
+        {
+            if (job.GetType() != GetType())
+            {
+                throw new ArgumentException("Need to be the same type", nameof(job));
+            }
+            Id = job.Id;
+            Name = job.Name;
+            Description = job.Description;
+            Status = job.Status;
+            Error = job.Error;
+        }
+
+        protected void RaiseUpdateEvent(UpdateEventArgs e)
+        {
+            OnUpdate?.Invoke(this, e);
+        }
     }
+
+    public class UpdateEventArgs(Job job) : EventArgs
+    {
+        public Job Job { get; private set; } = job;
+    }
+
+    public delegate void UpdateEventHandler(object sender, UpdateEventArgs e);
 }
