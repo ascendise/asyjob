@@ -1,7 +1,6 @@
 ﻿using AsyJob.Lib.Jobs;
-using System.Net.NetworkInformation;
 
-namespace AsyJobTests.Jobs
+namespace AsyJob.Lib.Tests.Jobs
 {
     internal static class JobTestUtils
     {

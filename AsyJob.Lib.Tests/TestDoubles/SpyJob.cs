@@ -1,5 +1,4 @@
 ﻿using AsyJob.Lib.Jobs;
-using AsyJob.Tests;
 
 namespace AsyJob.Lib.Tests.TestDoubles
 {

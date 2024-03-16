@@ -1,7 +1,6 @@
 ﻿using AsyJob.Lib.Jobs;
 using AsyJob.Lib.Jobs.Factory;
 using AsyJob.Lib.Runner;
-using AsyJob.Tests;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;

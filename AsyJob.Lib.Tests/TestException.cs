@@ -1,4 +1,4 @@
-﻿namespace AsyJob.Tests
+﻿namespace AsyJob.Lib.Tests
 {
     /// <summary>
     /// Used in test double classes to avoid mix up with exceptions thrown from the system under test
