@@ -1,7 +1,11 @@
+using AspNetCore.Identity.MongoDbCore.Extensions;
+using AspNetCore.Identity.MongoDbCore.Infrastructure;
+using AsyJob.Auth;
 using AsyJob.Jobs;
 using AsyJob.Lib.Jobs;
 using AsyJob.Lib.Jobs.Factory;
 using AsyJob.Lib.Runner;
+using Microsoft.AspNetCore.Identity;
 using MongoDB.Bson.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,10 +36,36 @@ BsonClassMap.RegisterClassMap<DiceRollJob>();
 BsonClassMap.RegisterClassMap<TimerJob>();
 BsonClassMap.RegisterClassMap<RNGJob>();
 
-
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+//Authorization
+var mongoDbIdentityConfiguration = new MongoDbIdentityConfiguration()
+{
+    MongoDbSettings = new MongoDbSettings
+    {
+        ConnectionString = builder.Configuration.GetConnectionString("MongoDB")!,
+        DatabaseName = "asyJob"
+    },
+    IdentityOptionsAction = options =>
+    {
+        options.Password.RequireDigit = false;
+		options.Password.RequiredLength = 8;
+		options.Password.RequireNonAlphanumeric = false;
+		options.Password.RequireUppercase = false;
+		options.Password.RequireLowercase = false;
+
+		// Lockout settings
+		options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+		options.Lockout.MaxFailedAccessAttempts = 10;
+
+		// ApplicationUser settings
+		options.User.RequireUniqueEmail = true;
+    }
+};
+builder.Services.ConfigureMongoDbIdentity<User, Role, Guid>(mongoDbIdentityConfiguration);
+builder.Services.AddIdentityApiEndpoints<User>();
 
 var app = builder.Build();
 
@@ -49,6 +79,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+app.MapIdentityApi<User>();
 
 app.MapControllers();
 
