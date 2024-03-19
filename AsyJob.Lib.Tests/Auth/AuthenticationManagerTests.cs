@@ -6,7 +6,7 @@ using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AsyJob.Lib.Tests
+namespace AsyJob.Lib.Tests.Auth
 {
     internal class AuthenticationManagerTests
     {
