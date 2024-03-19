@@ -17,19 +17,23 @@
             foreach(var requiredRight in required)
             {
                 Right? userRight = Rights.SingleOrDefault(r => r.Resource == requiredRight.Resource);
-                if(!userRight.HasValue)
+                if (!userRight.HasValue)
                 {
                     missing.Add(requiredRight);
                     continue;
                 }
-                var missingOps = ~userRight.Value.Ops & requiredRight.Ops;
-                if(missingOps > 0)
+                Operation missingOps = GetMissingOperations(userRight.Value, requiredRight.Ops);
+                if (missingOps != Operation.None)
                 {
-                    missing.Add(new Right(requiredRight.Resource, missingOps)); 
+                    missing.Add(new Right(requiredRight.Resource, missingOps));
                 }
             }
             return missing;
+        }
 
+        private static Operation GetMissingOperations(Right userRight, Operation requiredOps)
+        {
+            return ~userRight.Ops & requiredOps;
         }
     }
 
