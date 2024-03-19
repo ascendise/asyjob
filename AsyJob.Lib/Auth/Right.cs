@@ -1,16 +1,9 @@
 ﻿namespace AsyJob.Lib.Auth
 {
-    public readonly struct Right
+    public readonly struct Right(string resource, Operation ops)
     {
-        public string Resource { get; }
-        public Operation Ops { get; }
-        [Flags]
-        public enum Operation
-        {
-            Read,
-            Write,
-            Execute
-        }
+        public string Resource { get; } = resource;
+        public Operation Ops { get; } = ops;
     }
 
 }
