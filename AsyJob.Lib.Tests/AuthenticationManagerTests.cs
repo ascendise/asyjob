@@ -43,5 +43,24 @@ namespace AsyJob.Lib.Tests
             Assert.Throws<UnauthorizedException>(fn);
         }
 
+        [Test]
+        public void AuthenticationContext_DifferentRights_ShouldIncludeMissingRightsInException()
+        {
+            //Arrange
+            var sut = new AuthenticationManager();
+            var user = new User(Guid.NewGuid(), "HelloWorld", [new Right("Resource", Operation.Execute)]);
+            List<Right> requiredRights = [new Right("Resource", Operation.Read | Operation.Write)];
+            //Act
+            void fn() => sut.AuthenticatedContext(() =>
+            {
+                Assert.Fail("Action was run even tho user is not permitted to!");
+            }, user, requiredRights);
+            //Assert
+            var exception = Assert.Throws<UnauthorizedException>(fn);
+            Assert.That(exception.MissingRights.Count, Is.EqualTo(1));
+            Assert.That(exception.MissingRights.Single().Ops, Is.EqualTo(Operation.Read | Operation.Write));
+        }
+
+
     }
 }

@@ -21,18 +21,18 @@ namespace AsyJob.Lib.Auth
         private static bool HasPermission(User user, IEnumerable<Right> requiredRights, out IEnumerable<Right> missingRights)
         {
             List<Right> missing = [];
-            foreach(var right in requiredRights)
+            foreach(var requiredRight in requiredRights)
             {
-                Right? userRight = user.Rights.SingleOrDefault(r => r.Resource == right.Resource);
+                Right? userRight = user.Rights.SingleOrDefault(r => r.Resource == requiredRight.Resource);
                 if(!userRight.HasValue)
                 {
-                    missing.Add(right);
+                    missing.Add(requiredRight);
                     continue;
                 }
-                var missingOps = userRight.Value.Ops ^ right.Ops;
+                var missingOps = ~userRight.Value.Ops & requiredRight.Ops;
                 if(missingOps > 0)
                 {
-                    missing.Add(new Right(right.Resource, missingOps)); 
+                    missing.Add(new Right(requiredRight.Resource, missingOps)); 
                 }
             }
             missingRights = missing;
