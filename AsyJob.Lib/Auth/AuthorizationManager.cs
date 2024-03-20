@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AsyJob.Lib.Auth
 {
-    public class AuthenticationManager : IAuthenticationManager
+    public class AuthorizationManager : IAuthorizationManager
     {
         public void AuthenticatedContext(Action action, User user, IEnumerable<Right> requiredRights)
         {

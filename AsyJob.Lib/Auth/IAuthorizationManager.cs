@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AsyJob.Lib.Auth
 {
-    public interface IAuthenticationManager
+    public interface IAuthorizationManager
     {
         /// <summary>
         /// Used to run a procedure in an authenticated context (a present user)

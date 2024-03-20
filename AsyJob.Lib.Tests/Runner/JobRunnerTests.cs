@@ -12,8 +12,9 @@ namespace AsyJob.Lib.Tests.Runner
         public void RunJob_DummyJob_ShouldRunJob()
         {
             //Arrange
+            var stubAuthManager = new StubAuthorizationManager();
             var fakeJobPool = new FakeJobPool();
-            var sut = new JobRunner(fakeJobPool);
+            var sut = new JobRunner(fakeJobPool, stubAuthManager);
             var spyJob = new SpyJob("TEST_1");
             //Act
             sut.RunJob(spyJob);
@@ -26,8 +27,9 @@ namespace AsyJob.Lib.Tests.Runner
         public void RunJob_JobPool_ShouldRunTheJobThroughTheJobPool()
         {
             //Arrange
+            var stubAuthManager = new StubAuthorizationManager();
             var fakeJobPool = new FakeJobPool();
-            var sut = new JobRunner(fakeJobPool);
+            var sut = new JobRunner(fakeJobPool, stubAuthManager);
             var dummyJob = new DummyJob("JOB_1");
             //Act
             sut.RunJob(dummyJob);
@@ -39,10 +41,11 @@ namespace AsyJob.Lib.Tests.Runner
         public async Task GetJobs_WithJobs_ShouldReturnAllJobs()
         {
             //Arrange
+            var stubAuthManager = new StubAuthorizationManager();
             var fakeJobPool = new FakeJobPool();
             fakeJobPool.RunJob(new DummyJob("J1"));
             fakeJobPool.RunJob(new DummyJob("J2"));
-            var sut = new JobRunner(fakeJobPool);
+            var sut = new JobRunner(fakeJobPool, stubAuthManager);
             //Act
             var jobs = await sut.GetJobs();
             //Assert
@@ -53,8 +56,9 @@ namespace AsyJob.Lib.Tests.Runner
         public async Task GetJob_ExistingId_ShouldReturnJob()
         {
             //Arrange
+            var stubAuthManager = new StubAuthorizationManager();
             var fakeJobPool = FakeJobPool.InitializePool([new DummyJob("J1")]);
-            var sut = new JobRunner(fakeJobPool);
+            var sut = new JobRunner(fakeJobPool, stubAuthManager);
             //Act
             var job = await sut.GetJob("J1");
             //Assert
@@ -65,8 +69,9 @@ namespace AsyJob.Lib.Tests.Runner
         public async Task GetJob_NoExistingId_ShouldReturnNull()
         {
             //Arrange
+            var stubAuthManager = new StubAuthorizationManager();
             var fakeJobPool = FakeJobPool.InitializePool([new DummyJob("J1")]);
-            var sut = new JobRunner(fakeJobPool);
+            var sut = new JobRunner(fakeJobPool, stubAuthManager);
             //Act
             var job = await sut.GetJob("Wabbajack");
             //Assert

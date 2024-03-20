@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace AsyJob.Lib.Tests.Auth
 {
-    internal class AuthenticationManagerTests
+    internal class AuthorizationManagerTests
     {
 
         [Test]
         public void AuthenticationContext_HasRequiredRights_ShouldRunAction()
         {
             //Arrange
-            var sut = new AuthenticationManager();
+            var sut = new AuthorizationManager();
             var user = new User(Guid.NewGuid(), "User", [new Right("MyResource", Operation.Execute | Operation.Write)]);
             List<Right> requiredRights = [new Right("MyResource", Operation.Execute | Operation.Write)];
             //Act
@@ -31,7 +31,7 @@ namespace AsyJob.Lib.Tests.Auth
         public void AuthenticationContext_DoesNotHaveRights_ShouldThrowException()
         {
             //Arrange
-            var sut = new AuthenticationManager();
+            var sut = new AuthorizationManager();
             var user = new User(Guid.NewGuid(), "n00b", []);
             List<Right> requiredRights = [new Right("Resource", Operation.Read)];
             //Act
@@ -47,7 +47,7 @@ namespace AsyJob.Lib.Tests.Auth
         public void AuthenticationContext_DifferentRights_ShouldIncludeMissingRightsInException()
         {
             //Arrange
-            var sut = new AuthenticationManager();
+            var sut = new AuthorizationManager();
             var user = new User(Guid.NewGuid(), "HelloWorld", [new Right("Resource", Operation.Execute)]);
             List<Right> requiredRights = [new Right("Resource", Operation.Read | Operation.Write)];
             //Act
