@@ -30,7 +30,9 @@ namespace AsyJob.Lib.Runner
 
         public Task<Job?> GetJob(string jobId)
         {
-            return _pool.FetchJob<Job>(jobId);
+            return _authManager.AuthenticatedContext(
+                () => _pool.FetchJob<Job>(jobId),
+                User, [new Right(nameof(JobRunner), Operation.Read)]);
         }
     }
 }

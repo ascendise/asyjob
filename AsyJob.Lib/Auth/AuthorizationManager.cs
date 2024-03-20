@@ -28,5 +28,14 @@ namespace AsyJob.Lib.Auth
             missingRights = user.Needs(requiredRights);
             return !missingRights.Any();
         }
+
+        public T AuthenticatedContext<T>(Func<T> func, User? user, IEnumerable<Right> requiredRights)
+        {
+            if(!HasPermission(user, requiredRights, out var missingRights))
+            {
+                throw new UnauthorizedException(user, missingRights);
+            }
+            return func();
+        }
     }
 }

@@ -117,5 +117,35 @@ namespace AsyJob.Lib.Tests.Runner
             //Assert
             Assert.That(job, Is.Null);
         }
+
+        [Test]
+        public async Task GetJob_Unauthorized_ShouldThrowException()
+        {
+            //Arrange
+            var authManager = new AuthorizationManager();
+            var fakeJobPool = FakeJobPool.InitializePool([]);
+            var sut = new JobRunner(fakeJobPool, authManager)
+            {
+                User = new User(Guid.NewGuid(), "Username", [new Right(nameof(JobRunner), Operation.Write)])
+            };
+            //Act //Assert
+            Assert.That(() => sut.GetJob("AEIOU"), Throws.TypeOf<UnauthorizedException>());
+        }
+
+        [Test]
+        public async Task GetJob_HasRequiredRights_ShouldReturnJob()
+        {
+            //Arrange
+            var authManager = new AuthorizationManager();
+            var fakeJobPool = FakeJobPool.InitializePool([new DummyJob("1234")]);
+            var sut = new JobRunner(fakeJobPool, authManager)
+            {
+                User = new User(Guid.NewGuid(), "Username", [new Right(nameof(JobRunner), Operation.Read)])
+            };
+            //Act 
+            var job = await sut.GetJob("1234");
+            //Assert
+            Assert.That(job, Is.Not.Null);
+        }
     }
 }

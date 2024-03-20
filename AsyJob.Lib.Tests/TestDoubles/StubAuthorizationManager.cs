@@ -17,5 +17,10 @@ namespace AsyJob.Lib.Tests.TestDoubles
         {
             action();
         }
+
+        public T AuthenticatedContext<T>(Func<T> func, User? user, IEnumerable<Right> requiredRights)
+        {
+            return func();
+        }
     }
 }
