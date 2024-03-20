@@ -93,6 +93,42 @@ namespace AsyJob.Lib.Tests.Runner
         }
 
         [Test]
+        public async Task GetJobs_HasRequiredRights_ShouldReturnJobs()
+        {
+            //Arrange
+            var authManager = new AuthorizationManager();
+            var fakeJobPool = FakeJobPool.InitializePool([
+                new DummyJob("DJ1"),
+                new DummyJob("DJ2")
+            ]);
+            var sut = new JobRunner(fakeJobPool, authManager)
+            {
+                User = new(Guid.NewGuid(), "Username", [new Right(nameof(JobRunner), Operation.Read)])
+            };
+            //Act
+            var jobs = await sut.GetJobs();
+            //Assert
+            Assert.That(jobs.Count(), Is.EqualTo(2));
+        }
+
+        [Test]
+        public void GetJobs_Unauthorized_ShouldThrowException()
+        {
+            //Arrange
+            var authManager = new AuthorizationManager();
+            var fakeJobPool = FakeJobPool.InitializePool([
+                new DummyJob("DJ1"),
+                new DummyJob("DJ2")
+            ]);
+            var sut = new JobRunner(fakeJobPool, authManager)
+            {
+                User = new(Guid.NewGuid(), "Username", [new Right(nameof(JobRunner), Operation.Write)])
+            };
+            //Act //Assert
+            Assert.That(sut.GetJobs, Throws.TypeOf<UnauthorizedException>());
+        }
+
+        [Test]
         public async Task GetJob_ExistingId_ShouldReturnJob()
         {
             //Arrange
@@ -119,7 +155,7 @@ namespace AsyJob.Lib.Tests.Runner
         }
 
         [Test]
-        public async Task GetJob_Unauthorized_ShouldThrowException()
+        public void GetJob_Unauthorized_ShouldThrowException()
         {
             //Arrange
             var authManager = new AuthorizationManager();

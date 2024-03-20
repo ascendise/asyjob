@@ -25,7 +25,9 @@ namespace AsyJob.Lib.Runner
 
         public Task<IEnumerable<Job>> GetJobs()
         {
-            return _pool.FetchAll<Job>();
+            return _authManager.AuthenticatedContext(
+                _pool.FetchAll,
+                User, [new Right(nameof(JobRunner), Operation.Read)]);
         }
 
         public Task<Job?> GetJob(string jobId)
