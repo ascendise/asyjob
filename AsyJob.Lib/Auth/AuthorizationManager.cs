@@ -9,7 +9,7 @@ namespace AsyJob.Lib.Auth
 {
     public class AuthorizationManager : IAuthorizationManager
     {
-        public void AuthenticatedContext(Action action, User user, IEnumerable<Right> requiredRights)
+        public void AuthenticatedContext(Action action, User? user, IEnumerable<Right> requiredRights)
         {
             if(!HasPermission(user, requiredRights, out var missingRights))
             {
@@ -18,8 +18,13 @@ namespace AsyJob.Lib.Auth
             action();
         }
 
-        private static bool HasPermission(User user, IEnumerable<Right> requiredRights, out IEnumerable<Right> missingRights)
+        private static bool HasPermission(User? user, IEnumerable<Right> requiredRights, out IEnumerable<Right> missingRights)
         {
+            if(user == null)
+            {
+                missingRights = requiredRights;
+                return !missingRights.Any();
+            }
             missingRights = user.Needs(requiredRights);
             return !missingRights.Any();
         }

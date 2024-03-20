@@ -18,7 +18,9 @@ namespace AsyJob.Lib.Runner
 
         public void RunJob(Job job)
         {
-            _pool.RunJob(job);
+            _authManager.AuthenticatedContext(
+                () => _pool.RunJob(job),
+                User, [new Right(nameof(JobRunner), Operation.Write | Operation.Execute)]);
         }
 
         public Task<IEnumerable<Job>> GetJobs()

@@ -1,4 +1,5 @@
-﻿using AsyJob.Lib.Runner;
+﻿using AsyJob.Lib.Auth;
+using AsyJob.Lib.Runner;
 using AsyJob.Lib.Tests.Jobs;
 using AsyJob.Lib.Tests.TestDoubles;
 using NUnit.Framework.Internal;
@@ -35,6 +36,45 @@ namespace AsyJob.Lib.Tests.Runner
             sut.RunJob(dummyJob);
             //Assert
             Assert.That(fakeJobPool.JobThreads, Has.Count.EqualTo(1));
+        }
+
+        [Test]
+        public void RunJob_MissingRights_ShouldNotRunJobAndThrowUnauthorizedException()
+        {
+            //Arrange
+            var authManager = new AuthorizationManager();
+            var fakeJobPool = new FakeJobPool();
+            var sut = new JobRunner(fakeJobPool, authManager)
+            {
+                User = new User(Guid.NewGuid(), "User", [new Right(nameof(JobRunner), Operation.Read)])
+            };
+            var spyJob = new SpyJob("JOB_1");
+            //Act //Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(() => sut.RunJob(spyJob), Throws.TypeOf<UnauthorizedException>());
+                Assert.That(spyJob.Output.RunCount, Is.EqualTo(0));
+            });
+        }
+        
+        [Test]
+        public void RunJob_HasRequiredRights_ShouldRunJob()
+        {
+            //Arrange
+            var authManager = new AuthorizationManager();
+            var fakeJobPool = new FakeJobPool();
+            var sut = new JobRunner(fakeJobPool, authManager)
+            {
+                User = new User(Guid.NewGuid(), "User", [new Right(nameof(JobRunner), Operation.Write | Operation.Execute)])
+            };
+            var spyJob = new SpyJob("JOB_1");
+            //Act 
+            sut.RunJob(spyJob);
+            //Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(spyJob.Output.RunCount, Is.EqualTo(1));
+            });
         }
 
         [Test]

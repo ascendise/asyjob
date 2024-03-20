@@ -17,7 +17,7 @@ namespace AsyJob.Lib.Auth
         /// <param name="user"></param>
         /// <param name="requiredRights"></param>
         /// <exception cref="UnauthorizedException"></exception>
-        void AuthenticatedContext(Action action, User user, IEnumerable<Right> requiredRights);
+        void AuthenticatedContext(Action action, User? user, IEnumerable<Right> requiredRights);
     }
 
 }
