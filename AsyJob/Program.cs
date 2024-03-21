@@ -66,6 +66,13 @@ var mongoDbIdentityConfiguration = new MongoDbIdentityConfiguration()
 };
 builder.Services.ConfigureMongoDbIdentity<User, Role, Guid>(mongoDbIdentityConfiguration);
 builder.Services.AddIdentityApiEndpoints<User>();
+    //Add Domain user to DI.
+    //Converts the Identity Framework User to a Domain User
+builder.Services.AddScoped(sp =>
+{
+    var mongoUser = sp.GetService<User>();
+    return mongoUser!.GetDomainUser();
+});
 
 var app = builder.Build();
 
