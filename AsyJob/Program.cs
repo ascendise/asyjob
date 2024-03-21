@@ -2,11 +2,13 @@ using AspNetCore.Identity.MongoDbCore.Extensions;
 using AspNetCore.Identity.MongoDbCore.Infrastructure;
 using AsyJob.Auth;
 using AsyJob.Jobs;
+using AsyJob.Lib.Auth;
 using AsyJob.Lib.Jobs;
 using AsyJob.Lib.Jobs.Factory;
 using AsyJob.Lib.Runner;
 using Microsoft.AspNetCore.Identity;
 using MongoDB.Bson.Serialization;
+using User = AsyJob.Auth.User;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +28,7 @@ builder.Services.AddSingleton<IJobPool, JobPool>(sp =>
     var repo = sp.GetService<IJobRepository>();
     return Task.Run(() => JobPool.StartJobPool(repo!)).Result;
 });
+builder.Services.AddTransient<IAuthorizationManager, AuthorizationManager>();
 
 //MongoDB
 //Tell BsonMapper which Subtypes for Job exist for deserialization
@@ -66,8 +69,9 @@ var mongoDbIdentityConfiguration = new MongoDbIdentityConfiguration()
 };
 builder.Services.ConfigureMongoDbIdentity<User, Role, Guid>(mongoDbIdentityConfiguration);
 builder.Services.AddIdentityApiEndpoints<User>();
-    //Add Domain user to DI.
-    //Converts the Identity Framework User to a Domain User
+//Add Domain user to DI.
+//Converts the Identity Framework User to a Domain User
+builder.Services.AddScoped<User>();
 builder.Services.AddScoped(sp =>
 {
     var mongoUser = sp.GetService<User>();
