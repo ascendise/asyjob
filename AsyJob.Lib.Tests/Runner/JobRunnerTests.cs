@@ -44,10 +44,8 @@ namespace AsyJob.Lib.Tests.Runner
             //Arrange
             var authManager = new AuthorizationManager();
             var fakeJobPool = new FakeJobPool();
-            var sut = new JobRunner(fakeJobPool, authManager)
-            {
-                User = new User(Guid.NewGuid(), "User", [new Right(nameof(JobRunner), Operation.Read)])
-            };
+            var user = new User(Guid.NewGuid(), "User", [new Right(nameof(JobRunner), Operation.Read)]);
+            var sut = new JobRunner(fakeJobPool, authManager, user);
             var spyJob = new SpyJob("JOB_1");
             //Act //Assert
             Assert.Multiple(() =>
@@ -63,10 +61,8 @@ namespace AsyJob.Lib.Tests.Runner
             //Arrange
             var authManager = new AuthorizationManager();
             var fakeJobPool = new FakeJobPool();
-            var sut = new JobRunner(fakeJobPool, authManager)
-            {
-                User = new User(Guid.NewGuid(), "User", [new Right(nameof(JobRunner), Operation.Write | Operation.Execute)])
-            };
+            var user = new User(Guid.NewGuid(), "User", [new Right(nameof(JobRunner), Operation.Write | Operation.Execute)]);
+            var sut = new JobRunner(fakeJobPool, authManager, user);
             var spyJob = new SpyJob("JOB_1");
             //Act 
             sut.RunJob(spyJob);
@@ -101,10 +97,8 @@ namespace AsyJob.Lib.Tests.Runner
                 new DummyJob("DJ1"),
                 new DummyJob("DJ2")
             ]);
-            var sut = new JobRunner(fakeJobPool, authManager)
-            {
-                User = new(Guid.NewGuid(), "Username", [new Right(nameof(JobRunner), Operation.Read)])
-            };
+            var user = new User(Guid.NewGuid(), "Username", [new Right(nameof(JobRunner), Operation.Read)]);
+            var sut = new JobRunner(fakeJobPool, authManager, user);
             //Act
             var jobs = await sut.GetJobs();
             //Assert
@@ -120,10 +114,8 @@ namespace AsyJob.Lib.Tests.Runner
                 new DummyJob("DJ1"),
                 new DummyJob("DJ2")
             ]);
-            var sut = new JobRunner(fakeJobPool, authManager)
-            {
-                User = new(Guid.NewGuid(), "Username", [new Right(nameof(JobRunner), Operation.Write)])
-            };
+            var user = new User(Guid.NewGuid(), "Username", [new Right(nameof(JobRunner), Operation.Write)]);
+            var sut = new JobRunner(fakeJobPool, authManager);
             //Act //Assert
             Assert.That(sut.GetJobs, Throws.TypeOf<UnauthorizedException>());
         }
@@ -160,10 +152,8 @@ namespace AsyJob.Lib.Tests.Runner
             //Arrange
             var authManager = new AuthorizationManager();
             var fakeJobPool = FakeJobPool.InitializePool([]);
-            var sut = new JobRunner(fakeJobPool, authManager)
-            {
-                User = new User(Guid.NewGuid(), "Username", [new Right(nameof(JobRunner), Operation.Write)])
-            };
+            var user = new User(Guid.NewGuid(), "Username", [new Right(nameof(JobRunner), Operation.Write)]);
+            var sut = new JobRunner(fakeJobPool, authManager);
             //Act //Assert
             Assert.That(() => sut.GetJob("AEIOU"), Throws.TypeOf<UnauthorizedException>());
         }
@@ -174,10 +164,8 @@ namespace AsyJob.Lib.Tests.Runner
             //Arrange
             var authManager = new AuthorizationManager();
             var fakeJobPool = FakeJobPool.InitializePool([new DummyJob("1234")]);
-            var sut = new JobRunner(fakeJobPool, authManager)
-            {
-                User = new User(Guid.NewGuid(), "Username", [new Right(nameof(JobRunner), Operation.Read)])
-            };
+            var user = new User(Guid.NewGuid(), "Username", [new Right(nameof(JobRunner), Operation.Read)]);
+            var sut = new JobRunner(fakeJobPool, authManager, user);
             //Act 
             var job = await sut.GetJob("1234");
             //Assert

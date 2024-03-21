@@ -4,7 +4,7 @@ using AsyJob.Lib.Jobs;
 namespace AsyJob.Lib.Runner
 {
 
-    public class JobRunner(IJobPool pool, IAuthorizationManager authManager) : IJobRunner
+    public class JobRunner(IJobPool pool, IAuthorizationManager authManager, User? user = null) : IJobRunner
     {
         /// <summary>
         /// Sets the current <see cref="User"/> of the JobRunner
@@ -12,7 +12,7 @@ namespace AsyJob.Lib.Runner
         /// If the User does not have the appropriate rights for a method, then the
         /// method throws a <see cref="UnauthorizedException"/>
         /// </summary>
-        public User? User { get; set; }
+        public User? User { get; } = user;
         private readonly IJobPool _pool = pool;
         private readonly IAuthorizationManager _authManager = authManager;
 
