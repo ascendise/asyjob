@@ -23,7 +23,7 @@ builder.Services.AddTransient<IJobWithInputFactory, RNGJobFactory>();
 builder.Services.AddTransient<JobFactory>();
 builder.Services.AddTransient<IJobRepository, JobMongoRepository>();
 builder.Services.AddTransient<IJobRunner, JobRunner>();
-builder.Services.AddSingleton<IJobPool, JobPool>(sp =>
+builder.Services.AddScoped<IJobPool, JobPool>(sp =>
 {
     var repo = sp.GetService<IJobRepository>();
     return Task.Run(() => JobPool.StartJobPool(repo!)).Result;
