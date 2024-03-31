@@ -1,16 +1,17 @@
 ﻿using AsyJob.Lib.Auth;
 using Microsoft.AspNetCore.Authorization;
+using System.Text;
 
 namespace AsyJob.Auth
 {
     /// <summary>
-    /// Sets a policy in the format "HasRights_{<see cref="Right.ToString"></see>}
+    /// Sets a policy in the format "{<see cref="POLICY_PREFIX"/>}_{<see cref="Right.ToString"></see>}
     /// </summary>
     internal class HasRightsAttribute : AuthorizeAttribute
     {
-        const string POLICY_PREFIX = "HasRights";
+        public const string POLICY_PREFIX = "HasRights";
 
-        public Right Right
+        public Right[] Right
         {
             set
             {
@@ -18,7 +19,10 @@ namespace AsyJob.Auth
             }
         }
 
-        private static string ToPolicy(Right right)
-            => $"{POLICY_PREFIX}_{right}";
+        private static string ToPolicy(Right[] rights)
+        {
+            var rightString = string.Join("_", rights.Select(x => x.ToString()));
+            return $"{POLICY_PREFIX}_{rightString}";
+        }
     }
 }
