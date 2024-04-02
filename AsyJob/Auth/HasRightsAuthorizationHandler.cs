@@ -10,26 +10,32 @@ namespace AsyJob.Auth
 
         protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, HasRightsRequirement requirement)
         {
-            var userId = context.User.Claims.SingleOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-            if (userId == null)
+            try
             {
-                context.Fail(new AuthorizationFailureReason(this, "User has no id"));
-                return;
+                await CheckUserRights(context, requirement);
             }
-            var mongoUser = await _userStore.FindByIdAsync(userId, CancellationToken.None);
-            if (mongoUser == null)
-            {
-                context.Fail(new AuthorizationFailureReason(this, "No user with matching id found"));
-                return;
+            catch (AuthorizationFailedException ex) {
+                context.Fail(new AuthorizationFailureReason(this, ex.Message));
             }
-            var domainUser = mongoUser.GetDomainUser();
-            var missingRights = domainUser.Needs(requirement.Rights);
+            context.Succeed(requirement);
+        }
+
+        private async Task CheckUserRights(AuthorizationHandlerContext context, HasRightsRequirement requirement)
+        {
+            var user = await MapToDomainUser(context.User);
+            var missingRights = user.Needs(requirement.Rights);
             if (missingRights.Any())
-            {
-                context.Fail(new AuthorizationFailureReason(this, "User does not have all rights"));
-            } else {
-                context.Succeed(requirement);
-            }
+                throw new AuthorizationFailedException("User is missing rights for this action");
+        }
+
+        private async Task<Lib.Auth.User> MapToDomainUser(ClaimsPrincipal identity)
+        {
+
+            var userId = identity.Claims.SingleOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value
+                ?? throw new AuthorizationFailedException("User has no id");
+            var mongoUser = await _userStore.FindByIdAsync(userId, CancellationToken.None) 
+                ?? throw new AuthorizationFailedException("No user with matching id found");
+            return mongoUser.GetDomainUser();
         }
 
         private class AuthorizationFailedException(string message) : Exception(message)
