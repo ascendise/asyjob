@@ -13,7 +13,6 @@ namespace AsyJob.Jobs
     /// </summary>
     [Route("api/jobs")]
     [ApiController]
-    [HasRights($"{nameof(JobRunner)}_wx")]
     public class JobController(IJobRunner jobRunner, JobFactory jobFactory) : ControllerBase
     {
         private readonly IJobRunner _jobRunner = jobRunner;
@@ -27,6 +26,7 @@ namespace AsyJob.Jobs
         /// <exception cref="NoMatchingJobFactoryException">Thrown when no job factory for <see cref="JobRequestDto.JobType"/> exists </exception>
         /// <returns></returns>
         [HttpPost]
+        [HasRights($"{nameof(JobRunner)}_wx")]
         public Task<JobResponseDto> RunJob(JobRequestDto jobRequest)
         {
             Job job = CreateJob(jobRequest);
@@ -44,6 +44,7 @@ namespace AsyJob.Jobs
         }
 
         [HttpGet("{jobId}")]
+        [HasRights($"{nameof(JobRunner)}_r")]
         public async Task<JobResponseDto> FetchJob(string jobId)
         {
             var job = await _jobRunner.GetJob(jobId);
