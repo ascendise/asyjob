@@ -65,7 +65,7 @@ namespace AsyJob.Jobs
 
         public Job CreateJobWithInput(string type, string id, dynamic input, string name = "", string description = "")
         {
-            int delay = DynamicExtensions.TryGetValue(input, nameof(TimerInput.Delay))
+            int delay = DynamicExtensions.TryGetValue<int>(input, nameof(TimerInput.Delay))
                 ?? throw new JobInputMismatchException(nameof(TimerInput.Delay), typeof(int));
             return new TimerJob(id, name, new(delay), description);
         }

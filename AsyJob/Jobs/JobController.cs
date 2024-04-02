@@ -1,4 +1,6 @@
-﻿using AsyJob.Lib.Jobs;
+﻿using AsyJob.Auth;
+using AsyJob.Lib.Auth;
+using AsyJob.Lib.Jobs;
 using AsyJob.Lib.Jobs.Factory;
 using AsyJob.Lib.Runner;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +26,7 @@ namespace AsyJob.Jobs
         /// <exception cref="NoMatchingJobFactoryException">Thrown when no job factory for <see cref="JobRequestDto.JobType"/> exists </exception>
         /// <returns></returns>
         [HttpPost]
+        [HasRights($"{nameof(JobRunner)}_wx")]
         public Task<JobResponseDto> RunJob(JobRequestDto jobRequest)
         {
             Job job = CreateJob(jobRequest);
@@ -41,6 +44,7 @@ namespace AsyJob.Jobs
         }
 
         [HttpGet("{jobId}")]
+        [HasRights($"{nameof(JobRunner)}_r")]
         public async Task<JobResponseDto> FetchJob(string jobId)
         {
             var job = await _jobRunner.GetJob(jobId);
