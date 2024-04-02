@@ -14,7 +14,8 @@ namespace AsyJob.Auth
             {
                 await CheckUserRights(context, requirement);
             }
-            catch (AuthorizationFailedException ex) {
+            catch (AuthorizationFailedException ex)
+            {
                 context.Fail(new AuthorizationFailureReason(this, ex.Message));
             }
             context.Succeed(requirement);
@@ -33,7 +34,7 @@ namespace AsyJob.Auth
 
             var userId = identity.Claims.SingleOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value
                 ?? throw new AuthorizationFailedException("User has no id");
-            var mongoUser = await _userStore.FindByIdAsync(userId, CancellationToken.None) 
+            var mongoUser = await _userStore.FindByIdAsync(userId, CancellationToken.None)
                 ?? throw new AuthorizationFailedException("No user with matching id found");
             return mongoUser.GetDomainUser();
         }

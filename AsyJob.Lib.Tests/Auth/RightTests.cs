@@ -23,12 +23,12 @@ namespace AsyJob.Lib.Tests.Auth
 
         public static object[] ToStringCases =
         [
-            new object [] { new Right("Resource", Operation.None), "Resource_0" } ,
-            new object [] { new Right("Resource", Operation.Read), "Resource_r" },
-            new object [] { new Right("Resource", Operation.Write), "Resource_w" },
-            new object [] { new Right("Resource", Operation.Execute), "Resource_x" },
-            new object [] { new Right("Resource", Operation.Read | Operation.Write), "Resource_rw" },
-            new object [] { new Right("Resource", Operation.Execute | Operation.Write | Operation.Read), "Resource_rwx" },
+            new object[] { new Right("Resource", Operation.None), "Resource_0" },
+            new object[] { new Right("Resource", Operation.Read), "Resource_r" },
+            new object[] { new Right("Resource", Operation.Write), "Resource_w" },
+            new object[] { new Right("Resource", Operation.Execute), "Resource_x" },
+            new object[] { new Right("Resource", Operation.Read | Operation.Write), "Resource_rw" },
+            new object[] { new Right("Resource", Operation.Execute | Operation.Write | Operation.Read), "Resource_rwx" },
         ];
 
         [Test]

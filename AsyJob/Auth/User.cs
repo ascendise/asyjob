@@ -7,7 +7,7 @@ namespace AsyJob.Auth
     public class User : MongoIdentityUser<Guid>
     {
         public IEnumerable<Right> Rights { get; set; } = [
-            new Right(nameof(JobRunner), Operation.Read | Operation.Write | Operation.Execute)    
+            new Right(nameof(JobRunner), Operation.Read | Operation.Write | Operation.Execute)
         ];
 
         public User(string username) : base(username) { }

@@ -55,17 +55,17 @@ var mongoDbIdentityConfiguration = new MongoDbIdentityConfiguration()
     IdentityOptionsAction = options =>
     {
         options.Password.RequireDigit = false;
-		options.Password.RequiredLength = 8;
-		options.Password.RequireNonAlphanumeric = false;
-		options.Password.RequireUppercase = false;
-		options.Password.RequireLowercase = false;
+        options.Password.RequiredLength = 8;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequireLowercase = false;
 
-		// Lockout settings
-		options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
-		options.Lockout.MaxFailedAccessAttempts = 10;
+        // Lockout settings
+        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+        options.Lockout.MaxFailedAccessAttempts = 10;
 
-		// ApplicationUser settings
-		options.User.RequireUniqueEmail = true;
+        // ApplicationUser settings
+        options.User.RequireUniqueEmail = true;
     }
 };
 builder.Services.AddTransient<IAuthorizationHandler, HasRightsAuthorizationHandler>();

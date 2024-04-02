@@ -6,7 +6,7 @@ namespace AsyJob.Auth
 {
     internal class HasRightsPolicyProvider : IAuthorizationPolicyProvider
     {
-        public Task<AuthorizationPolicy> GetDefaultPolicyAsync() => 
+        public Task<AuthorizationPolicy> GetDefaultPolicyAsync() =>
             Task.FromResult(
                 new AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()

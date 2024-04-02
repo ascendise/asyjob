@@ -14,7 +14,7 @@
         public IEnumerable<Right> Needs(IEnumerable<Right> required)
         {
             List<Right> missing = [];
-            foreach(var requiredRight in required)
+            foreach (var requiredRight in required)
             {
                 Right? userRight = Rights.SingleOrDefault(r => r.Resource == requiredRight.Resource);
                 if (!userRight.HasValue)

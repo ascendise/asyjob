@@ -29,7 +29,7 @@ namespace AsyJob.Tests.Auth
             };
             var identityPrincipal = CreatePrincipal(id.ToString());
             var fakeUserStore = new FakeUserStore([mongoUser]);
-            var sut = new HasRightsAuthorizationHandler(fakeUserStore); 
+            var sut = new HasRightsAuthorizationHandler(fakeUserStore);
             var requirement = new HasRightsRequirement([new("Resource", Operation.Write | Operation.Execute)]);
             var authContext = new AuthorizationHandlerContext([requirement], identityPrincipal, null);
             //Act
@@ -60,7 +60,7 @@ namespace AsyJob.Tests.Auth
                 ]
             };
             var fakeUserStore = new FakeUserStore([mongoUser]);
-            var sut = new HasRightsAuthorizationHandler(fakeUserStore); 
+            var sut = new HasRightsAuthorizationHandler(fakeUserStore);
             var requirement = new HasRightsRequirement([new("Resource", Operation.Write | Operation.Execute)]);
             var identityPrincipal = CreatePrincipal(id.ToString());
             var authContext = new AuthorizationHandlerContext([requirement], identityPrincipal, null);

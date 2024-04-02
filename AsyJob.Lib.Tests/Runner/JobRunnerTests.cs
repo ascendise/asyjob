@@ -54,7 +54,7 @@ namespace AsyJob.Lib.Tests.Runner
                 Assert.That(spyJob.Output.RunCount, Is.EqualTo(0));
             });
         }
-        
+
         [Test]
         public void RunJob_HasRequiredRights_ShouldRunJob()
         {

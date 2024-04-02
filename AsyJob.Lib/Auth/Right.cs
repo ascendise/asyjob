@@ -32,7 +32,7 @@ namespace AsyJob.Lib.Auth
             if (opsString.Equals(0))
                 return Operation.None;
             var op = Operation.None;
-            foreach(var c in opsString)
+            foreach (var c in opsString)
             {
                 op |= GetOperation(c);
             }
