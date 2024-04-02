@@ -1,4 +1,6 @@
-﻿using AsyJob.Lib.Jobs;
+﻿using AsyJob.Auth;
+using AsyJob.Lib.Auth;
+using AsyJob.Lib.Jobs;
 using AsyJob.Lib.Jobs.Factory;
 using AsyJob.Lib.Runner;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +13,7 @@ namespace AsyJob.Jobs
     /// </summary>
     [Route("api/jobs")]
     [ApiController]
+    [HasRights($"{nameof(JobRunner)}_wx")]
     public class JobController(IJobRunner jobRunner, JobFactory jobFactory) : ControllerBase
     {
         private readonly IJobRunner _jobRunner = jobRunner;

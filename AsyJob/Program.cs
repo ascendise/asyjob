@@ -6,6 +6,7 @@ using AsyJob.Lib.Auth;
 using AsyJob.Lib.Jobs;
 using AsyJob.Lib.Jobs.Factory;
 using AsyJob.Lib.Runner;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using MongoDB.Bson.Serialization;
 using User = AsyJob.Auth.User;
@@ -67,6 +68,8 @@ var mongoDbIdentityConfiguration = new MongoDbIdentityConfiguration()
 		options.User.RequireUniqueEmail = true;
     }
 };
+builder.Services.AddTransient<IAuthorizationHandler, HasRightsAuthorizationHandler>();
+builder.Services.AddSingleton<IAuthorizationPolicyProvider, HasRightsPolicyProvider>();
 builder.Services.ConfigureMongoDbIdentity<User, Role, Guid>(mongoDbIdentityConfiguration);
 builder.Services.AddIdentityApiEndpoints<User>();
 //Add Domain user to DI.
