@@ -28,7 +28,7 @@ namespace AsyJob.Lib.Auth
         private static Operation GetOperations(string str)
         {
             var splitCharIndex = str.IndexOf('_');
-            var opsString = str.Substring(splitCharIndex + 1);
+            var opsString = str[(splitCharIndex + 1)..];
             if (opsString.Equals(0))
                 return Operation.None;
             var op = Operation.None;

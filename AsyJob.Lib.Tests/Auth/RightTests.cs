@@ -44,9 +44,11 @@ namespace AsyJob.Lib.Tests.Auth
             //Act
             var output = new Right(input);
             //Assert
-            Assert.That(output.Resource, Is.EqualTo("Resource"));
-            Assert.That(output.Ops, Is.EqualTo(expected));
+            Assert.Multiple(() =>
+            {
+                Assert.That(output.Resource, Is.EqualTo("Resource"));
+                Assert.That(output.Ops, Is.EqualTo(expected));
+            });
         }
-
     }
 }
