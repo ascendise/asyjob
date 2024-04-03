@@ -1,4 +1,6 @@
-﻿namespace AsyJob.Web.HAL
+﻿using System.Security.Cryptography;
+
+namespace AsyJob.Web.HAL
 {
 
     public class Link
@@ -14,7 +16,7 @@
         public string? Title { get; private set; }
         public string? HrefLang { get; private set; }
 
-        public class LinkBuilder(HALBuilder halBuilder, string uri, bool? templated = null)
+        public class LinkBuilder<TBase>(HALBuilder<TBase> halBuilder, string uri, bool? templated = null) where TBase : IHAL
         {
             private readonly HALBuilder _halBuilder = halBuilder;
             private readonly Link _link = new(uri)
