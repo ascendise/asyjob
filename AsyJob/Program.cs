@@ -1,15 +1,15 @@
 using AspNetCore.Identity.MongoDbCore.Extensions;
 using AspNetCore.Identity.MongoDbCore.Infrastructure;
-using AsyJob.Auth;
-using AsyJob.Jobs;
 using AsyJob.Lib.Auth;
 using AsyJob.Lib.Jobs;
 using AsyJob.Lib.Jobs.Factory;
 using AsyJob.Lib.Runner;
+using AsyJob.Web.Auth;
+using AsyJob.Web.Jobs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using MongoDB.Bson.Serialization;
-using User = AsyJob.Auth.User;
+using User = AsyJob.Web.Auth.User;
 
 var builder = WebApplication.CreateBuilder(args);
 

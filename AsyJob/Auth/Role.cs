@@ -1,6 +1,6 @@
 ﻿using AspNetCore.Identity.MongoDbCore.Models;
 
-namespace AsyJob.Auth
+namespace AsyJob.Web.Auth
 {
     public class Role : MongoIdentityRole<Guid>
     {

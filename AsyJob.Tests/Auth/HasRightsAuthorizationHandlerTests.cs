@@ -1,6 +1,6 @@
-﻿using AsyJob.Auth;
+﻿using AsyJob.Web.Auth;
 using AsyJob.Lib.Auth;
-using AsyJob.Tests.TestDoubles;
+using AsyJob.Web.Tests.TestDoubles;
 using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
@@ -8,9 +8,9 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using User = AsyJob.Auth.User;
+using User = AsyJob.Web.Auth.User;
 
-namespace AsyJob.Tests.Auth
+namespace AsyJob.Web.Tests.Auth
 {
     internal class HasRightsAuthorizationHandlerTests
     {

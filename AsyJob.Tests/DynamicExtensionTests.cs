@@ -1,4 +1,4 @@
-﻿using AsyJob;
+﻿using AsyJob.Web;
 using System.Dynamic;
 
 namespace AsyJob.Tests

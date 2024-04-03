@@ -1,11 +1,11 @@
-﻿using AsyJob.Auth;
-using AsyJob.Lib.Auth;
+﻿using AsyJob.Lib.Auth;
 using AsyJob.Lib.Jobs;
 using AsyJob.Lib.Jobs.Factory;
 using AsyJob.Lib.Runner;
+using AsyJob.Web.Auth;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AsyJob.Jobs
+namespace AsyJob.Web.Jobs
 {
     /// <summary>
     /// Controller for Job API

@@ -1,6 +1,6 @@
 ﻿using AsyJob.Lib.Jobs;
 
-namespace AsyJob.Jobs
+namespace AsyJob.Web.Jobs
 {
 
     public class JobResponseDto(Job job)

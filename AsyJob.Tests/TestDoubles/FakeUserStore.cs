@@ -1,4 +1,4 @@
-﻿using AsyJob.Auth;
+﻿using AsyJob.Web.Auth;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AsyJob.Tests.TestDoubles
+namespace AsyJob.Web.Tests.TestDoubles
 {
     internal class FakeUserStore(List<User>? initUsers = null) : IUserStore<User>
     {

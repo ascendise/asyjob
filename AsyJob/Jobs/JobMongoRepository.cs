@@ -3,7 +3,7 @@ using AsyJob.Lib.Jobs;
 using AsyJob.Lib.Runner;
 using MongoDB.Driver;
 
-namespace AsyJob.Jobs
+namespace AsyJob.Web.Jobs
 {
     /// <summary>
     /// Repository for persisting jobs using the MongoDB.Driver
