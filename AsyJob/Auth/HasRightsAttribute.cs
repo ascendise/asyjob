@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using System.Text;
 
-namespace AsyJob.Auth
+namespace AsyJob.Web.Auth
 {
     /// <summary>
     /// Sets a policy in the format "{POLICY_PREFIX}:{RIGHT1};{RIGHT2}"

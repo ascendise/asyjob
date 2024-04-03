@@ -2,7 +2,7 @@
 using AsyJob.Lib.Jobs.Factory;
 using AsyJob.Lib.Runner;
 
-namespace AsyJob.Jobs
+namespace AsyJob.Web.Jobs
 {
     /// <summary>
     /// Example job for representing input and output

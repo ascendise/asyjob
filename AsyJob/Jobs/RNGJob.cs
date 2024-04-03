@@ -1,7 +1,7 @@
 ﻿using AsyJob.Lib.Jobs;
 using AsyJob.Lib.Jobs.Factory;
 
-namespace AsyJob.Jobs
+namespace AsyJob.Web.Jobs
 {
     public class RNGJob(RNGInput input, string id, string name, string description = "") : Job(id, name, description), IInput<RNGInput>, IOutput<RNGOutput>
     {

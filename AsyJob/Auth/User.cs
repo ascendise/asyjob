@@ -2,7 +2,7 @@
 using AsyJob.Lib.Auth;
 using AsyJob.Lib.Runner;
 
-namespace AsyJob.Auth
+namespace AsyJob.Web.Auth
 {
     public class User : MongoIdentityUser<Guid>
     {

@@ -1,6 +1,6 @@
 ﻿using System.Dynamic;
 
-namespace AsyJob.Jobs
+namespace AsyJob.Web.Jobs
 {
     public class JobRequestDto(string jobtype, string name = "", string description = "", ExpandoObject? input = null)
     {

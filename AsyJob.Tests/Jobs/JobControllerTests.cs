@@ -1,10 +1,10 @@
-﻿using AsyJob.Jobs;
+﻿using AsyJob.Web.Jobs;
 using AsyJob.Lib.Jobs.Factory;
 using AsyJob.Lib.Runner;
 using AsyJob.Lib.Tests.TestDoubles;
 using System.Dynamic;
 
-namespace AsyJob.Tests.Jobs
+namespace AsyJob.Web.Tests.Jobs
 {
     internal class JobControllerTests
     {
