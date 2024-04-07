@@ -1,8 +1,8 @@
 ﻿namespace AsyJob.Web.HAL
 {
-    public readonly struct Embed(HALDocument document, string? name)
+    public readonly struct Embed(HalDocument document, string? name)
     {
-        public HALDocument Document { get; } = document;
+        public HalDocument Document { get; } = document;
         public string? Name { get; } = name;
     }
 }
