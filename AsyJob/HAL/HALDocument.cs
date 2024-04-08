@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using AsyJob.Web.HAL.Json;
+using Newtonsoft.Json;
 
 namespace AsyJob.Web.HAL
 {
