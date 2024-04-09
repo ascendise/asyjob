@@ -21,16 +21,18 @@ namespace AsyJob.Web.HAL.Json
         public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
         {
             if (value is not Links links || !links.Any())
+            {
+                writer.WriteValue(null as object);
                 return;
+            }
             writer.WriteStartObject();
-            var counter = 1;
             foreach(var link in links)
             {
-                var propertyName = link.Name ?? (counter++).ToString();
-                var jProperty = new JProperty(serialipropertyName, link);
-                jProperty.WriteTo(writer);
+                writer.WritePropertyName(link.Key);
+                serializer.Serialize(writer, link.Value);
             }
             writer.WriteEndObject();
         }
+
     }
 }

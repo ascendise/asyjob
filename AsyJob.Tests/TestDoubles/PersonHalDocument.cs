@@ -13,10 +13,4 @@ namespace AsyJob.Web.Tests.TestDoubles
         public int Age { get; set; } = age;
 
     }
-
-    internal class AddressHalDocument(string city, string street) : HalDocument
-    {
-        public string City { get; set; } = city;
-        public string Street { get; set; } = street;
-    }
 }

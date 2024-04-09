@@ -1,8 +1,10 @@
-﻿namespace AsyJob.Web.HAL
+﻿using Newtonsoft.Json;
+
+namespace AsyJob.Web.HAL
 {
-    public readonly struct Embed(HalDocument document, string? name)
+    public readonly struct Embed(string resourceName, HalDocument document)
     {
+        public string ResourceName { get; } = resourceName;
         public HalDocument Document { get; } = document;
-        public string? Name { get; } = name;
     }
 }
