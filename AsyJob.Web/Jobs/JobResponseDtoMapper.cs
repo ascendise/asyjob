@@ -11,7 +11,7 @@ namespace AsyJob.Web.Jobs
         {
             var dto = new JobResponseDto(job);
             dto.Links.Add("self", LinkBuilder.New()
-                .FromController(typeof(JobController), nameof(JobController.FetchJob), new() { { "id", job.Id} })
+                .FromController(typeof(JobController), nameof(JobController.FetchJob), new() { { "jobId", job.Id} })
                 .Build()
             );
             return dto;

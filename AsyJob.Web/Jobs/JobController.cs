@@ -3,6 +3,7 @@ using AsyJob.Lib.Jobs;
 using AsyJob.Lib.Jobs.Factory;
 using AsyJob.Lib.Runner;
 using AsyJob.Web.Auth;
+using AsyJob.Web.Mapping;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AsyJob.Web.Jobs
@@ -14,10 +15,11 @@ namespace AsyJob.Web.Jobs
     [Route("api/jobs")]
     [ApiController]
     [Produces("application/hal+json")]
-    public class JobController(IJobRunner jobRunner, JobFactory jobFactory) : ControllerBase
+    public class JobController(IJobRunner jobRunner, JobFactory jobFactory, IMapper<Job, JobResponseDto> mapper) : ControllerBase
     {
         private readonly IJobRunner _jobRunner = jobRunner;
         private readonly JobFactory _jobFactory = jobFactory;
+        private readonly IMapper<Job, JobResponseDto> _mapper = mapper;
 
         /// <summary>
         /// Creates a new job and runs it.
@@ -32,7 +34,7 @@ namespace AsyJob.Web.Jobs
         {
             Job job = CreateJob(jobRequest);
             _jobRunner.RunJob(job);
-            return Task.FromResult(new JobResponseDto(job));
+            return Task.FromResult(_mapper.Map(job));
         }
 
         private Job CreateJob(JobRequestDto jobRequest)
@@ -49,7 +51,7 @@ namespace AsyJob.Web.Jobs
         public async Task<JobResponseDto> FetchJob(string jobId)
         {
             var job = await _jobRunner.GetJob(jobId);
-            return job != null ? new JobResponseDto(job) : throw new KeyNotFoundException();
+            return job != null ? _mapper.Map(job) : throw new KeyNotFoundException();
         }
     }
 }

@@ -18,7 +18,7 @@ namespace AsyJob.Web.Jobs
 
         private void AddDefaultLinks() 
         {
-            Links.Add("Jobs", LinkBuilder.New()
+            Links.Add("jobs", LinkBuilder.New()
                 .FromController(typeof(JobController), nameof(JobController.FetchJob))
                 .Build());
         }
