@@ -24,9 +24,9 @@ namespace AsyJob.Web.Tests.HAL.SerializationTests
         {
             //Arrange
             var person = new PersonHalDocument("Max Muster", 21);
-            person.Links.Add("self", new LinkBuilder("/person/1")
+            person.Links.Add("self", LinkBuilder.New("/person/1")
                 .Build());
-            person.Links.Add("address", new LinkBuilder("/person/1/address")
+            person.Links.Add("address", LinkBuilder.New("/person/1/address")
                 .Build());
             person.Embedded.Add(new Embed("address", new AddressHalDocument("SimCity", "SimoleonStreet")));
             //Act
