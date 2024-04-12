@@ -8,7 +8,7 @@ namespace AsyJob.Web.Jobs
 
     public class JobResponseDto : HalDocument
     {
-        public Job Job { get; private set; } 
+        public Job Job { get; private set; }
 
         public JobResponseDto(Job job)
         {
@@ -16,7 +16,7 @@ namespace AsyJob.Web.Jobs
             AddDefaultLinks();
         }
 
-        private void AddDefaultLinks() 
+        private void AddDefaultLinks()
         {
             Links.Add("jobs", LinkBuilder.New()
                 .FromController(typeof(JobController), nameof(JobController.FetchJob))

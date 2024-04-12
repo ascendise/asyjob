@@ -22,7 +22,7 @@ namespace AsyJob.Web.HAL.Json
                 return;
             }
             writer.WriteStartObject();
-            foreach(var embed in embedded)
+            foreach (var embed in embedded)
             {
                 writer.WritePropertyName(embed.ResourceName);
                 serializer.Serialize(writer, embed.Document);

@@ -9,7 +9,7 @@ namespace AsyJob.Web
     public class Sitemap : HalDocument
     {
         public string Message { get => "Welcome to the Asynchronous Job API! Thanks for being here!"; }
-        
+
         public Sitemap()
         {
             Links.Add("jobs", LinkBuilder.New()

@@ -7,7 +7,8 @@ namespace AsyJob.Web.HAL.Json
         public static IList<JsonConverter> Converters
         {
             get => [
-                new JsonLinksConverter(), new JsonEmbeddedConverter()
+                new JsonLinksConverter(),
+                new JsonEmbeddedConverter()
             ];
         }
     }

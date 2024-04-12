@@ -3,7 +3,7 @@
 
     public partial class Link
     {
-        public class LinkBuilder 
+        public class LinkBuilder
         {
             private Link _link;
 
@@ -14,7 +14,7 @@
 
             public static LinkBuilder New(string uri = "/", bool? templated = null)
                 => new(uri, templated);
-            
+
             public LinkBuilder SetHref(string href)
             {
                 _link.Href = href;

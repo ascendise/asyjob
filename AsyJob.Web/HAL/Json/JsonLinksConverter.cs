@@ -26,7 +26,7 @@ namespace AsyJob.Web.HAL.Json
                 return;
             }
             writer.WriteStartObject();
-            foreach(var link in links)
+            foreach (var link in links)
             {
                 writer.WritePropertyName(link.Key);
                 serializer.Serialize(writer, link.Value);
