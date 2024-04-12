@@ -13,6 +13,7 @@ namespace AsyJob.Web.Jobs
     /// </summary>
     [Route("api/jobs")]
     [ApiController]
+    [Produces("application/hal+json")]
     public class JobController(IJobRunner jobRunner, JobFactory jobFactory) : ControllerBase
     {
         private readonly IJobRunner _jobRunner = jobRunner;
