@@ -1,6 +1,7 @@
 ﻿using AsyJob.Web.HAL;
 using AsyJob.Web.HAL.AspNetCore;
 using AsyJob.Web.Jobs;
+using System.Net.Mime;
 using static AsyJob.Web.HAL.Link;
 
 namespace AsyJob.Web
@@ -13,6 +14,9 @@ namespace AsyJob.Web
         {
             Links.Add("jobs", LinkBuilder.New()
                 .FromController(typeof(JobController), nameof(JobController.FetchJob))
+                .Build());
+            Links.Add("docs", LinkBuilder.New("swagger/index.html")
+                .SetType(MediaTypeNames.Text.Html)
                 .Build());
         }
     }
