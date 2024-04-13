@@ -17,7 +17,7 @@ namespace AsyJob.Web.Tests.Jobs
             var fakeJobFactory = new FakeJobFactory("FakeJobFactory", "FakeJob");
             var jobFactory = new JobFactory([fakeJobFactory], null, new FakeGuidProvider([new(guid)]));
             var jobRunner = new JobRunner(new FakeJobPool(), new StubAuthorizationManager());
-            var sut = new JobController(jobRunner, jobFactory);
+            var sut = new JobController(jobRunner, jobFactory, new JobResponseDtoMapper());
             var jobRequest = new JobRequestDto("FakeJob", "MyJob1", "LoremIpsum");
             //Act
             var response = await sut.RunJob(jobRequest);
@@ -40,7 +40,7 @@ namespace AsyJob.Web.Tests.Jobs
             var guid = "19D5D496-6046-485B-8E22-92E3923A4DCB";
             var jobFactory = new JobFactory(null, [fakeJobFactory], new FakeGuidProvider([new(guid)]));
             var jobRunner = new JobRunner(new FakeJobPool(), new StubAuthorizationManager());
-            var sut = new JobController(jobRunner, jobFactory);
+            var sut = new JobController(jobRunner, jobFactory, new JobResponseDtoMapper());
             var checkNum = 14;
             dynamic input = new ExpandoObject();
             input.CheckNum = 14;
@@ -68,7 +68,7 @@ namespace AsyJob.Web.Tests.Jobs
             var fakeJobFactory = new FakeJobWithInputFactory("FakeJobWithInputFactory", "FakeJob");
             var jobFactory = new JobFactory(null, [fakeJobFactory], new GuidProvider());
             var runner = new JobRunner(new FakeJobPool(), new StubAuthorizationManager());
-            var sut = new JobController(runner, jobFactory);
+            var sut = new JobController(runner, jobFactory, new JobResponseDtoMapper());
             dynamic wrongInput = new ExpandoObject();
             wrongInput.Wrong = "1!1";
             var jobRequest = new JobRequestDto("FakeJob", "Job", "", wrongInput);
@@ -82,7 +82,7 @@ namespace AsyJob.Web.Tests.Jobs
             //Arrange
             var jobFactory = new JobFactory(null, null, new GuidProvider());
             var runner = new JobRunner(new FakeJobPool(), new StubAuthorizationManager());
-            var sut = new JobController(runner, jobFactory);
+            var sut = new JobController(runner, jobFactory, new JobResponseDtoMapper());
             var jobRequest = new JobRequestDto("UnknownJob", "Job");
             //Act //Assert
             Assert.ThrowsAsync<NoMatchingJobFactoryException>(() => sut.RunJob(jobRequest));
@@ -95,7 +95,7 @@ namespace AsyJob.Web.Tests.Jobs
             //Arrange
             var pool = FakeJobPool.InitializePool([new DummyJob("DUMMY1")]);
             var runner = new JobRunner(pool, new StubAuthorizationManager());
-            var sut = new JobController(runner, null!);
+            var sut = new JobController(runner, null!, new JobResponseDtoMapper());
             //Act
             var response = await sut.FetchJob("DUMMY1");
             //Assert
@@ -110,7 +110,7 @@ namespace AsyJob.Web.Tests.Jobs
             //Arrange
             var pool = FakeJobPool.InitializePool([new DummyJob("DUMMY1")]);
             var runner = new JobRunner(pool, new StubAuthorizationManager());
-            var sut = new JobController(runner, null!);
+            var sut = new JobController(runner, null!, new JobResponseDtoMapper());
             //Act //Assert
             Assert.ThrowsAsync<KeyNotFoundException>(() => sut.FetchJob("SOME_OTHER_ID"));
         }
