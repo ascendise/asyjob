@@ -13,7 +13,7 @@ namespace AsyJob.Lib.Tests.TestDoubles
     /// </summary>
     public class StubAuthorizationManager : IAuthorizationManager
     {
-        public void AuthenticatedContext(Action action, User user, IEnumerable<Right> requiredRights)
+        public void AuthenticatedContext(Action action, User? user, IEnumerable<Right> requiredRights)
         {
             action();
         }

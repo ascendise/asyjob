@@ -20,7 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\AsyJob.Lib.Tests\AsyJob.Lib.Tests.csproj" />
     <ProjectReference Include="..\AsyJob.Lib.Tests\AsyJob.Lib.Tests.csproj" />
-    <ProjectReference Include="..\AsyJob\AsyJob.Web.csproj" />
+    <ProjectReference Include="..\AsyJob.Web\AsyJob.Web.csproj" />
   </ItemGroup>
 
 </Project>

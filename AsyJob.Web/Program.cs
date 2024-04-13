@@ -5,16 +5,20 @@ using AsyJob.Lib.Jobs;
 using AsyJob.Lib.Jobs.Factory;
 using AsyJob.Lib.Runner;
 using AsyJob.Web.Auth;
+using AsyJob.Web.HAL.Json;
 using AsyJob.Web.Jobs;
+using AsyJob.Web.Mapping;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using MongoDB.Bson.Serialization;
+
 using User = AsyJob.Web.Auth.User;
 
 var builder = WebApplication.CreateBuilder(args);
-
 // Add services to the container.
-builder.Services.AddControllers().AddNewtonsoftJson();
+builder.Services.AddControllers().AddNewtonsoftJson(o =>
+{
+    o.SerializerSettings.Converters = JsonHal.Converters;
+});
 
 //Dependency Injection
 builder.Services.AddTransient<IGuidProvider, GuidProvider>();
@@ -30,6 +34,8 @@ builder.Services.AddScoped<IJobPool, JobPool>(sp =>
     return Task.Run(() => JobPool.StartJobPool(repo!)).Result;
 });
 builder.Services.AddTransient<IAuthorizationManager, AuthorizationManager>();
+//Mapping
+builder.Services.AddTransient<IMapper<Job, JobResponseDto>, JobResponseDtoMapper>();
 
 //MongoDB
 //Tell BsonMapper which Subtypes for Job exist for deserialization
