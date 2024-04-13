@@ -5,7 +5,7 @@
     {
         public class LinkBuilder
         {
-            private Link _link;
+            private readonly Link _link;
 
             private LinkBuilder(string uri = "/", bool? templated = null)
             {

@@ -12,7 +12,7 @@ namespace AsyJob.Web.Tests.TestDoubles
     internal class PersonStubController : ControllerBase
     {
         [HttpGet("/withid/{id}")]
-        public PersonHalDocument Get(Guid id)
+        public static PersonHalDocument Get(Guid _)
         {
             return null!;
         }
