@@ -5,7 +5,7 @@ using AsyJob.Lib.Runner;
 namespace AsyJob.Web.Jobs
 {
     /// <summary>
-    /// Example job for representing input and output
+    /// Example job for representing input and output.
     /// This job simulates a dice roll, with a user-defined dice.
     /// It outputs a random result, in the range of the dice.
     /// </summary>

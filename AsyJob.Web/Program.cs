@@ -25,6 +25,7 @@ builder.Services.AddTransient<IGuidProvider, GuidProvider>();
 builder.Services.AddTransient<IJobWithInputFactory, TimerJobFactory>();
 builder.Services.AddTransient<IJobWithInputFactory, DiceRollJobFactory>();
 builder.Services.AddTransient<IJobWithInputFactory, RNGJobFactory>();
+builder.Services.AddTransient<IJobWithInputFactory, CounterJobFactory>();
 builder.Services.AddTransient<JobFactory>();
 builder.Services.AddTransient<IJobRepository, JobMongoRepository>();
 builder.Services.AddTransient<IJobRunner, JobRunner>();
@@ -45,6 +46,7 @@ BsonClassMap.RegisterClassMap<Job>();
 BsonClassMap.RegisterClassMap<DiceRollJob>();
 BsonClassMap.RegisterClassMap<TimerJob>();
 BsonClassMap.RegisterClassMap<RNGJob>();
+BsonClassMap.RegisterClassMap<CounterJob>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
