@@ -4,6 +4,7 @@ using AsyJob.Lib.Auth;
 using AsyJob.Lib.Jobs;
 using AsyJob.Lib.Jobs.Factory;
 using AsyJob.Lib.Runner;
+using AsyJob.Web;
 using AsyJob.Web.Auth;
 using AsyJob.Web.HAL.Json;
 using AsyJob.Web.Jobs;
@@ -20,7 +21,7 @@ builder.Services.AddControllers().AddNewtonsoftJson(o =>
     o.SerializerSettings.Converters = JsonHal.Converters;
 });
 
-//Dependency Injection
+//Jobs
 builder.Services.AddTransient<IGuidProvider, GuidProvider>();
 builder.Services.AddTransient<IJobWithInputFactory, TimerJobFactory>();
 builder.Services.AddTransient<IJobWithInputFactory, DiceRollJobFactory>();
@@ -29,11 +30,12 @@ builder.Services.AddTransient<IJobWithInputFactory, CounterJobFactory>();
 builder.Services.AddTransient<JobFactory>();
 builder.Services.AddTransient<IJobRepository, JobMongoRepository>();
 builder.Services.AddTransient<IJobRunner, JobRunner>();
-builder.Services.AddScoped<IJobPool, JobPool>(sp =>
+builder.Services.AddSingleton<IJobPool, JobPool>(sp =>
 {
-    var repo = sp.GetService<IJobRepository>();
-    return Task.Run(() => JobPool.StartJobPool(repo!)).Result;
+    var repo = sp.GetRequiredService<IJobRepository>();
+    return JobPool.StartJobPool(repo).Result!;
 });
+builder.Services.AddHostedService<JobPoolBackgroundService>(); 
 builder.Services.AddTransient<IAuthorizationManager, AuthorizationManager>();
 //Mapping
 builder.Services.AddTransient<IMapper<Job, JobResponseDto>, JobResponseDtoMapper>();
