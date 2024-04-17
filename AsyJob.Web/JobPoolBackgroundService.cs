@@ -1,5 +1,4 @@
-﻿
-using AsyJob.Lib.Runner;
+﻿using AsyJob.Lib.Runner;
 
 namespace AsyJob.Web
 {
@@ -12,7 +11,9 @@ namespace AsyJob.Web
     /// <param name="jobPool"></param>
     internal class JobPoolBackgroundService(IJobPool jobPool) : BackgroundService
     {
+#pragma warning disable IDE0052 // Remove unread private members
         private readonly IJobPool _jobPool = jobPool;
+#pragma warning restore IDE0052 // Remove unread private members
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
             => Idle(stoppingToken);

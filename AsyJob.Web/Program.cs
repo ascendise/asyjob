@@ -35,7 +35,7 @@ builder.Services.AddSingleton<IJobPool, JobPool>(sp =>
     var repo = sp.GetRequiredService<IJobRepository>();
     return JobPool.StartJobPool(repo).Result!;
 });
-builder.Services.AddHostedService<JobPoolBackgroundService>(); 
+builder.Services.AddHostedService<JobPoolBackgroundService>();
 builder.Services.AddTransient<IAuthorizationManager, AuthorizationManager>();
 //Mapping
 builder.Services.AddTransient<IMapper<Job, JobResponseDto>, JobResponseDtoMapper>();
