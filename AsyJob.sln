@@ -18,8 +18,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AsyJob.Web.Tests", "AsyJob.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsyJob.Lib.Client", "AsyJob.Lib.Client\AsyJob.Lib.Client.csproj", "{B7D48CD1-6BC2-4271-AC6C-951C1A3DF33F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsyJob.Lib.Client.Tests", "AsyJob.Lib.Client.Tests\AsyJob.Lib.Client.Tests.csproj", "{DCFD4A2B-A4AB-4AA7-8742-821E70C4C0FD}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,10 +44,6 @@ Global
 		{B7D48CD1-6BC2-4271-AC6C-951C1A3DF33F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7D48CD1-6BC2-4271-AC6C-951C1A3DF33F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7D48CD1-6BC2-4271-AC6C-951C1A3DF33F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DCFD4A2B-A4AB-4AA7-8742-821E70C4C0FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DCFD4A2B-A4AB-4AA7-8742-821E70C4C0FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DCFD4A2B-A4AB-4AA7-8742-821E70C4C0FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DCFD4A2B-A4AB-4AA7-8742-821E70C4C0FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
