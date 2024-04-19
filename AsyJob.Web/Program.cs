@@ -6,6 +6,7 @@ using AsyJob.Lib.Client.Jobs;
 using AsyJob.Lib.Jobs;
 using AsyJob.Lib.Jobs.Factory;
 using AsyJob.Lib.Runner;
+using AsyJob.Web;
 using AsyJob.Web.Auth;
 using AsyJob.Web.HAL.Json;
 using AsyJob.Web.Jobs;
@@ -21,21 +22,26 @@ builder.Services.AddControllers().AddNewtonsoftJson(o =>
     o.SerializerSettings.Converters = JsonHal.Converters;
 });
 
-//Dependency Injection
+//Jobs
 builder.Services.AddTransient<IJobRepository, JobMongoRepository>();
+builder.Services.AddSingleton<IJobPool, JobPool>(sp =>
+{
+    var repo = sp.GetRequiredService<IJobRepository>();
+    return JobPool.StartJobPool(repo).Result!;
+});
 builder.Services.AddTransient<IJobApi, JobApi>(sp =>
 {
     var jobFactory = new JobFactory(
         [],
         [new TimerJobFactory(), new DiceRollJobFactory(), new RNGJobFactory(), new CounterJobFactory()],
-        new GuidProvider()); 
-    var repo = sp.GetRequiredService<IJobRepository>();
-    var pool = JobPool.StartJobPool(repo).Result!;
+        new GuidProvider());
+    var pool = sp.GetRequiredService<IJobPool>();
     var authManager = new AuthorizationManager();
     var user = sp.GetService<AsyJob.Lib.Auth.User>();
     var jobRunner = new JobRunner(pool, authManager, user);
     return new(jobFactory, jobRunner);
 });
+builder.Services.AddHostedService<JobPoolBackgroundService>();
 
 //MongoDB
 //Tell BsonMapper which Subtypes for Job exist for deserialization
