@@ -1,18 +1,19 @@
-﻿using AsyJob.Lib.Jobs;
+﻿using AsyJob.Lib.Client.Abstract.Jobs;
 using AsyJob.Web.HAL;
 using AsyJob.Web.HAL.AspNetCore;
+using Newtonsoft.Json;
 using static AsyJob.Web.HAL.Link;
 
 namespace AsyJob.Web.Jobs
 {
-
-    public class JobResponseDto : HalDocument
+    public class HalJobResponse : HalDocument
     {
-        public Job Job { get; private set; }
+        [JsonExtensionData]
+        public JobResponse JobResponse { get; private set; }
 
-        public JobResponseDto(Job job)
+        public HalJobResponse(JobResponse response)
         {
-            Job = job;
+            JobResponse = response; 
             AddDefaultLinks();
         }
 

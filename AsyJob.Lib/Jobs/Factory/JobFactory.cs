@@ -1,4 +1,6 @@
-﻿namespace AsyJob.Lib.Jobs.Factory
+﻿using System.Dynamic;
+
+namespace AsyJob.Lib.Jobs.Factory
 {
 
     public class JobFactory(
@@ -35,12 +37,14 @@
         private static string GenerateJobName(string type, string id)
             => $"{type}-{id}".ToUpper();
 
-        public Job CreateJobWithInput(string type, dynamic input, string name = "", string description = "")
+        public Job CreateJobWithInput(string type, IDictionary<string, object?> input, string name = "", string description = "")
         {
             var id = GetJobId();
             name = GetNameOrDefault(name, type, id);
-            var factory = _jobWithInputFactories.FirstOrDefault(f => f.JobType.Equals(type, StringComparison.OrdinalIgnoreCase));
-            return factory == null ? throw new NoMatchingJobFactoryException(type) : factory.CreateJobWithInput(type, id, input, name, description);
+            var factory = _jobWithInputFactories.FirstOrDefault(
+                f => f.JobType.Equals(type, StringComparison.OrdinalIgnoreCase));
+            return factory?.CreateJobWithInput(type, id, input, name, description)
+                ?? throw new NoMatchingJobFactoryException(type);
         }
     }
 }

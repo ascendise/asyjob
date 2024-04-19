@@ -1,13 +1,14 @@
 using AspNetCore.Identity.MongoDbCore.Extensions;
 using AspNetCore.Identity.MongoDbCore.Infrastructure;
 using AsyJob.Lib.Auth;
+using AsyJob.Lib.Client.Abstract.Jobs;
+using AsyJob.Lib.Client.Jobs;
 using AsyJob.Lib.Jobs;
 using AsyJob.Lib.Jobs.Factory;
 using AsyJob.Lib.Runner;
 using AsyJob.Web.Auth;
 using AsyJob.Web.HAL.Json;
 using AsyJob.Web.Jobs;
-using AsyJob.Web.Mapping;
 using Microsoft.AspNetCore.Authorization;
 using MongoDB.Bson.Serialization;
 
@@ -35,8 +36,7 @@ builder.Services.AddScoped<IJobPool, JobPool>(sp =>
     return Task.Run(() => JobPool.StartJobPool(repo!)).Result;
 });
 builder.Services.AddTransient<IAuthorizationManager, AuthorizationManager>();
-//Mapping
-builder.Services.AddTransient<IMapper<Job, JobResponseDto>, JobResponseDtoMapper>();
+builder.Services.AddTransient<IJobApi, JobApi>();
 
 //MongoDB
 //Tell BsonMapper which Subtypes for Job exist for deserialization

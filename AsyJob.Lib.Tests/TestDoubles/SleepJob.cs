@@ -14,6 +14,12 @@ namespace AsyJob.Lib.Tests.TestDoubles
         {
             Thread.Sleep(Input.Time);
         }
+
+        public IDictionary<string, object?> GetInputDict()
+            => new Dictionary<string, object?>
+            {
+                { nameof(SleepInput.Time), Input.Time },
+            };
     }
 
     public class SleepInput(int time)

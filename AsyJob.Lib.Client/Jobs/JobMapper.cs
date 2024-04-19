@@ -8,11 +8,11 @@ using System.Runtime.CompilerServices;
 namespace AsyJob.Lib.Client.Jobs
 {
     internal class JobMapper(JobFactory jobFactory) 
-        : IMapper<JobRequestDto, Job>, IMapper<Job, JobResponseDto>
+        : IMapper<JobRequest, Job>, IMapper<Job, JobResponse>
     {
         private readonly JobFactory _jobFactory = jobFactory;
 
-        public Job Map(JobRequestDto jobReq)
+        public Job Map(JobRequest jobReq)
         {
             if(jobReq.Input == null)
             {
@@ -21,22 +21,15 @@ namespace AsyJob.Lib.Client.Jobs
             return _jobFactory.CreateJobWithInput(jobReq.JobType, jobReq.Input, jobReq.Name, jobReq.Description);
         }
 
-        public JobResponseDto Map(Job src)
+        public JobResponse Map(Job job)
         {
-            var input = TryGetSubProperty<IInput<object>, object>(src, i => i.Input);
-            var output = TryGetSubProperty<IOutput<object>, object>(src, i => i.Output);
-            return new(src.Id, src.Name, src.Description, Enum.GetName(src.Status)!, input, output, src.Error);
+            IDictionary<string, object?>? input = null;
+            if (job is IInput jobInput)
+                input = jobInput.GetInputDict();
+            IDictionary<string, object?>? output = null;
+            if (job is IOutput jobOutput)
+                output = jobOutput.GetOutputDict();
+            return new(job.Id, job.Name, job.Description, Enum.GetName(job.Status)!, input, output, job.Error);
         }
-
-        private static dynamic TryGetSubProperty<TSub, TProp>(Job job, Func<TSub, TProp?> predicate)
-            where TSub : class
-            where TProp : class
-        {
-            if (job is not TSub subObject)
-                return null;
-            var subProperty = predicate(subObject);
-            return subProperty;
-        }
-
     }
 }

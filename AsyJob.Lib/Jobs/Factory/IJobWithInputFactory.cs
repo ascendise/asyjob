@@ -12,6 +12,6 @@
         /// Create a new <see cref="Job"/> with the specified type
         /// </summary>
         /// <exception cref="JobInputMismatchException">Thrown when the input does not match the expected structure</exception>
-        Job CreateJobWithInput(string type, string id, dynamic input, string name = "", string description = "");
+        Job CreateJobWithInput(string type, string id, IDictionary<string, object?> input, string name = "", string description = "");
     }
 }

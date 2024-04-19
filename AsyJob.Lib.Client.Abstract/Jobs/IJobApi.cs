@@ -2,8 +2,8 @@
 {
     public interface IJobApi
     {
-        Task<JobResponseDto> CreateJob(JobRequestDto job);
-        Task<JobResponseDto> FetchJob(string jobId);
-        Task<IEnumerable<JobResponseDto>> FetchAllJobs();
+        Task<JobResponse> RunJob(JobRequest job);
+        Task<JobResponse> FetchJob(string jobId);
+        Task<IEnumerable<JobResponse>> FetchAllJobs();
     }
 }

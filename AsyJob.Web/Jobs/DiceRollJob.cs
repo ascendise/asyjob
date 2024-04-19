@@ -1,4 +1,5 @@
-﻿using AsyJob.Lib.Jobs;
+﻿using AsyJob.Lib;
+using AsyJob.Lib.Jobs;
 using AsyJob.Lib.Jobs.Factory;
 using AsyJob.Lib.Runner;
 
@@ -35,6 +36,18 @@ namespace AsyJob.Web.Jobs
             Input = diceJob.Input;
             Output = diceJob.Output;
         }
+
+        public IDictionary<string, object?> GetInputDict()
+            => new Dictionary<string, object?>()
+            {
+                { nameof(Input.Sides), Input.Sides },
+            };
+
+        public IDictionary<string, object?> GetOutputDict()
+            => new Dictionary<string, object?>()
+            {
+                { nameof(Output.Result), Output?.Result },
+            };
     }
 
     public class DiceRollInput(int sides)
@@ -58,9 +71,9 @@ namespace AsyJob.Web.Jobs
     {
         public string JobType { get; } = nameof(DiceRollJob);
 
-        public Job CreateJobWithInput(string type, string id, dynamic input, string name = "", string description = "")
+        public Job CreateJobWithInput(string _, string id, IDictionary<string, object?> input, string name = "", string description = "")
         {
-            int sides = DynamicExtensions.TryGetValue<int>(input, nameof(DiceRollInput.Sides))
+            int sides = input.Get<int?>(nameof(DiceRollInput.Sides)) 
                 ?? throw new JobInputMismatchException(nameof(DiceRollInput.Sides), typeof(int));
             return new DiceRollJob(id, name, new(sides), description);
         }
