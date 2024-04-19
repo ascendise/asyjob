@@ -24,7 +24,7 @@ namespace AsyJob.Lib.Tests.TestDoubles
 
         public Job CreateJobWithInput(string type, string id, IDictionary<string, object?> input, string name = "", string description = "")
         {
-            var checknum = input.Get<int>(nameof(FakeFactoryJobInput.CheckNum)) 
+            var checknum = input.Get<int>(nameof(FakeFactoryJobInput.CheckNum))
                 ?? throw new JobInputMismatchException(nameof(FakeFactoryJobInput.CheckNum), typeof(int));
             var jobInput = new FakeFactoryJobInput(checknum);
             return new FakeJobFactoryOutputExtendedJob(id, name, jobInput, type, FactoryName, description);

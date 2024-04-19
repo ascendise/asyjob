@@ -12,28 +12,27 @@ namespace AsyJob.Lib.Client.Jobs
 {
     public class JobApi(JobFactory jobFactory, IJobRunner jobRunner) : IJobApi
     {
-        private readonly IMapper<JobRequest, Job> _domainMapper = new JobMapper(jobFactory);
-        private readonly IMapper<Job, JobResponse> _responseMapper = new JobMapper(jobFactory);
+        private readonly JobMapper _domainMapper = new(jobFactory);
         private readonly IJobRunner _jobRunner = jobRunner;
 
         public Task<JobResponse> RunJob(JobRequest jobReq)
         {
             var job = _domainMapper.Map(jobReq);
             _jobRunner.RunJob(job);
-            var response = _responseMapper.Map(job);
+            var response = _domainMapper.Map(job);
             return Task.FromResult(response);
         }
 
         public async Task<IEnumerable<JobResponse>> FetchAllJobs()
         {
             var jobs = await _jobRunner.GetJobs();
-            return jobs.Select(_responseMapper.Map);
+            return jobs.Select(_domainMapper.Map);
         }
 
         public async Task<JobResponse> FetchJob(string jobId)
         {
             var job = await _jobRunner.GetJob(jobId);
-            return job != null ? _responseMapper.Map(job) : throw new KeyNotFoundException();
+            return job != null ? _domainMapper.Map(job) : throw new KeyNotFoundException();
         }
     }
 }

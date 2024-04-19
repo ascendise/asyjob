@@ -9,13 +9,13 @@ namespace AsyJob.Web.Jobs
 {
     public class HalJobResponse : HalDocument
     {
-        public string Id { get; private set; } 
-        public string Name { get; private set; } 
-        public string Description { get; private set; } 
+        public string Id { get; private set; }
+        public string Name { get; private set; }
+        public string Description { get; private set; }
         public string ProgressStatus { get; private set; }
         public IDictionary<string, object?>? Input { get; private set; }
         public IDictionary<string, object?>? Output { get; private set; }
-        public Exception? Error { get; private set; } 
+        public Exception? Error { get; private set; }
 
         public HalJobResponse(JobResponse response)
         {
@@ -29,7 +29,7 @@ namespace AsyJob.Web.Jobs
             AddDefaultLinks();
         }
 
-        private IDictionary<string, JToken?>? ToJsonExtension(IDictionary<string, object?>? output)
+        private static IDictionary<string, JToken?>? ToJsonExtension(IDictionary<string, object?>? output)
             => output?.Select(kp =>
             {
                 JToken? token = null;

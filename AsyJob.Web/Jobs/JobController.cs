@@ -28,7 +28,7 @@ namespace AsyJob.Web.Jobs
         public async Task<HalJobResponse> RunJob(JobRequest jobRequest)
         {
             var response = await _jobApi.RunJob(jobRequest);
-            return new(response); 
+            return new(response);
         }
 
         [HttpGet("{jobId}")]

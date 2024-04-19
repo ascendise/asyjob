@@ -7,14 +7,14 @@ using System.Runtime.CompilerServices;
 
 namespace AsyJob.Lib.Client.Jobs
 {
-    internal class JobMapper(JobFactory jobFactory) 
+    internal class JobMapper(JobFactory jobFactory)
         : IMapper<JobRequest, Job>, IMapper<Job, JobResponse>
     {
         private readonly JobFactory _jobFactory = jobFactory;
 
         public Job Map(JobRequest jobReq)
         {
-            if(jobReq.Input == null)
+            if (jobReq.Input == null)
             {
                 return _jobFactory.CreateJob(jobReq.JobType, jobReq.Name, jobReq.Description);
             }

@@ -80,11 +80,11 @@ namespace AsyJob.Web.Jobs
         {
             var delay = input.Get<int>(nameof(CounterJobInput.DelayMs))
                 ?? 0;
-            var value = input.Get<int>(nameof(CounterJobInput.Value)) 
+            var value = input.Get<int>(nameof(CounterJobInput.Value))
                 ?? 0;
             var goal = input.Get<int>(nameof(CounterJobInput.Goal))
                 ?? int.MaxValue;
-            var increment = input.Get<int>(nameof(CounterJobInput.Increment)) 
+            var increment = input.Get<int>(nameof(CounterJobInput.Increment))
                 ?? 1;
             var jobInput = new CounterJobInput(delay, value, goal, increment);
             return new CounterJob(id, name, jobInput, description);

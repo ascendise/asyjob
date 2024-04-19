@@ -46,7 +46,7 @@ namespace AsyJob.Lib.Tests.TestDoubles
             => new Dictionary<string, object?>()
             {
                 { nameof(Output.RunCount), Output.RunCount },
-                { nameof(Output.Runs), Output.Runs } 
+                { nameof(Output.Runs), Output.Runs }
             };
 
         public class SpyResult

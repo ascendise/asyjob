@@ -2,7 +2,7 @@
 
 namespace AsyJob.Lib.Client.Abstract.Jobs
 {
-    public class JobResponse(string id, string name, string description, string progressStatus, 
+    public class JobResponse(string id, string name, string description, string progressStatus,
         IDictionary<string, object?>? input, IDictionary<string, object?>? output, Exception? error)
     {
         public string Id { get; private set; } = id;
