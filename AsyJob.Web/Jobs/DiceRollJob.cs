@@ -73,7 +73,7 @@ namespace AsyJob.Web.Jobs
 
         public Job CreateJobWithInput(string _, string id, IDictionary<string, object?> input, string name = "", string description = "")
         {
-            int sides = input.Get<int?>(nameof(DiceRollInput.Sides)) 
+            int sides = input.Get<int>(nameof(DiceRollInput.Sides)) 
                 ?? throw new JobInputMismatchException(nameof(DiceRollInput.Sides), typeof(int));
             return new DiceRollJob(id, name, new(sides), description);
         }

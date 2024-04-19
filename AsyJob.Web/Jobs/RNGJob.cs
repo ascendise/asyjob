@@ -60,13 +60,13 @@ namespace AsyJob.Web.Jobs
 
         public Job CreateJobWithInput(string _, string id, IDictionary<string, object?> input, string name = "", string description = "")
         {
-            int periodMillis = input.Get<int?>(nameof(RNGInput.PeriodMillis))
+            int periodMillis = input.Get<int>(nameof(RNGInput.PeriodMillis))
                 ?? throw new JobInputMismatchException(nameof(periodMillis), typeof(int));
-            int iterations = input.Get<int?>(nameof(RNGInput.Iterations)) 
+            int iterations = input.Get<int>(nameof(RNGInput.Iterations)) 
                 ?? throw new JobInputMismatchException(nameof(iterations), typeof(int));
-            long min = input.Get<int?>(nameof(RNGInput.Min))
+            long min = input.Get<int>(nameof(RNGInput.Min))
                 ?? throw new JobInputMismatchException(nameof(min), typeof(long));
-            long max = input.Get<int?>(nameof(RNGInput.Max)) 
+            long max = input.Get<int>(nameof(RNGInput.Max)) 
                 ?? throw new JobInputMismatchException(nameof(max), typeof(long));
             var rngInput = new RNGInput(periodMillis, iterations, min, max);
             return new RNGJob(rngInput, id, name, description);

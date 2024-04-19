@@ -1,7 +1,6 @@
 ﻿using AsyJob.Lib;
 using AsyJob.Lib.Jobs;
 using AsyJob.Lib.Jobs.Factory;
-using System.Security.Cryptography;
 
 namespace AsyJob.Web.Jobs
 {
@@ -79,13 +78,13 @@ namespace AsyJob.Web.Jobs
 
         public Job CreateJobWithInput(string _, string id, IDictionary<string, object?> input, string name = "", string description = "")
         {
-            int delay = input.Get<int?>(nameof(CounterJobInput.DelayMs))
+            var delay = input.Get<int>(nameof(CounterJobInput.DelayMs))
                 ?? 0;
-            int value = input.Get<int?>(nameof(CounterJobInput.Value)) 
+            var value = input.Get<int>(nameof(CounterJobInput.Value)) 
                 ?? 0;
-            int goal = input.Get<int?>(nameof(CounterJobInput.Goal)) as int?
+            var goal = input.Get<int>(nameof(CounterJobInput.Goal))
                 ?? int.MaxValue;
-            int increment = input.Get<int?>(nameof(CounterJobInput.Increment)) 
+            var increment = input.Get<int>(nameof(CounterJobInput.Increment)) 
                 ?? 1;
             var jobInput = new CounterJobInput(delay, value, goal, increment);
             return new CounterJob(id, name, jobInput, description);

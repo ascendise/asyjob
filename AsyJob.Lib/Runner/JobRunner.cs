@@ -20,21 +20,21 @@ namespace AsyJob.Lib.Runner
         {
             _authManager.AuthenticatedContext(
                 () => _pool.RunJob(job),
-                User, [new Right(nameof(JobRunner), Operation.Write | Operation.Execute)]);
+                User, [new Right(Resources.Jobs, Operation.Write | Operation.Execute)]);
         }
 
         public Task<IEnumerable<Job>> GetJobs()
         {
             return _authManager.AuthenticatedContext(
                 _pool.FetchAll,
-                User, [new Right(nameof(JobRunner), Operation.Read)]);
+                User, [new Right(Resources.Jobs, Operation.Read)]);
         }
 
         public Task<Job?> GetJob(string jobId)
         {
             return _authManager.AuthenticatedContext(
                 () => _pool.FetchJob<Job>(jobId),
-                User, [new Right(nameof(JobRunner), Operation.Read)]);
+                User, [new Right(Resources.Jobs, Operation.Read)]);
         }
     }
 }

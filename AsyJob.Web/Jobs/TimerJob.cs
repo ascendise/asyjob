@@ -79,7 +79,7 @@ namespace AsyJob.Web.Jobs
 
         public Job CreateJobWithInput(string _, string id, IDictionary<string, object?> input, string name = "", string description = "")
         {
-            int delay = input.Get<int?>(nameof(TimerInput.Delay)) 
+            int delay = input.Get<int>(nameof(TimerInput.Delay)) 
                 ?? throw new JobInputMismatchException(nameof(TimerInput.Delay), typeof(int));
             return new TimerJob(id, name, new(delay), description);
         }

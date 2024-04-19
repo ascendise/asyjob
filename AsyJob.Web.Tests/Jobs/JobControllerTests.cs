@@ -25,12 +25,11 @@ namespace AsyJob.Web.Tests.Jobs
             //Act
             var response = await sut.RunJob(jobRequest);
             //Assert
-            var job = response.JobResponse;
             Assert.Multiple(() =>
             {
-                Assert.That(job.Id, Is.EqualTo(guid));
-                Assert.That(job.Name, Is.EqualTo("MyJob1"));
-                Assert.That(job.Description, Is.EqualTo("LoremIpsum"));
+                Assert.That(response.Id, Is.EqualTo(guid));
+                Assert.That(response.Name, Is.EqualTo("MyJob1"));
+                Assert.That(response.Description, Is.EqualTo("LoremIpsum"));
             });
         }
 
@@ -52,12 +51,11 @@ namespace AsyJob.Web.Tests.Jobs
             //Act
             var response = await sut.RunJob(jobRequest);
             //Assert
-            var job = response.JobResponse;
             Assert.Multiple(() =>
             {
-                Assert.That(job.Id, Is.EqualTo(guid));
-                Assert.That(job.Name, Is.EqualTo("MyJob1"));
-                Assert.That(job.Description, Is.EqualTo("LoremIpsum"));
+                Assert.That(response.Id, Is.EqualTo(guid));
+                Assert.That(response.Name, Is.EqualTo("MyJob1"));
+                Assert.That(response.Description, Is.EqualTo("LoremIpsum"));
                 Assert.That(input[nameof(FakeFactoryJobInput.CheckNum)], Is.EqualTo(14));
 
             });
@@ -103,10 +101,9 @@ namespace AsyJob.Web.Tests.Jobs
             var sut = new JobController(jobApi);
             //Act
             var response = await sut.FetchJob("DUMMY1");
-            var job = response?.JobResponse;
             //Assert
-            Assert.That(job, Is.Not.Null);
-            Assert.That(job.Id, Is.EqualTo("DUMMY1"));
+            Assert.That(response, Is.Not.Null);
+            Assert.That(response.Id, Is.EqualTo("DUMMY1"));
         }
 
         [Test]

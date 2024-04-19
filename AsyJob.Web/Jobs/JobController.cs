@@ -1,8 +1,5 @@
 ﻿using AsyJob.Lib.Auth;
 using AsyJob.Lib.Client.Abstract.Jobs;
-using AsyJob.Lib.Jobs;
-using AsyJob.Lib.Jobs.Factory;
-using AsyJob.Lib.Runner;
 using AsyJob.Web.Auth;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,7 +24,7 @@ namespace AsyJob.Web.Jobs
         /// <exception cref="NoMatchingJobFactoryException">Thrown when no job factory for <see cref="HalJobRequest.JobType"/> exists </exception>
         /// <returns></returns>
         [HttpPost]
-        [HasRights($"{nameof(JobRunner)}_wx")]
+        [HasRights($"{Resources.Jobs}_wx")]
         public async Task<HalJobResponse> RunJob(JobRequest jobRequest)
         {
             var response = await _jobApi.RunJob(jobRequest);
@@ -35,7 +32,7 @@ namespace AsyJob.Web.Jobs
         }
 
         [HttpGet("{jobId}")]
-        [HasRights($"{nameof(JobRunner)}_r")]
+        [HasRights($"{Resources.Jobs}_r")]
         public async Task<HalJobResponse> FetchJob(string jobId)
         {
             var response = await _jobApi.FetchJob(jobId);

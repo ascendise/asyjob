@@ -22,21 +22,20 @@ builder.Services.AddControllers().AddNewtonsoftJson(o =>
 });
 
 //Dependency Injection
-builder.Services.AddTransient<IGuidProvider, GuidProvider>();
-builder.Services.AddTransient<IJobWithInputFactory, TimerJobFactory>();
-builder.Services.AddTransient<IJobWithInputFactory, DiceRollJobFactory>();
-builder.Services.AddTransient<IJobWithInputFactory, RNGJobFactory>();
-builder.Services.AddTransient<IJobWithInputFactory, CounterJobFactory>();
-builder.Services.AddTransient<JobFactory>();
 builder.Services.AddTransient<IJobRepository, JobMongoRepository>();
-builder.Services.AddTransient<IJobRunner, JobRunner>();
-builder.Services.AddScoped<IJobPool, JobPool>(sp =>
+builder.Services.AddTransient<IJobApi, JobApi>(sp =>
 {
-    var repo = sp.GetService<IJobRepository>();
-    return Task.Run(() => JobPool.StartJobPool(repo!)).Result;
+    var jobFactory = new JobFactory(
+        [],
+        [new TimerJobFactory(), new DiceRollJobFactory(), new RNGJobFactory(), new CounterJobFactory()],
+        new GuidProvider()); 
+    var repo = sp.GetRequiredService<IJobRepository>();
+    var pool = JobPool.StartJobPool(repo).Result!;
+    var authManager = new AuthorizationManager();
+    var user = sp.GetService<AsyJob.Lib.Auth.User>();
+    var jobRunner = new JobRunner(pool, authManager, user);
+    return new(jobFactory, jobRunner);
 });
-builder.Services.AddTransient<IAuthorizationManager, AuthorizationManager>();
-builder.Services.AddTransient<IJobApi, JobApi>();
 
 //MongoDB
 //Tell BsonMapper which Subtypes for Job exist for deserialization

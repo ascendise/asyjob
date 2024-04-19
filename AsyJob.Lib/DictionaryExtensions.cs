@@ -9,10 +9,11 @@ namespace AsyJob.Lib
 {
     public static class DictionaryExtensions
     {
-        public static T? Get<T>(this IDictionary<string, object?> dict, string key)
+        public static T? Get<T>(this IDictionary<string, object?> dict, string key) where T : struct
         {
             dict.TryGetValue(key, out object? result);
-            return (T?)result;
+            if (result is null) return null;
+            return Convert.ChangeType(result, typeof(T)) as T?;
         }
     }
 }
