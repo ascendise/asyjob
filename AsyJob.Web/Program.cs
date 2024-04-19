@@ -1,6 +1,8 @@
 using AspNetCore.Identity.MongoDbCore.Extensions;
 using AspNetCore.Identity.MongoDbCore.Infrastructure;
 using AsyJob.Lib.Auth;
+using AsyJob.Lib.Client.Abstract.Jobs;
+using AsyJob.Lib.Client.Jobs;
 using AsyJob.Lib.Jobs;
 using AsyJob.Lib.Jobs.Factory;
 using AsyJob.Lib.Runner;
@@ -8,7 +10,6 @@ using AsyJob.Web;
 using AsyJob.Web.Auth;
 using AsyJob.Web.HAL.Json;
 using AsyJob.Web.Jobs;
-using AsyJob.Web.Mapping;
 using Microsoft.AspNetCore.Authorization;
 using MongoDB.Bson.Serialization;
 
@@ -22,23 +23,25 @@ builder.Services.AddControllers().AddNewtonsoftJson(o =>
 });
 
 //Jobs
-builder.Services.AddTransient<IGuidProvider, GuidProvider>();
-builder.Services.AddTransient<IJobWithInputFactory, TimerJobFactory>();
-builder.Services.AddTransient<IJobWithInputFactory, DiceRollJobFactory>();
-builder.Services.AddTransient<IJobWithInputFactory, RNGJobFactory>();
-builder.Services.AddTransient<IJobWithInputFactory, CounterJobFactory>();
-builder.Services.AddTransient<JobFactory>();
 builder.Services.AddTransient<IJobRepository, JobMongoRepository>();
-builder.Services.AddTransient<IJobRunner, JobRunner>();
 builder.Services.AddSingleton<IJobPool, JobPool>(sp =>
 {
     var repo = sp.GetRequiredService<IJobRepository>();
     return JobPool.StartJobPool(repo).Result!;
 });
+builder.Services.AddTransient<IJobApi, JobApi>(sp =>
+{
+    var jobFactory = new JobFactory(
+        [],
+        [new TimerJobFactory(), new DiceRollJobFactory(), new RNGJobFactory(), new CounterJobFactory()],
+        new GuidProvider());
+    var pool = sp.GetRequiredService<IJobPool>();
+    var authManager = new AuthorizationManager();
+    var user = sp.GetService<AsyJob.Lib.Auth.User>();
+    var jobRunner = new JobRunner(pool, authManager, user);
+    return new(jobFactory, jobRunner);
+});
 builder.Services.AddHostedService<JobPoolBackgroundService>();
-builder.Services.AddTransient<IAuthorizationManager, AuthorizationManager>();
-//Mapping
-builder.Services.AddTransient<IMapper<Job, JobResponseDto>, JobResponseDtoMapper>();
 
 //MongoDB
 //Tell BsonMapper which Subtypes for Job exist for deserialization

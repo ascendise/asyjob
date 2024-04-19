@@ -42,6 +42,13 @@ namespace AsyJob.Lib.Tests.TestDoubles
             Output.AddJobRun(jobRun);
         }
 
+        public IDictionary<string, object?> GetOutputDict()
+            => new Dictionary<string, object?>()
+            {
+                { nameof(Output.RunCount), Output.RunCount },
+                { nameof(Output.Runs), Output.Runs }
+            };
+
         public class SpyResult
         {
             public int RunCount { get => Runs.Count; }

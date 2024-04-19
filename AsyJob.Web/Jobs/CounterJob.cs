@@ -1,6 +1,6 @@
-﻿using AsyJob.Lib.Jobs;
+﻿using AsyJob.Lib;
+using AsyJob.Lib.Jobs;
 using AsyJob.Lib.Jobs.Factory;
-using System.Security.Cryptography;
 
 namespace AsyJob.Web.Jobs
 {
@@ -42,6 +42,21 @@ namespace AsyJob.Web.Jobs
             Input = counterJob.Input;
             Output = counterJob.Output;
         }
+
+        public IDictionary<string, object?> GetInputDict()
+            => new Dictionary<string, object?>()
+            {
+                { nameof(Input.Increment), Input.Increment },
+                { nameof(Input.Value), Input.Value },
+                { nameof(Input.Goal), Input.Goal },
+                { nameof(Input.DelayMs), Input.DelayMs },
+            };
+
+        IDictionary<string, object?> IOutput.GetOutputDict()
+            => new Dictionary<string, object?>()
+            {
+                { nameof(Output.Progress), Output?.Progress }
+            };
     }
 
     public class CounterJobInput(int delayms = 0, int startValue = 0, int goal = int.MaxValue, int increment = 1)
@@ -61,15 +76,15 @@ namespace AsyJob.Web.Jobs
     {
         public string JobType => nameof(CounterJob);
 
-        public Job CreateJobWithInput(string type, string id, dynamic input, string name = "", string description = "")
+        public Job CreateJobWithInput(string _, string id, IDictionary<string, object?> input, string name = "", string description = "")
         {
-            int delay = DynamicExtensions.TryGetValue<int?>(input, nameof(CounterJobInput.DelayMs))
+            var delay = input.Get<int>(nameof(CounterJobInput.DelayMs))
                 ?? 0;
-            int value = DynamicExtensions.TryGetValue<int?>(input, nameof(CounterJobInput.Value))
+            var value = input.Get<int>(nameof(CounterJobInput.Value))
                 ?? 0;
-            int goal = DynamicExtensions.TryGetValue<int?>(input, nameof(CounterJobInput.Goal))
+            var goal = input.Get<int>(nameof(CounterJobInput.Goal))
                 ?? int.MaxValue;
-            int increment = DynamicExtensions.TryGetValue<int?>(input, nameof(CounterJobInput.Increment))
+            var increment = input.Get<int>(nameof(CounterJobInput.Increment))
                 ?? 1;
             var jobInput = new CounterJobInput(delay, value, goal, increment);
             return new CounterJob(id, name, jobInput, description);

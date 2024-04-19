@@ -22,9 +22,10 @@ namespace AsyJob.Lib.Tests.TestDoubles
         public string JobType { get; } = jobType;
 
 
-        public Job CreateJobWithInput(string type, string id, dynamic input, string name = "", string description = "")
+        public Job CreateJobWithInput(string type, string id, IDictionary<string, object?> input, string name = "", string description = "")
         {
-            var checknum = DynamicExtensions.TryGetValue<int?>(input, "CheckNum") ?? throw new JobInputMismatchException(nameof(input.CheckNum), typeof(int));
+            var checknum = input.Get<int>(nameof(FakeFactoryJobInput.CheckNum))
+                ?? throw new JobInputMismatchException(nameof(FakeFactoryJobInput.CheckNum), typeof(int));
             var jobInput = new FakeFactoryJobInput(checknum);
             return new FakeJobFactoryOutputExtendedJob(id, name, jobInput, type, FactoryName, description);
         }
@@ -41,6 +42,12 @@ namespace AsyJob.Lib.Tests.TestDoubles
         : FakeJobFactoryOutputJob(id, name, jobType, factoryName, description), IInput<FakeFactoryJobInput>
     {
         public FakeFactoryJobInput Input { get; } = input;
+
+        public IDictionary<string, object?> GetInputDict()
+            => new Dictionary<string, object?>()
+            {
+                { nameof(FakeFactoryJobInput.CheckNum), Input.CheckNum }
+            };
     }
 
     public class FakeFactoryJobInput(int checknum)

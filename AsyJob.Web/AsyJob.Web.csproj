@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AsyJob.Lib\AsyJob.Lib.csproj" />
+    <ProjectReference Include="..\AsyJob.Lib.Client\AsyJob.Lib.Client.csproj" />
   </ItemGroup>
 
 </Project>

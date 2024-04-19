@@ -1,4 +1,5 @@
-﻿using AsyJob.Lib.Jobs;
+﻿using AsyJob.Lib;
+using AsyJob.Lib.Jobs;
 using AsyJob.Lib.Jobs.Factory;
 using AsyJob.Lib.Runner;
 
@@ -43,6 +44,19 @@ namespace AsyJob.Web.Jobs
             Input = timerJob.Input;
             Output = timerJob.Output;
         }
+
+        public IDictionary<string, object?> GetInputDict()
+            => new Dictionary<string, object?>()
+            {
+                { nameof(Input.Delay), Input.Delay },
+            };
+
+        public IDictionary<string, object?> GetOutputDict()
+            => new Dictionary<string, object?>()
+            {
+                { nameof(Output.Start), Output?.Start },
+                { nameof(Output.End), Output?.End }
+            };
     }
 
     public class TimerInput(int delay)
@@ -63,9 +77,9 @@ namespace AsyJob.Web.Jobs
     {
         public string JobType { get; } = nameof(TimerJob);
 
-        public Job CreateJobWithInput(string type, string id, dynamic input, string name = "", string description = "")
+        public Job CreateJobWithInput(string _, string id, IDictionary<string, object?> input, string name = "", string description = "")
         {
-            int delay = DynamicExtensions.TryGetValue<int>(input, nameof(TimerInput.Delay))
+            int delay = input.Get<int>(nameof(TimerInput.Delay))
                 ?? throw new JobInputMismatchException(nameof(TimerInput.Delay), typeof(int));
             return new TimerJob(id, name, new(delay), description);
         }

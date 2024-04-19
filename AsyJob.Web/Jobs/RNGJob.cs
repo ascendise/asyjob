@@ -1,4 +1,5 @@
-﻿using AsyJob.Lib.Jobs;
+﻿using AsyJob.Lib;
+using AsyJob.Lib.Jobs;
 using AsyJob.Lib.Jobs.Factory;
 
 namespace AsyJob.Web.Jobs
@@ -23,6 +24,21 @@ namespace AsyJob.Web.Jobs
                 Thread.Sleep(Input.PeriodMillis);
             }
         }
+
+        public IDictionary<string, object?> GetInputDict()
+            => new Dictionary<string, object?>()
+            {
+                { nameof(Input.Iterations), Input.Iterations },
+                { nameof(Input.Min), Input.Min },
+                { nameof(Input.Max), Input.Max },
+                { nameof(Input.PeriodMillis), Input.PeriodMillis }
+            };
+
+        public IDictionary<string, object?> GetOutputDict()
+            => new Dictionary<string, object?>()
+            {
+                { nameof(Output.Result), Output?.Result }
+            };
     }
 
     public class RNGInput(int periodMillis = 100, int iterations = 1000, long min = long.MinValue, long max = long.MaxValue)
@@ -42,15 +58,15 @@ namespace AsyJob.Web.Jobs
     {
         public string JobType { get; } = nameof(RNGJob);
 
-        public Job CreateJobWithInput(string type, string id, dynamic input, string name = "", string description = "")
+        public Job CreateJobWithInput(string _, string id, IDictionary<string, object?> input, string name = "", string description = "")
         {
-            int periodMillis = DynamicExtensions.TryGetValue<int>(input, nameof(RNGInput.PeriodMillis))
+            int periodMillis = input.Get<int>(nameof(RNGInput.PeriodMillis))
                 ?? throw new JobInputMismatchException(nameof(periodMillis), typeof(int));
-            int iterations = DynamicExtensions.TryGetValue<int>(input, nameof(RNGInput.Iterations))
+            int iterations = input.Get<int>(nameof(RNGInput.Iterations))
                 ?? throw new JobInputMismatchException(nameof(iterations), typeof(int));
-            long min = DynamicExtensions.TryGetValue<long>(input, nameof(RNGInput.Min))
+            long min = input.Get<int>(nameof(RNGInput.Min))
                 ?? throw new JobInputMismatchException(nameof(min), typeof(long));
-            long max = DynamicExtensions.TryGetValue<long>(input, nameof(RNGInput.Max))
+            long max = input.Get<int>(nameof(RNGInput.Max))
                 ?? throw new JobInputMismatchException(nameof(max), typeof(long));
             var rngInput = new RNGInput(periodMillis, iterations, min, max);
             return new RNGJob(rngInput, id, name, description);

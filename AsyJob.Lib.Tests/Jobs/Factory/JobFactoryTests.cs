@@ -47,7 +47,11 @@ namespace AsyJob.Lib.Tests.Jobs.Factory
             var guidProvider = new FakeGuidProvider([Guid.NewGuid()]);
             var sut = new JobFactory(null, [job1Factory, job2Factory], guidProvider);
             //Act
-            var createdJob = sut.CreateJobWithInput("Job1", new FakeFactoryJobInput(14));
+            var input = new Dictionary<string, object?>
+            {
+                { nameof(FakeFactoryJobInput.CheckNum), 14 }
+            };
+            var createdJob = sut.CreateJobWithInput("Job1", input);
             //Assert
             Assert.That(createdJob, Is.Not.Null);
             Assert.That(createdJob, Is.InstanceOf<FakeJobFactoryOutputExtendedJob>());
@@ -64,11 +68,15 @@ namespace AsyJob.Lib.Tests.Jobs.Factory
         public void CreateJob_NoFactoriesWithInput_ShouldThrowException()
         {
             //Arrange
-            var jobFactory = new FakeJobWithInputFactory("JobFactory", "NoJob");
             var guidProvider = new FakeGuidProvider([Guid.NewGuid()]);
             var sut = new JobFactory(null, null, guidProvider);
             //Act //Assert
-            Assert.Throws<NoMatchingJobFactoryException>(() => sut.CreateJobWithInput("SomeJob", new FakeFactoryJobInput(14)));
+            var input = new Dictionary<string, object?>
+            {
+                { nameof(FakeFactoryJobInput.CheckNum), 14 }
+            };
+            Assert.Throws<NoMatchingJobFactoryException>(
+                () => sut.CreateJobWithInput("SomeJob", input));
         }
 
         [Test]
@@ -79,7 +87,11 @@ namespace AsyJob.Lib.Tests.Jobs.Factory
             var guidProvider = new FakeGuidProvider([Guid.NewGuid()]);
             var sut = new JobFactory(null, [jobFactory], guidProvider);
             //Act //Assert
-            Assert.Throws<JobInputMismatchException>(() => sut.CreateJobWithInput("Job", "1"));
+            var input = new Dictionary<string, object?>
+            {
+                { "AAA", false }
+            };
+            Assert.Throws<JobInputMismatchException>(() => sut.CreateJobWithInput("Job", input));
         }
 
         [Test]
@@ -108,8 +120,12 @@ namespace AsyJob.Lib.Tests.Jobs.Factory
             var guid = "9E5C66CE-8419-4DB6-AD03-B4EF4568FA83";
             var guidProvider = new FakeGuidProvider([Guid.Parse(guid)]);
             var sut = new JobFactory(null, [jobFactory], guidProvider);
-            //Act
-            var createdJob = sut.CreateJobWithInput("Job", new FakeFactoryJobInput(12));
+            //Act(
+            var input = new Dictionary<string, object?>
+            {
+                { nameof(FakeFactoryJobInput.CheckNum), 12 }
+            };
+            var createdJob = sut.CreateJobWithInput("Job", input);
             //Assert
             Assert.Multiple(() =>
             {
