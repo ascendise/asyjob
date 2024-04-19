@@ -1,7 +1,6 @@
 ﻿using AsyJob.Lib.Client.Abstract.Jobs;
 using AsyJob.Web.HAL;
 using AsyJob.Web.HAL.AspNetCore;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using static AsyJob.Web.HAL.Link;
 
@@ -29,7 +28,7 @@ namespace AsyJob.Web.Jobs
             AddDefaultLinks();
         }
 
-        private static IDictionary<string, JToken?>? ToJsonExtension(IDictionary<string, object?>? output)
+        private static Dictionary<string, JToken?>? ToJsonExtension(IDictionary<string, object?>? output)
             => output?.Select(kp =>
             {
                 JToken? token = null;
