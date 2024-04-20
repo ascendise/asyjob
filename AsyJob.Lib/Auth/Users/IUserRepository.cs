@@ -5,6 +5,6 @@
         Task<IEnumerable<User>> GetAll();
         Task<User?> Get(Guid id);
         Task Remove(Guid id);
-        Task Update(User user);
+        Task<User> Update(User user);
     }
 }

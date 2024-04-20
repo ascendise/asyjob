@@ -27,13 +27,13 @@ namespace AsyJob.Lib.Tests.TestDoubles
             return Task.CompletedTask;
         }
 
-        public Task Update(User user)
+        public Task<User> Update(User user)
         {
             var oldUser = _users.FirstOrDefault(u => u.Id == user.Id) 
                 ?? throw new KeyNotFoundException($"No user with id {user.Id} found");
             _users.Remove(oldUser);
             _users.Add(user);
-            return Task.CompletedTask;
+            return Task.FromResult(user);
         }
     }
 }

@@ -37,10 +37,18 @@ namespace AsyJob.Lib.Auth.Users
                     return await _userRepo.GetAll();
                 }, _user, [new Right("Users", Operation.Read)]);
 
-        public Task<User> Update(Guid userId, UserUpdate user)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<User> Update(Guid userId, UserUpdate update)
+            => await _authManager.AuthenticatedContext(async () =>
+            {
+                var oldUser = await _userRepo.Get(userId)
+                    ?? throw new KeyNotFoundException();
+                var newUser = new User(
+                    userId,
+                    update.Username ?? oldUser.Username,
+                    update.Rights ?? oldUser.Rights
+                );
+                return await _userRepo.Update(newUser);
+            }, _user, [new Right("Users", Operation.Read | Operation.Write)]);
 
     }
 }
