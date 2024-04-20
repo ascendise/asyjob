@@ -17,22 +17,23 @@ namespace AsyJob.Lib.Auth.Users
         private readonly IWhitelist _whitelist = whitelist;
         private readonly IBans _bans = bans;
 
-        public void Ban(string email)
+        public Task Ban(string email)
+        {
+            _bans.Ban(email);
+            return Task.CompletedTask;
+        }
+
+        public Task<IEnumerable<User>> GetAll()
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<User> GetAll()
+        public Task<User> Update(Guid userId, UserUpdate user)
         {
             throw new NotImplementedException();
         }
 
-        public User Update(Guid userId, UserUpdate user)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Whitelist(string email)
+        public Task Whitelist(string email)
         {
             throw new NotImplementedException();
         }
