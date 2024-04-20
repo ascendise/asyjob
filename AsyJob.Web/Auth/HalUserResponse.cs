@@ -1,9 +1,16 @@
 ﻿namespace AsyJob.Web.Auth
 {
-    public class HalUserResponse(User user)
+    public class HalUserResponse(Guid id, string username, IEnumerable<string> rights)
     {
-        public Guid Id { get; private set; } = user.Id;
-        public string Username { get; private set; } = user.UserName ?? user.Email ?? user.Id.ToString(); //TODO: define what is actually set...
-        public IEnumerable<string> Rights { get; private set; } = user.Rights.Select(r => r.ToString());
+        public HalUserResponse(User user) : this(
+            user.Id, 
+            user.UserName ?? user.Email ?? user.Id.ToString(), 
+            user.Rights.Select(r => r.ToString())
+        )
+        { }
+
+        public Guid Id { get; private set; } = id;
+        public string Username { get; private set; } = username;
+        public IEnumerable<string> Rights { get; private set; } = rights;
     }
 }

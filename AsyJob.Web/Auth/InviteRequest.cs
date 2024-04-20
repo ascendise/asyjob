@@ -1,6 +1,4 @@
 ﻿namespace AsyJob.Web.Auth
 {
-    public class InviteRequest
-    {
-    }
+    public record InviteRequest(string Email);
 }
