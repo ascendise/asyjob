@@ -1,8 +1,11 @@
 using AspNetCore.Identity.MongoDbCore.Extensions;
 using AspNetCore.Identity.MongoDbCore.Infrastructure;
 using AsyJob.Lib.Auth;
+using AsyJob.Lib.Auth.Users;
 using AsyJob.Lib.Client.Abstract.Jobs;
+using AsyJob.Lib.Client.Abstract.Users;
 using AsyJob.Lib.Client.Jobs;
+using AsyJob.Lib.Client.Users;
 using AsyJob.Lib.Jobs;
 using AsyJob.Lib.Jobs.Factory;
 using AsyJob.Lib.Runner;
@@ -41,6 +44,15 @@ builder.Services.AddTransient<IJobApi, JobApi>(sp =>
     var user = sp.GetService<AsyJob.Lib.Auth.User>();
     var jobRunner = new JobRunner(pool, authManager, user);
     return new(jobFactory, jobRunner);
+});
+builder.Services.AddTransient<IUsersApi, UsersApi>(sp =>
+{
+    var whitelist = sp.GetRequiredService<IWhitelist>();
+    var bans = sp.GetRequiredService<IBans>();
+    var userRepo = sp.GetRequiredService<IUserRepository>();
+    var user = sp.GetService<User>();
+    var userManager = new UserManager(new AuthorizationManager(), userRepo, whitelist, bans, user?.GetDomainUser());
+    return new(userManager);
 });
 builder.Services.AddHostedService<JobPoolBackgroundService>();
 
