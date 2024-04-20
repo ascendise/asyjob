@@ -22,6 +22,6 @@
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        User Update(Guid userId, UserUpdate user);
+        User Update(Guid userId, UpdateUserRequest user);
     }
 }

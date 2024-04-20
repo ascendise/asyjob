@@ -3,8 +3,10 @@ using MongoDB.Driver;
 
 namespace AsyJob.Web.Auth
 {
-    internal class MongoBans : IBans
+    internal class MongoBans(IConfiguration config) : IBans
     {
+        private readonly IConfiguration _config = config;
+
         public async Task Ban(string email)
         {
             var bans = GetBans();
@@ -13,7 +15,8 @@ namespace AsyJob.Web.Auth
 
         private IMongoCollection<BanModel> GetBans()
         {
-            var client = new MongoClient();
+            var conn = _config.GetConnectionString("MongoDB");
+            var client = new MongoClient(conn);
             return client.GetDatabase("asyJob").GetCollection<BanModel>("bans");
         }
 

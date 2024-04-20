@@ -1,8 +1,10 @@
-﻿namespace AsyJob.Web.Auth
+﻿using AsyJob.Lib.Auth;
+
+namespace AsyJob.Web.Auth
 {
     public record UpdateUserRequest(
-        string? Email = null,
-        string? Username = null,
-        IEnumerable<string>? Rights = null
+        string? Email, 
+        string? Username, 
+        IEnumerable<Right> Rights
     );
 }

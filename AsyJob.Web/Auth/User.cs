@@ -8,7 +8,8 @@ namespace AsyJob.Web.Auth
     public class User : MongoIdentityUser<Guid>
     {
         public IEnumerable<Right> Rights { get; set; } = [
-            new Right(Resources.Jobs, Operation.Read | Operation.Write | Operation.Execute)
+            new Right(Resources.Jobs, Operation.Read | Operation.Write | Operation.Execute),
+            new Right("Users", Operation.Read | Operation.Write)
         ];
 
         public User(string username) : base(username) { }

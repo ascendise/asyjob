@@ -7,12 +7,12 @@ namespace AsyJob.Web.Auth
     {
         private readonly UserManager<User> _userManager = userManager;
 
-        public async Task<Lib.Auth.User?> Get(Guid id)
+        public Task<Lib.Auth.User?> Get(Guid id)
         {
             var user = FindUser(id);
             if (user is null)
-                return null;
-            return Map(user);
+                return Task.FromResult<Lib.Auth.User?>(null);
+            return Task.FromResult<Lib.Auth.User?>(Map(user));
         }
 
         private User? FindUser(Guid id)
@@ -40,6 +40,7 @@ namespace AsyJob.Web.Auth
             dbUser.UserName = user.Username;
             dbUser.Rights = user.Rights;
             await _userManager.UpdateAsync(dbUser);
+            return dbUser.GetDomainUser();
         }
     }
 }

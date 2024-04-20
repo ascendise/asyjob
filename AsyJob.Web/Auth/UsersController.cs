@@ -24,9 +24,9 @@ namespace AsyJob.Web.Auth
         private HalUserResponse Map(UserResponse response)
             => new(response.Id, response.Username, response.Rights);
 
-        [HttpPost("/invite/")]
+        [HttpPost("invite/")]
         [HasRights("Users_w")]
-        public async Task<ActionResult> Invite(InviteRequest request)
+        public async Task<ActionResult> Invite(InviteUserRequest request)
         {
             await _usersApi.Whitelist(new(request.Email));
             return NoContent();

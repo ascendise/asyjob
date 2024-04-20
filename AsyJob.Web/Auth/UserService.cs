@@ -18,7 +18,7 @@
             throw new NotImplementedException();
         }
 
-        public User Update(Guid userId, UserUpdate user)
+        public User Update(Guid userId, UpdateUserRequest user)
         {
             throw new NotImplementedException();
         }

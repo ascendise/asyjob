@@ -15,7 +15,8 @@ namespace AsyJob.Web.Auth
 
         private IMongoCollection<WhitelistModel> GetWhitelist()
         {
-            var client = new MongoClient();
+            var conn = _config.GetConnectionString("MongoDB");
+            var client = new MongoClient(conn);
             return client.GetDatabase("asyJob").GetCollection<WhitelistModel>("whitelist");
         }
 
