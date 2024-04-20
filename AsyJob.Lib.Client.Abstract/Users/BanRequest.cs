@@ -1,6 +1,4 @@
 ﻿namespace AsyJob.Lib.Client.Abstract.Users
 {
-    public class BanRequest(string Email)
-    {
-    }
+    public record BanRequest(string Email)
 }
