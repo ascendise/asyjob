@@ -36,9 +36,41 @@ namespace AsyJob.Lib.Tests.Auth.Users
             var user = new User(Guid.NewGuid(), "User", []);
             var sut = new UserManager(new AuthorizationManager(), fakeRepo, null!, fakeBans, user);
             //Act
-            var ban = async () => await sut.Ban("troll@hotmail.com");
+            async Task ban() => await sut.Ban("troll@hotmail.com");
             //Assert
-            Assert.ThrowsAsync<UnauthorizedException>(() => ban(), "User with missing right was able to ban user");
+            Assert.ThrowsAsync<UnauthorizedException>(ban, "User with missing right was able to ban user");
+            Assert.That(fakeBans.BannedEmails, Is.Empty);
+        }
+
+        [Test]
+        public void Whitelist_MissingRight_ShouldThrowException()
+        {
+            //Arrange
+            var fakeRepo = new FakeUserRepository();
+            var fakeWhitelist = new FakeWhitelist();
+            var user = new User(Guid.NewGuid(), "User", []);
+            var sut = new UserManager(new AuthorizationManager(), fakeRepo, fakeWhitelist, null!, user);
+            //Act
+            async Task whitelist() => await sut.Whitelist("literallyJFC@heaven.com");
+            //Assert
+            Assert.ThrowsAsync<UnauthorizedException>(whitelist, "User with missing right was able to whitelist user");
+            Assert.That(fakeWhitelist.AllowedEmails, Is.Empty); 
+        }
+
+        [Test]
+        public async Task Whitelist_IsAuthorized_ShouldWhitelistUser()
+        {
+            //Arrange
+            var fakeRepo = new FakeUserRepository();
+            var fakeWhitelist = new FakeWhitelist();
+            var user = new User(Guid.NewGuid(), "User", [
+                new Right("Users", Operation.Write)
+            ]);
+            var sut = new UserManager(new AuthorizationManager(), fakeRepo, fakeWhitelist, null!, user);
+            //Act
+            await sut.Whitelist("literallyJFC@heaven.com");
+            //Assert
+            Assert.That(fakeWhitelist.AllowedEmails, Contains.Item("literallyJFC@heaven.com")); 
         }
 
     }

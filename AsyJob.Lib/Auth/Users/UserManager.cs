@@ -28,6 +28,15 @@ namespace AsyJob.Lib.Auth.Users
             return Task.CompletedTask;
         }
 
+        public Task Whitelist(string email)
+        {
+            _authManager.AuthenticatedContext(() =>
+            {
+                _whitelist.Add(email);
+            }, _user, [new Right("Users", Operation.Write)]);
+            return Task.CompletedTask;
+        }
+
         public Task<IEnumerable<User>> GetAll()
         {
             throw new NotImplementedException();
@@ -38,9 +47,5 @@ namespace AsyJob.Lib.Auth.Users
             throw new NotImplementedException();
         }
 
-        public Task Whitelist(string email)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
