@@ -8,6 +8,7 @@ using AsyJob.Lib.Jobs.Factory;
 using AsyJob.Lib.Runner;
 using AsyJob.Web;
 using AsyJob.Web.Auth;
+using AsyJob.Web.Auth.Rights;
 using AsyJob.Web.HAL.Json;
 using AsyJob.Web.Jobs;
 using Microsoft.AspNetCore.Authorization;

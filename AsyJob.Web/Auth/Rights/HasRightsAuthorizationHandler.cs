@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 
-namespace AsyJob.Web.Auth
+namespace AsyJob.Web.Auth.Rights
 {
     public class HasRightsAuthorizationHandler(IUserStore<User> userStore) : AuthorizationHandler<HasRightsRequirement>
     {

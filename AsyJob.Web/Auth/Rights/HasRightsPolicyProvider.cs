@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 
-namespace AsyJob.Web.Auth
+namespace AsyJob.Web.Auth.Rights
 {
     internal class HasRightsPolicyProvider : IAuthorizationPolicyProvider
     {
