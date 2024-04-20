@@ -1,4 +1,4 @@
 ﻿namespace AsyJob.Web.Auth
 {
-    public record WhitelistModel(string Email);
+    internal record WhitelistModel(string Email);
 }

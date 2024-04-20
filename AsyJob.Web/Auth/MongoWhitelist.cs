@@ -3,7 +3,7 @@ using MongoDB.Driver;
 
 namespace AsyJob.Web.Auth
 {
-    public class MongoWhitelist(IConfiguration config) : IWhitelist
+    internal class MongoWhitelist(IConfiguration config) : IWhitelist
     {
         private readonly IConfiguration _config = config;
 
