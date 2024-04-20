@@ -22,9 +22,11 @@ namespace AsyJob.Web.Auth
         public ActionResult InviteUser(InviteUserRequest request) => throw new NotImplementedException();
 
         [HttpPost("/{userId}/ban")]
+        [HasRights("Users_w")]
         public ActionResult BanUser(Guid userId) => throw new NotImplementedException();
 
         [HttpPatch("/{userId}")]
+        [HasRights("Users_rw")]
         public HalUserResponse UpdateUser(Guid userId, UpdateUserRequest request) => throw new NotImplementedException();
     }
 }

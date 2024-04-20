@@ -10,16 +10,21 @@ namespace AsyJob.Lib.Auth.Users
         IAuthorizationManager authManager,
         IUserRepository userRepo,
         IWhitelist whitelist,
-        IBans bans) : IUserManager
+        IBans bans,
+        User? user = null) : IUserManager
     {
         private readonly IAuthorizationManager _authManager = authManager;
         private readonly IUserRepository _userRepo = userRepo;
         private readonly IWhitelist _whitelist = whitelist;
         private readonly IBans _bans = bans;
+        private readonly User? _user = user;
 
         public Task Ban(string email)
         {
-            _bans.Ban(email);
+            _authManager.AuthenticatedContext(() =>
+            {
+                _bans.Ban(email);
+            }, _user, [new Right("Users", Operation.Write)]);
             return Task.CompletedTask;
         }
 
