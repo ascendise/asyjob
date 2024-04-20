@@ -33,8 +33,7 @@ namespace AsyJob.Lib.Tests.Auth.Users
             //Arrange
             var fakeRepo = new FakeUserRepository();
             var fakeBans = new FakeBans();
-            var user = new User(Guid.NewGuid(), "User", []);
-            var sut = new UserManager(new AuthorizationManager(), fakeRepo, null!, fakeBans, user);
+            var sut = new UserManager(new AuthorizationManager(), fakeRepo, null!, fakeBans);
             //Act
             async Task ban() => await sut.Ban("troll@hotmail.com");
             //Assert
@@ -48,8 +47,7 @@ namespace AsyJob.Lib.Tests.Auth.Users
             //Arrange
             var fakeRepo = new FakeUserRepository();
             var fakeWhitelist = new FakeWhitelist();
-            var user = new User(Guid.NewGuid(), "User", []);
-            var sut = new UserManager(new AuthorizationManager(), fakeRepo, fakeWhitelist, null!, user);
+            var sut = new UserManager(new AuthorizationManager(), fakeRepo, fakeWhitelist, null!);
             //Act
             async Task whitelist() => await sut.Whitelist("literallyJFC@heaven.com");
             //Assert
@@ -72,6 +70,39 @@ namespace AsyJob.Lib.Tests.Auth.Users
             //Assert
             Assert.That(fakeWhitelist.AllowedEmails, Contains.Item("literallyJFC@heaven.com")); 
         }
+
+        [Test]
+        public void GetAll_MissingRights_ShouldThrowException()
+        {
+            //Arrange
+            var fakeRepo = new FakeUserRepository([
+                new User(Guid.NewGuid(), "User1", []),
+                new User(Guid.NewGuid(), "Steve", [new Right("Billing", Operation.Read | Operation.Write | Operation.Execute)])
+            ]);
+            var sut = new UserManager(new AuthorizationManager(), fakeRepo, null!, null!);
+            //Act
+            async Task<IEnumerable<User>> getAllUsers() => await sut.GetAll();
+            //Assert
+            Assert.ThrowsAsync<UnauthorizedException>(getAllUsers, "User with missing rights was able to fetch users");
+        }
+
+
+        [Test]
+        public async Task GetAll_HasRights_ShouldReturnUsers()
+        {
+            //Arrange
+            var fakeRepo = new FakeUserRepository([
+                new User(Guid.NewGuid(), "User1", []),
+                new User(Guid.NewGuid(), "Steve", [new Right("Billing", Operation.Read | Operation.Write | Operation.Execute)])
+            ]);
+            var user = new User(Guid.NewGuid(), "Admin", [new Right("Users", Operation.Read)]);
+            var sut = new UserManager(new AuthorizationManager(), fakeRepo, null!, null!, user);
+            //Act
+            var users = await sut.GetAll();
+            //Assert
+            Assert.That(users.Count(), Is.EqualTo(2));
+        }
+
 
     }
 }

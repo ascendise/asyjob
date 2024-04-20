@@ -19,28 +19,23 @@ namespace AsyJob.Lib.Auth.Users
         private readonly IBans _bans = bans;
         private readonly User? _user = user;
 
-        public Task Ban(string email)
-        {
-            _authManager.AuthenticatedContext(() =>
-            {
-                _bans.Ban(email);
-            }, _user, [new Right("Users", Operation.Write)]);
-            return Task.CompletedTask;
-        }
+        public async Task Ban(string email)
+            => await _authManager.AuthenticatedContext(async () =>
+                {
+                    await _bans.Ban(email);
+                }, _user, [new Right("Users", Operation.Write)]);
 
-        public Task Whitelist(string email)
-        {
-            _authManager.AuthenticatedContext(() =>
-            {
-                _whitelist.Add(email);
-            }, _user, [new Right("Users", Operation.Write)]);
-            return Task.CompletedTask;
-        }
+        public async Task Whitelist(string email)
+            => await _authManager.AuthenticatedContext(async () =>
+                {
+                    await _whitelist.Add(email);
+                }, _user, [new Right("Users", Operation.Write)]);
 
-        public Task<IEnumerable<User>> GetAll()
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<IEnumerable<User>> GetAll()
+            => await _authManager.AuthenticatedContext(async () =>
+                {
+                    return await _userRepo.GetAll();
+                }, _user, [new Right("Users", Operation.Read)]);
 
         public Task<User> Update(Guid userId, UserUpdate user)
         {
