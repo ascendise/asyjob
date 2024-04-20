@@ -45,6 +45,9 @@ builder.Services.AddTransient<IJobApi, JobApi>(sp =>
     var jobRunner = new JobRunner(pool, authManager, user);
     return new(jobFactory, jobRunner);
 });
+builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddTransient<IWhitelist, MongoWhitelist>();
+builder.Services.AddTransient<IBans, MongoBans>();
 builder.Services.AddTransient<IUsersApi, UsersApi>(sp =>
 {
     var whitelist = sp.GetRequiredService<IWhitelist>();
