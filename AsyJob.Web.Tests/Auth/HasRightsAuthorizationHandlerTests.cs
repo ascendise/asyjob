@@ -9,6 +9,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using User = AsyJob.Web.Auth.User;
+using AsyJob.Web.Auth.Rights;
 
 namespace AsyJob.Web.Tests.Auth
 {

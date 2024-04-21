@@ -1,16 +1,21 @@
 using AspNetCore.Identity.MongoDbCore.Extensions;
 using AspNetCore.Identity.MongoDbCore.Infrastructure;
 using AsyJob.Lib.Auth;
+using AsyJob.Lib.Auth.Users;
 using AsyJob.Lib.Client.Abstract.Jobs;
+using AsyJob.Lib.Client.Abstract.Users;
 using AsyJob.Lib.Client.Jobs;
+using AsyJob.Lib.Client.Users;
 using AsyJob.Lib.Jobs;
 using AsyJob.Lib.Jobs.Factory;
 using AsyJob.Lib.Runner;
 using AsyJob.Web;
 using AsyJob.Web.Auth;
+using AsyJob.Web.Auth.Rights;
 using AsyJob.Web.HAL.Json;
 using AsyJob.Web.Jobs;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using MongoDB.Bson.Serialization;
 
 using User = AsyJob.Web.Auth.User;
@@ -40,6 +45,17 @@ builder.Services.AddTransient<IJobApi, JobApi>(sp =>
     var user = sp.GetService<AsyJob.Lib.Auth.User>();
     var jobRunner = new JobRunner(pool, authManager, user);
     return new(jobFactory, jobRunner);
+});
+builder.Services.AddTransient<IUsersApi, UsersApi>(sp =>
+{
+    var config = sp.GetRequiredService<IConfiguration>();
+    var whitelist = new MongoWhitelist(config);
+    var bans = new MongoBans(config);
+    var aspUserManager = sp.GetRequiredService<UserManager<User>>();
+    var userRepo = new UserRepository(aspUserManager);
+    var user = sp.GetService<User>();
+    var userManager = new UserManager(new AuthorizationManager(), userRepo, whitelist, bans, user?.GetDomainUser());
+    return new(userManager);
 });
 builder.Services.AddHostedService<JobPoolBackgroundService>();
 
@@ -81,8 +97,9 @@ var mongoDbIdentityConfiguration = new MongoDbIdentityConfiguration()
         options.User.RequireUniqueEmail = true;
     }
 };
-builder.Services.AddTransient<IAuthorizationHandler, HasRightsAuthorizationHandler>();
 builder.Services.AddSingleton<IAuthorizationPolicyProvider, HasRightsPolicyProvider>();
+builder.Services.AddTransient<IAuthorizationHandler, HasRightsAuthorizationHandler>();
+builder.Services.AddTransient<IAuthorizationHandler, VipAuthorizationHandler>();
 builder.Services.ConfigureMongoDbIdentity<User, Role, Guid>(mongoDbIdentityConfiguration);
 builder.Services.AddIdentityApiEndpoints<User>();
 //Add Domain user to DI.

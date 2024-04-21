@@ -1,6 +1,7 @@
 ﻿using AsyJob.Lib.Auth;
 using AsyJob.Lib.Client.Abstract.Jobs;
 using AsyJob.Web.Auth;
+using AsyJob.Web.Auth.Rights;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AsyJob.Web.Jobs
