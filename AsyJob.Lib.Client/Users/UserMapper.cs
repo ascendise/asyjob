@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AsyJob.Lib.Client.Users
 {
-    internal class UserMapper : 
+    internal class UserMapper :
         IMapper<User, UserResponse>,
         IMapper<UserUpdateRequest, UserUpdate>
     {

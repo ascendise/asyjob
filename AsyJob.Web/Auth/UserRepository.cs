@@ -18,10 +18,10 @@ namespace AsyJob.Web.Auth
         private User? FindUser(Guid id)
             => _userManager.Users.SingleOrDefault(u => u.Id == id);
 
-        private static Lib.Auth.User Map(User user) 
+        private static Lib.Auth.User Map(User user)
             => new(user.Id, user.UserName ?? user.Email ?? user.Id.ToString(), user.Rights);
 
-        public Task<IEnumerable<Lib.Auth.User>> GetAll() 
+        public Task<IEnumerable<Lib.Auth.User>> GetAll()
             => Task.FromResult(_userManager.Users.Select(Map));
 
         public async Task Remove(Guid id)

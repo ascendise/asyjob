@@ -19,13 +19,13 @@ namespace AsyJob.Web.Auth
         public async Task HandleAsync(AuthorizationHandlerContext context)
         {
             var email = context.User?.FindFirst(ClaimTypes.Email)?.Value;
-            if(email is null || !await IsAllowed(email))
+            if (email is null || !await IsAllowed(email))
             {
                 context.Fail(new AuthorizationFailureReason(this, "User was either banned or removed from whitelist"));
             }
         }
 
-        private async Task<bool> IsAllowed(string email) 
+        private async Task<bool> IsAllowed(string email)
         {
             var access = await _usersApi.GetUserAccessRights(new(email));
             return access.IsWhitelisted && !access.IsBanned;

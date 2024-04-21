@@ -22,14 +22,14 @@ namespace AsyJob.Lib.Tests.TestDoubles
         public Task Remove(Guid id)
         {
             var user = _users.FirstOrDefault(u => u.Id == id);
-            if(user is not null)
+            if (user is not null)
                 _users.Remove(user);
             return Task.CompletedTask;
         }
 
         public Task<User> Update(User user)
         {
-            var oldUser = _users.FirstOrDefault(u => u.Id == user.Id) 
+            var oldUser = _users.FirstOrDefault(u => u.Id == user.Id)
                 ?? throw new KeyNotFoundException($"No user with id {user.Id} found");
             _users.Remove(oldUser);
             _users.Add(user);

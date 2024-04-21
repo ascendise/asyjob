@@ -52,7 +52,7 @@ namespace AsyJob.Lib.Tests.Auth.Users
             async Task whitelist() => await sut.Whitelist("literallyJFC@heaven.com");
             //Assert
             Assert.ThrowsAsync<UnauthorizedException>(whitelist, "User with missing right was able to whitelist user");
-            Assert.That(fakeWhitelist.AllowedEmails, Is.Empty); 
+            Assert.That(fakeWhitelist.AllowedEmails, Is.Empty);
         }
 
         [Test]
@@ -68,7 +68,7 @@ namespace AsyJob.Lib.Tests.Auth.Users
             //Act
             await sut.Whitelist("literallyJFC@heaven.com");
             //Assert
-            Assert.That(fakeWhitelist.AllowedEmails, Contains.Item("literallyJFC@heaven.com")); 
+            Assert.That(fakeWhitelist.AllowedEmails, Contains.Item("literallyJFC@heaven.com"));
         }
 
         [Test]
@@ -116,7 +116,7 @@ namespace AsyJob.Lib.Tests.Auth.Users
             async Task<User> update(Guid userId, UserUpdate update) => await sut.Update(userId, update);
             //Assert
             var updateRequest = new UserUpdate("JosephDestroyerOfWorlds", [new Right("Nukes", Operation.Execute)]);
-            Assert.ThrowsAsync<UnauthorizedException>(() => update(joeId, updateRequest), 
+            Assert.ThrowsAsync<UnauthorizedException>(() => update(joeId, updateRequest),
                 "User without rights was able to update user");
             Assert.That(fakeRepo.Users.Single().Username, Is.EqualTo("AverageJoe"));
         }

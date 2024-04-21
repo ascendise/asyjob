@@ -18,7 +18,7 @@ namespace AsyJob.Lib.Tests.TestDoubles
             return Task.CompletedTask;
         }
 
-        public Task<IEnumerable<string>> GetBannedEmails() 
+        public Task<IEnumerable<string>> GetBannedEmails()
             => Task.FromResult(_bannedEmails as IEnumerable<string>);
 
         public Task Unban(string email)

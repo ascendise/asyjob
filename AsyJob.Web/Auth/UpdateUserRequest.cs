@@ -3,8 +3,8 @@
 namespace AsyJob.Web.Auth
 {
     public record UpdateUserRequest(
-        string? Email, 
-        string? Username, 
+        string? Email,
+        string? Username,
         IEnumerable<Right> Rights
     );
 }
