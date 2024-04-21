@@ -18,8 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AsyJob.Lib.Tests\AsyJob.Lib.Tests.csproj" />
-    <ProjectReference Include="..\AsyJob.Lib.Tests\AsyJob.Lib.Tests.csproj" />
+    <ProjectReference Include="..\Jobs\AsyJob.Lib.Tests\AsyJob.Lib.Tests.csproj" />
+    <ProjectReference Include="..\Jobs\AsyJob.Lib.Tests\AsyJob.Lib.Tests.csproj" />
     <ProjectReference Include="..\AsyJob.Web\AsyJob.Web.csproj" />
   </ItemGroup>
 
