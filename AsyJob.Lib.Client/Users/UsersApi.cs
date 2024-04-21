@@ -27,5 +27,12 @@ namespace AsyJob.Lib.Client.Users
             var newUser = await _userManager.Update(request.Id, _userMapper.Map(request));
             return _userMapper.Map(newUser);
         }
+
+        public async Task<UserAccessResponse> GetUserAccessRights(GetUserAccessRightsRequest request)
+        {
+            var isBanned = await _userManager.IsBanned(request.Email);
+            var isWhitelisted = await _userManager.IsWhitelisted(request.Email);
+            return new(isBanned, isWhitelisted);
+        }
     }
 }

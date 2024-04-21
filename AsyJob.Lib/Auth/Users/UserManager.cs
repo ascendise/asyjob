@@ -50,5 +50,10 @@ namespace AsyJob.Lib.Auth.Users
                 return await _userRepo.Update(newUser);
             }, _user, [new Right("Users", Operation.Read | Operation.Write)]);
 
+        public async Task<bool> IsBanned(string email)
+            => (await _bans.GetBannedEmails()).Contains(email);
+
+        public async Task<bool> IsWhitelisted(string email)
+            => (await _whitelist.GetWhitelistedEmails()).Contains(email);
     }
 }

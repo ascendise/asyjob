@@ -15,6 +15,7 @@ using AsyJob.Web.Auth.Rights;
 using AsyJob.Web.HAL.Json;
 using AsyJob.Web.Jobs;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using MongoDB.Bson.Serialization;
 
 using User = AsyJob.Web.Auth.User;
@@ -45,14 +46,13 @@ builder.Services.AddTransient<IJobApi, JobApi>(sp =>
     var jobRunner = new JobRunner(pool, authManager, user);
     return new(jobFactory, jobRunner);
 });
-builder.Services.AddTransient<IUserRepository, UserRepository>();
-builder.Services.AddTransient<IWhitelist, MongoWhitelist>();
-builder.Services.AddTransient<IBans, MongoBans>();
 builder.Services.AddTransient<IUsersApi, UsersApi>(sp =>
 {
-    var whitelist = sp.GetRequiredService<IWhitelist>();
-    var bans = sp.GetRequiredService<IBans>();
-    var userRepo = sp.GetRequiredService<IUserRepository>();
+    var config = sp.GetRequiredService<IConfiguration>();
+    var whitelist = new MongoWhitelist(config);
+    var bans = new MongoBans(config);
+    var aspUserManager = sp.GetRequiredService<UserManager<User>>();
+    var userRepo = new UserRepository(aspUserManager);
     var user = sp.GetService<User>();
     var userManager = new UserManager(new AuthorizationManager(), userRepo, whitelist, bans, user?.GetDomainUser());
     return new(userManager);
@@ -97,8 +97,9 @@ var mongoDbIdentityConfiguration = new MongoDbIdentityConfiguration()
         options.User.RequireUniqueEmail = true;
     }
 };
-builder.Services.AddTransient<IAuthorizationHandler, HasRightsAuthorizationHandler>();
 builder.Services.AddSingleton<IAuthorizationPolicyProvider, HasRightsPolicyProvider>();
+builder.Services.AddTransient<IAuthorizationHandler, HasRightsAuthorizationHandler>();
+builder.Services.AddTransient<IAuthorizationHandler, VipAuthorizationHandler>();
 builder.Services.ConfigureMongoDbIdentity<User, Role, Guid>(mongoDbIdentityConfiguration);
 builder.Services.AddIdentityApiEndpoints<User>();
 //Add Domain user to DI.

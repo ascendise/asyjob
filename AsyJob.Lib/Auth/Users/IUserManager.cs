@@ -23,5 +23,17 @@
         /// <param name="user"></param>
         /// <returns></returns>
         Task<User> Update(Guid userId, UserUpdate user);
+        /// <summary>
+        /// Checks if the provided email is banned
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        Task<bool> IsBanned(string email);
+        /// <summary>
+        /// Checks if the provided email is whitelisted
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        Task<bool> IsWhitelisted(string email);
     }
 }
