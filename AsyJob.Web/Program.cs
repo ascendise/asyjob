@@ -99,6 +99,7 @@ builder.Services.AddSingleton<IAuthorizationPolicyProvider, HasRightsPolicyProvi
 builder.Services.AddTransient<IAuthorizationHandler, HasRightsAuthorizationHandler>();
 builder.Services.ConfigureMongoDbIdentity<User, Role, Guid>(mongoDbIdentityConfiguration);
 builder.Services.AddIdentityApiEndpoints<User>();
+builder.Services.AddTransient<IUserConfirmation<User>, UserConfirmationService>();
 //Add Domain user to DI.
 //Converts the Identity Framework User to a Domain User
 builder.Services.AddScoped<User>();
