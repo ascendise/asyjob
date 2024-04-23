@@ -11,6 +11,7 @@ namespace AsyJob.Web.Auth
             new Right(Resources.Jobs, Operation.Read | Operation.Write | Operation.Execute),
             new Right("Users", Operation.Read | Operation.Write)
         ];
+        public bool ConfirmedByAdmin { get; set; } = false;
 
         public User(string username) : base(username) { }
         public User() : base() { }
