@@ -49,12 +49,10 @@ builder.Services.AddTransient<IJobApi, JobApi>(sp =>
 builder.Services.AddTransient<IUsersApi, UsersApi>(sp =>
 {
     var config = sp.GetRequiredService<IConfiguration>();
-    var whitelist = new MongoWhitelist(config);
-    var bans = new MongoBans(config);
     var aspUserManager = sp.GetRequiredService<UserManager<User>>();
     var userRepo = new UserRepository(aspUserManager);
     var user = sp.GetService<User>();
-    var userManager = new UserManager(new AuthorizationManager(), userRepo, whitelist, bans, user?.GetDomainUser());
+    var userManager = new UserManager(new AuthorizationManager(), userRepo, user?.GetDomainUser());
     return new(userManager);
 });
 builder.Services.AddHostedService<JobPoolBackgroundService>();
@@ -99,7 +97,6 @@ var mongoDbIdentityConfiguration = new MongoDbIdentityConfiguration()
 };
 builder.Services.AddSingleton<IAuthorizationPolicyProvider, HasRightsPolicyProvider>();
 builder.Services.AddTransient<IAuthorizationHandler, HasRightsAuthorizationHandler>();
-builder.Services.AddTransient<IAuthorizationHandler, VipAuthorizationHandler>();
 builder.Services.ConfigureMongoDbIdentity<User, Role, Guid>(mongoDbIdentityConfiguration);
 builder.Services.AddIdentityApiEndpoints<User>();
 //Add Domain user to DI.

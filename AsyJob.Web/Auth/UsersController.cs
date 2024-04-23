@@ -24,24 +24,6 @@ namespace AsyJob.Web.Auth
         private HalUserResponse Map(UserResponse response)
             => new(response.Id, response.Username, response.Rights);
 
-        [HttpPost("invite/")]
-        [HasRights("Users_w")]
-        public async Task<ActionResult> Invite(InviteUserRequest request)
-        {
-            await _usersApi.Whitelist(new(request.Email));
-            return NoContent();
-        }
-
-        [HttpPost("{userId}/ban")]
-        [HasRights("Users_w")]
-        public async Task<ActionResult> Ban(Guid userId)
-        {
-            var user = await _userStore.FindByIdAsync(userId.ToString(), CancellationToken.None);
-            if (user is not null)
-                NotFound();
-            await _usersApi.Ban(new(user!.Email!));
-            return NoContent();
-        }
 
         [HttpPatch("{userId}")]
         [HasRights("Users_rw")]

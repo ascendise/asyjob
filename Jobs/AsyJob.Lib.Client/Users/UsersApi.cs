@@ -13,12 +13,6 @@ namespace AsyJob.Lib.Client.Users
         private readonly IUserManager _userManager = userManager;
         private readonly UserMapper _userMapper = new();
 
-        public async Task Ban(BanRequest request)
-            => await _userManager.Ban(request.Email);
-
-        public async Task Whitelist(WhitelistRequest request)
-            => await _userManager.Whitelist(request.Email);
-
         public async Task<IEnumerable<UserResponse>> GetAll()
             => (await _userManager.GetAll()).Select(_userMapper.Map);
 
@@ -26,13 +20,6 @@ namespace AsyJob.Lib.Client.Users
         {
             var newUser = await _userManager.Update(request.Id, _userMapper.Map(request));
             return _userMapper.Map(newUser);
-        }
-
-        public async Task<UserAccessResponse> GetUserAccessRights(GetUserAccessRightsRequest request)
-        {
-            var isBanned = await _userManager.IsBanned(request.Email);
-            var isWhitelisted = await _userManager.IsWhitelisted(request.Email);
-            return new(isBanned, isWhitelisted);
         }
     }
 }
