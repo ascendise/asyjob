@@ -39,12 +39,12 @@ namespace AsyJob.Web.Auth
         [HasRights("Users_r")]
         public Task<IEnumerable<HalUserResponse>> GetUnconfirmedUsers()
         {
-            var users = _userManager.Users.Where(u => u.ConfirmedByAdmin);
+            var users = _userManager.Users.Where(u => !u.ConfirmedByAdmin).ToList();
             var response = users.Select(u => new HalUserResponse(u.Id, u.UserName ?? u.Email ?? u.Id.ToString(), u.Rights.Select(r => r.ToString())));
             return Task.FromResult(response.AsEnumerable());
         }
 
-        [HttpPost("/unconfirmed/{userId}")]
+        [HttpPost("/unconfirmed/{userId}/confirm")]
         [HasRights("Users_w")]
         public async Task<ActionResult> ConfirmUser(Guid userId, ConfirmUserRequest request) 
         {

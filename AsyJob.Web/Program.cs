@@ -17,7 +17,7 @@ using AsyJob.Web.Jobs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using MongoDB.Bson.Serialization;
-
+using System.Security.Claims;
 using User = AsyJob.Web.Auth.User;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,22 +36,26 @@ builder.Services.AddSingleton<IJobPool, JobPool>(sp =>
 });
 builder.Services.AddTransient<IJobApi, JobApi>(sp =>
 {
+    using var scope = sp.CreateScope();
+    var serviceProvider = scope.ServiceProvider;
     var jobFactory = new JobFactory(
         [],
         [new TimerJobFactory(), new DiceRollJobFactory(), new RNGJobFactory(), new CounterJobFactory()],
         new GuidProvider());
-    var pool = sp.GetRequiredService<IJobPool>();
+    var pool = serviceProvider.GetRequiredService<IJobPool>();
     var authManager = new AuthorizationManager();
-    var user = sp.GetService<AsyJob.Lib.Auth.User>();
+    var user = serviceProvider.GetService<AsyJob.Lib.Auth.User?>();
     var jobRunner = new JobRunner(pool, authManager, user);
     return new(jobFactory, jobRunner);
 });
 builder.Services.AddTransient<IUsersApi, UsersApi>(sp =>
 {
-    var config = sp.GetRequiredService<IConfiguration>();
-    var aspUserManager = sp.GetRequiredService<UserManager<User>>();
+    using var scope = sp.CreateScope();
+    var serviceProvider = scope.ServiceProvider;
+    var config = serviceProvider.GetRequiredService<IConfiguration>();
+    var aspUserManager = serviceProvider.GetRequiredService<UserManager<User>>();
     var userRepo = new UserRepository(aspUserManager);
-    var user = sp.GetService<User>();
+    var user = serviceProvider.GetRequiredService<User>();
     var userManager = new UserManager(new AuthorizationManager(), userRepo, user?.GetDomainUser());
     return new(userManager);
 });
@@ -93,23 +97,38 @@ var mongoDbIdentityConfiguration = new MongoDbIdentityConfiguration()
 
         // ApplicationUser settings
         options.User.RequireUniqueEmail = true;
+
+        //Signin Settings
+        options.SignIn.RequireConfirmedAccount = true;
     }
 };
 builder.Services.AddSingleton<IAuthorizationPolicyProvider, HasRightsPolicyProvider>();
 builder.Services.AddTransient<IAuthorizationHandler, HasRightsAuthorizationHandler>();
-builder.Services.ConfigureMongoDbIdentity<User, Role, Guid>(mongoDbIdentityConfiguration);
+builder.Services.ConfigureMongoDbIdentity<User, Role, Guid>(mongoDbIdentityConfiguration)
+    .AddUserConfirmation<UserConfirmationService>();
 builder.Services.AddIdentityApiEndpoints<User>();
-builder.Services.AddTransient<IUserConfirmation<User>, UserConfirmationService>();
 //Add Domain user to DI.
 //Converts the Identity Framework User to a Domain User
-builder.Services.AddScoped<User>();
 builder.Services.AddScoped(sp =>
 {
-    var mongoUser = sp.GetService<User>();
+    var context = sp.GetService<IHttpContextAccessor>();
+    var user = context?.HttpContext?.User;
+    var id = user?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+    var anonymous = new User();
+    if (id is null)
+        return anonymous; 
+    var userManager = sp.GetRequiredService<UserManager<User>>();
+    return userManager.FindByIdAsync(id).Result ?? anonymous;
+    
+});
+builder.Services.AddScoped(sp =>
+{
+    var mongoUser = sp.GetRequiredService<User>();
     return mongoUser!.GetDomainUser();
 });
 
 var app = builder.Build();
+app.AddAdminUser().Wait();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
