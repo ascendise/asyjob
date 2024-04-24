@@ -26,8 +26,6 @@ builder.Services.AddControllers().AddNewtonsoftJson(o =>
 {
     o.SerializerSettings.Converters = JsonHal.Converters;
 });
-builder.Services.AddTransient<IMapper<UserResponse, HalUserResponse>, UserResponseToHalMapper>();
-builder.Services.AddTransient<IMapper<User, UserResponse>, UserToUserResponseMapper>();
 
 //Jobs
 builder.Services.AddTransient<IJobRepository, JobMongoRepository>();
@@ -58,7 +56,7 @@ builder.Services.AddTransient<IUsersApi, UsersApi>(sp =>
     var aspUserManager = serviceProvider.GetRequiredService<UserManager<User>>();
     var userRepo = new UserRepository(aspUserManager);
     var user = serviceProvider.GetRequiredService<User>();
-    var userManager = new UserManager(new AuthorizationManager(), userRepo, user?.ToDomainUser());
+    var userManager = new UserManager(new AuthorizationManager(), userRepo, user?.GetDomainUser());
     return new(userManager);
 });
 builder.Services.AddHostedService<JobPoolBackgroundService>();
@@ -106,11 +104,9 @@ var mongoDbIdentityConfiguration = new MongoDbIdentityConfiguration()
 };
 builder.Services.AddSingleton<IAuthorizationPolicyProvider, HasRightsPolicyProvider>();
 builder.Services.AddTransient<IAuthorizationHandler, HasRightsAuthorizationHandler>();
-builder.Services.AddTransient<IAspUserManager, UserManagerWrapper>();
 builder.Services.ConfigureMongoDbIdentity<User, Role, Guid>(mongoDbIdentityConfiguration)
     .AddUserConfirmation<UserConfirmationService>();
 builder.Services.AddIdentityApiEndpoints<User>();
-builder.Services.AddTransient<IUserConfirmation<User>, UserConfirmationService>();
 //Add Domain user to DI.
 //Converts the Identity Framework User to a Domain User
 builder.Services.AddScoped(sp =>
@@ -120,15 +116,15 @@ builder.Services.AddScoped(sp =>
     var id = user?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
     var anonymous = new User();
     if (id is null)
-        return anonymous;
+        return anonymous; 
     var userManager = sp.GetRequiredService<UserManager<User>>();
     return userManager.FindByIdAsync(id).Result ?? anonymous;
-
+    
 });
 builder.Services.AddScoped(sp =>
 {
     var mongoUser = sp.GetRequiredService<User>();
-    return mongoUser!.ToDomainUser();
+    return mongoUser!.GetDomainUser();
 });
 
 var app = builder.Build();
