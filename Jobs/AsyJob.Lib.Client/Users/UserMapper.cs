@@ -14,7 +14,10 @@ namespace AsyJob.Lib.Client.Users
         IMapper<UserUpdateRequest, UserUpdate>
     {
         public UserResponse Map(User user)
-            => new(user.Id, user.Username, user.Rights.Select(r => r.ToString()));
+            => new(
+                user.Id, user.Username, 
+                user.Rights.Select(r => r.ToString()),
+                user.Active);
 
         public UserUpdate Map(UserUpdateRequest req)
             => new(req.Username, req.Rights?.Select(r => new Right(r)));

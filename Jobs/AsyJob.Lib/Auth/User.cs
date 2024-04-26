@@ -30,6 +30,12 @@
             }
             return missing;
         }
+        /// <summary>
+        /// 'General purpopse' property to define if a user is active, meaning if he is
+        /// actually able to operate. Inactive users should not be able to do anything
+        /// Default is true
+        /// </summary>
+        public bool Active { get; set; } = true;
 
         private static Operation GetMissingOperations(Right userRight, Operation requiredOps)
         {

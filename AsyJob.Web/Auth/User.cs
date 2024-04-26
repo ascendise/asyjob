@@ -15,7 +15,10 @@ namespace AsyJob.Web.Auth
 
         public Lib.Auth.User GetDomainUser()
         {
-            return new(Id, UserName!, Rights);
+            return new(Id, UserName!, Rights)
+            {
+                Active = ConfirmedByAdmin
+            };
         }
     }
 }
