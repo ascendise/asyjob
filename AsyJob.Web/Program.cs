@@ -104,6 +104,7 @@ var mongoDbIdentityConfiguration = new MongoDbIdentityConfiguration()
 };
 builder.Services.AddSingleton<IAuthorizationPolicyProvider, HasRightsPolicyProvider>();
 builder.Services.AddTransient<IAuthorizationHandler, HasRightsAuthorizationHandler>();
+builder.Services.AddTransient<IAspUserManager, UserManagerWrapper>();
 builder.Services.ConfigureMongoDbIdentity<User, Role, Guid>(mongoDbIdentityConfiguration)
     .AddUserConfirmation<UserConfirmationService>();
 builder.Services.AddIdentityApiEndpoints<User>();

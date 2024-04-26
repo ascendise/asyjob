@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AsyJob.Lib.Tests.TestDoubles
 {
-    internal class FakeUserRepository(HashSet<User>? users = null) : IUserRepository
+    public class FakeUserRepository(HashSet<User>? users = null) : IUserRepository
     {
         public IEnumerable<User> Users { get => _users; }
         private readonly HashSet<User> _users = users ?? [];

@@ -15,10 +15,10 @@ namespace AsyJob.Web.Auth
     [Route("api/users")]
     [ApiController]
     [Produces("application/hal+json")]
-    public class UsersController(IUsersApi usersApi, UserManager<User> userManager) : ControllerBase
+    public class UsersController(IUsersApi usersApi, IAspUserManager userManager) : ControllerBase
     {
         private readonly IUsersApi _usersApi = usersApi;
-        private readonly UserManager<User> _userManager = userManager;
+        private readonly IAspUserManager _userManager = userManager;
 
         [HttpGet]
         [HasRights("Users_r")]
@@ -36,7 +36,7 @@ namespace AsyJob.Web.Auth
         [HasRights("Users_rw")]
         public async Task<HalUserResponse> Update(Guid userId, UserUpdateRequest request) 
         {
-            var result = await _usersApi.Update(new(request.Id, request.Username, request.Rights));
+            var result = await _usersApi.Update(new(userId, request.Username, request.Rights));
             return Map(result);
         }
 
@@ -53,7 +53,7 @@ namespace AsyJob.Web.Auth
         [HasRights("Users_w")]
         public async Task<ActionResult> ConfirmUser(Guid userId, ConfirmUserRequest request) 
         {
-            var user = await _userManager.FindByIdAsync(userId.ToString());
+            var user = await _userManager.FindByIdAsync(userId);
             if(user is null)
                 return NotFound(); 
             user.ConfirmedByAdmin = true; 
