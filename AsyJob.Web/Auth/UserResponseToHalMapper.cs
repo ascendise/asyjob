@@ -11,22 +11,23 @@ namespace AsyJob.Web.Auth
         public HalUserResponse Map(UserResponse user)
         {
             var response = new HalUserResponse(user);
-            if (!user.Active && CanWrite(currentUser))
+            if (!user.Active && CanWrite(user))
                 response.Links.Add("confirm", LinkBuilder.New()
                     .FromController(
                         typeof(UsersController),
                         nameof(UsersController.ConfirmUser),
                         new() { { "userId", user.Id } })
                     .Build()
-               );
+               );            
             return response;
         }
 
-        private static bool CanWrite(User? user)
+        private bool CanWrite(UserResponse? user)
         {
             if (user == null)
                 return false;
-            Right? userResource = user.Rights.SingleOrDefault(r => r.Resource == "Users");
+            var rights = user.Rights.Select(r => new Right(r));
+            Right? userResource = rights.SingleOrDefault(r => r.Resource == "Users");
             return userResource is not null
                 && userResource.Value.Ops.HasFlag(Operation.Write);
         }

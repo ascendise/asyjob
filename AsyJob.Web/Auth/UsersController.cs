@@ -4,6 +4,7 @@ using AsyJob.Lib.Client.Abstract.Users;
 using AsyJob.Web.Auth.Rights;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver;
 
 namespace AsyJob.Web.Auth
 {
@@ -15,21 +16,22 @@ namespace AsyJob.Web.Auth
     [Route("api/users")]
     [ApiController]
     [Produces("application/hal+json")]
-    public class UsersController(IUsersApi usersApi, IAspUserManager userManager) : ControllerBase
+    public class UsersController(
+        IUsersApi usersApi, 
+        IAspUserManager userManager,
+        IMapper<UserResponse, HalUserResponse> userToHalMapper) : ControllerBase
     {
         private readonly IUsersApi _usersApi = usersApi;
         private readonly IAspUserManager _userManager = userManager;
+        private readonly IMapper<UserResponse, HalUserResponse> _userToHalMapper = userToHalMapper;
 
         [HttpGet]
         [HasRights("Users_r")]
         public async Task<IEnumerable<HalUserResponse>> GetUsers()
         {
             var users = await _usersApi.GetAll();
-            return users.Select(Map);
+            return users.Select(_userToHalMapper.Map);
         }
-
-        private HalUserResponse Map(UserResponse response)
-            => new(response.Id, response.Username, response.Rights);
 
 
         [HttpPatch("{userId}")]
@@ -37,7 +39,7 @@ namespace AsyJob.Web.Auth
         public async Task<HalUserResponse> Update(Guid userId, UserUpdateRequest request) 
         {
             var result = await _usersApi.Update(new(userId, request.Username, request.Rights));
-            return Map(result);
+            return _userToHalMapper.Map(result);
         }
 
         [HttpGet("/unconfirmed")]
