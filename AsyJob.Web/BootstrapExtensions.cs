@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Identity;
 
 namespace AsyJob.Web
 {
+    /// <summary>
+    /// Set of extensions for setting up the application
+    /// </summary>
     public static class BootstrapExtensions
     {
         public static async Task AddAdminUser(this IApplicationBuilder appBuilder)

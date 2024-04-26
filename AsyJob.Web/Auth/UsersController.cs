@@ -7,6 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AsyJob.Web.Auth
 {
+    /// <summary>
+    /// This controller handles administrative operations for managing users
+    /// </summary>
+    /// <param name="usersApi"></param>
+    /// <param name="userManager"></param>
     [Route("api/users")]
     [ApiController]
     [Produces("application/hal+json")]
