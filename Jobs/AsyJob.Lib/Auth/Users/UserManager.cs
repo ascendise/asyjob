@@ -29,7 +29,8 @@ namespace AsyJob.Lib.Auth.Users
                 var newUser = new User(
                     userId,
                     update.Username ?? oldUser.Username,
-                    update.Rights ?? oldUser.Rights
+                    update.Rights ?? oldUser.Rights,
+                    oldUser.Active
                 );
                 return await _userRepo.Update(newUser);
             }, _user, [new Right("Users", Operation.Read | Operation.Write)]);

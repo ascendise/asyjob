@@ -5,6 +5,7 @@ using AsyJob.Lib.Client.Users;
 using AsyJob.Lib.Tests.TestDoubles;
 using AsyJob.Web.Auth;
 using AsyJob.Web.Tests.TestDoubles;
+using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,7 +53,7 @@ namespace AsyJob.Web.Tests.Auth
             //Assert
             var userResponse = response.Single();
             Assert.That(userResponse.Links.Any(l => l.Key == "users"), "users link missing");
-            Assert.That(userResponse.Links.Any(l => l.Key == "user"), "user link missing");
+            Assert.That(userResponse.Links.Any(l => l.Key == "self"), "user link missing");
         }
 
         [Test]
@@ -141,6 +142,31 @@ namespace AsyJob.Web.Tests.Auth
             var update = async () => await sut.Update(userId, updateRequest);
             //Assert
             Assert.ThrowsAsync<KeyNotFoundException>(() => update());
+        }
+
+        [Test]
+        public async Task Update_UserExists_ShouldIncludeLinksInResponse()
+        {
+            //Arrange
+            var user = new Web.Auth.User("User")
+            {
+                ConfirmedByAdmin = false
+            };
+            var fakeUserRepo = new FakeUserRepository([_admin.GetDomainUser(), user.GetDomainUser()]);
+            var userManager = new UserManager(new AuthorizationManager(), fakeUserRepo, _admin.GetDomainUser());
+            var usersApi = new UsersApi(userManager);
+            var fakeAspUserManager = new FakeAspUserManager([_admin, user]);
+            var sut = new UsersController(usersApi, fakeAspUserManager, new UserResponseToHalMapper(_admin));
+            //Act
+            var updateRequest = new UserUpdateRequest(user.Id, "NewUsername", ["Test_rwx"]);
+            var response = await sut.Update(user.Id, updateRequest);
+            //Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(response.Links.Any(l => l.Key == "self"), "self link missing");
+                Assert.That(response.Links.Any(l => l.Key == "users"), "users link missing");
+                Assert.That(response.Links.Any(l => l.Key == "confirm"), "confirm link missing");
+            });
         }
     }
 }
