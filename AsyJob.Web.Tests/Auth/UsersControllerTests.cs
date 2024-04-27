@@ -125,5 +125,22 @@ namespace AsyJob.Web.Tests.Auth
                 Assert.That(newUser.Rights.Single().Ops, Is.EqualTo(Operation.Read | Operation.Write | Operation.Execute));
             });
         }
+
+        [Test]
+        public void Update_UserDoesNotExist_ShouldThrowException()
+        {
+            //Arrange
+            var fakeUserRepo = new FakeUserRepository([_admin.GetDomainUser()]);
+            var userManager = new UserManager(new AuthorizationManager(), fakeUserRepo, _admin.GetDomainUser());
+            var usersApi = new UsersApi(userManager);
+            var fakeAspUserManager = new FakeAspUserManager([_admin]);
+            var sut = new UsersController(usersApi, fakeAspUserManager, new UserResponseToHalMapper(_admin));
+            //Act
+            var userId = Guid.Parse("686131d6-2bf2-4d7e-8700-405fdd7ccd57");
+            var updateRequest = new UserUpdateRequest(userId, "NewUsername", ["Test_rwx"]);
+            var update = async () => await sut.Update(userId, updateRequest);
+            //Assert
+            Assert.ThrowsAsync<KeyNotFoundException>(() => update());
+        }
     }
 }
