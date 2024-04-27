@@ -56,7 +56,7 @@ builder.Services.AddTransient<IUsersApi, UsersApi>(sp =>
     var aspUserManager = serviceProvider.GetRequiredService<UserManager<User>>();
     var userRepo = new UserRepository(aspUserManager);
     var user = serviceProvider.GetRequiredService<User>();
-    var userManager = new UserManager(new AuthorizationManager(), userRepo, user?.GetDomainUser());
+    var userManager = new UserManager(new AuthorizationManager(), userRepo, user?.ToDomainUser());
     return new(userManager);
 });
 builder.Services.AddHostedService<JobPoolBackgroundService>();
@@ -125,7 +125,7 @@ builder.Services.AddScoped(sp =>
 builder.Services.AddScoped(sp =>
 {
     var mongoUser = sp.GetRequiredService<User>();
-    return mongoUser!.GetDomainUser();
+    return mongoUser!.ToDomainUser();
 });
 
 var app = builder.Build();
