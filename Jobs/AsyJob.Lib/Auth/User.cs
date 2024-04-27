@@ -1,6 +1,6 @@
 ﻿namespace AsyJob.Lib.Auth
 {
-    public class User(Guid id, string username, IEnumerable<Right> rights)
+    public class User(Guid id, string username, IEnumerable<Right> rights, bool active = true)
     {
         public Guid Id { get; } = id;
         public string Username { get; private set; } = username;
@@ -35,7 +35,7 @@
         /// actually able to operate. Inactive users should not be able to do anything
         /// Default is true
         /// </summary>
-        public bool Active { get; set; } = true;
+        public bool Active { get; set; } = active;
 
         private static Operation GetMissingOperations(Right userRight, Operation requiredOps)
         {

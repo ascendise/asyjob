@@ -31,7 +31,7 @@ namespace AsyJob.Web.Auth
                     typeof(UsersController),
                     nameof(UsersController.GetUsers))
                 .Build());
-            Links.Add("user", LinkBuilder.New()
+            Links.Add("self", LinkBuilder.New()
                 .FromController(
                     typeof(UsersController),
                     nameof(UsersController.Update),
