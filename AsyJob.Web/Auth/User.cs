@@ -13,7 +13,7 @@ namespace AsyJob.Web.Auth
         public User(string username) : base(username) { }
         public User() : base() { }
 
-        public Lib.Auth.User GetDomainUser()
+        public Lib.Auth.User ToDomainUser()
         {
             return new(Id, UserName!, Rights)
             {

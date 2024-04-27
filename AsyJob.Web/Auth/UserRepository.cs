@@ -40,7 +40,7 @@ namespace AsyJob.Web.Auth
             dbUser.UserName = user.Username;
             dbUser.Rights = user.Rights;
             await _userManager.UpdateAsync(dbUser);
-            return dbUser.GetDomainUser();
+            return dbUser.ToDomainUser();
         }
     }
 }

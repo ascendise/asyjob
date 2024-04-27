@@ -18,6 +18,7 @@ namespace AsyJob.Web.Tests.Auth
     {
         private Web.Auth.User _admin = new("admin")
         {
+            ConfirmedByAdmin = true,
             Rights = [
                 new Right("Users", Operation.Read | Operation.Write)
             ]
@@ -28,8 +29,8 @@ namespace AsyJob.Web.Tests.Auth
         {
             //Arrange
             var user = new Web.Auth.User("HelloWorld");
-            var fakeUserRepo = new FakeUserRepository([_admin.GetDomainUser(), user.GetDomainUser()]);
-            var userManager = new UserManager(new AuthorizationManager(), fakeUserRepo, _admin.GetDomainUser());
+            var fakeUserRepo = new FakeUserRepository([_admin.ToDomainUser(), user.ToDomainUser()]);
+            var userManager = new UserManager(new AuthorizationManager(), fakeUserRepo, _admin.ToDomainUser());
             var usersApi = new UsersApi(userManager);
             var fakeAspUserManager = new FakeAspUserManager([_admin, user]);
             var sut = new UsersController(usersApi, fakeAspUserManager, new UserResponseToHalMapper(_admin));
@@ -43,8 +44,8 @@ namespace AsyJob.Web.Tests.Auth
         public async Task GetUsers_Response_ShouldIncludeLinks()
         {
             //Arrange
-            var fakeUserRepo = new FakeUserRepository([_admin.GetDomainUser()]);
-            var userManager = new UserManager(new AuthorizationManager(), fakeUserRepo, _admin.GetDomainUser());
+            var fakeUserRepo = new FakeUserRepository([_admin.ToDomainUser()]);
+            var userManager = new UserManager(new AuthorizationManager(), fakeUserRepo, _admin.ToDomainUser());
             var usersApi = new UsersApi(userManager);
             var fakeAspUserManager = new FakeAspUserManager([_admin]);
             var sut = new UsersController(usersApi, fakeAspUserManager, new UserResponseToHalMapper(_admin));
@@ -64,8 +65,8 @@ namespace AsyJob.Web.Tests.Auth
             {
                 ConfirmedByAdmin = false
             };
-            var fakeUserRepo = new FakeUserRepository([_admin.GetDomainUser(), unconfirmedUser.GetDomainUser()]);
-            var userManager = new UserManager(new AuthorizationManager(), fakeUserRepo, _admin.GetDomainUser());
+            var fakeUserRepo = new FakeUserRepository([_admin.ToDomainUser(), unconfirmedUser.ToDomainUser()]);
+            var userManager = new UserManager(new AuthorizationManager(), fakeUserRepo, _admin.ToDomainUser());
             var usersApi = new UsersApi(userManager);
             var fakeAspUserManager = new FakeAspUserManager([_admin, unconfirmedUser]);
             var sut = new UsersController(usersApi, fakeAspUserManager, new UserResponseToHalMapper(_admin));
@@ -91,8 +92,8 @@ namespace AsyJob.Web.Tests.Auth
             {
                 ConfirmedByAdmin = false
             };
-            var fakeUserRepo = new FakeUserRepository([readonlyUser.GetDomainUser(), unconfirmedUser.GetDomainUser()]);
-            var userManager = new UserManager(new AuthorizationManager(), fakeUserRepo, readonlyUser.GetDomainUser());
+            var fakeUserRepo = new FakeUserRepository([readonlyUser.ToDomainUser(), unconfirmedUser.ToDomainUser()]);
+            var userManager = new UserManager(new AuthorizationManager(), fakeUserRepo, readonlyUser.ToDomainUser());
             var usersApi = new UsersApi(userManager);
             var fakeAspUserManager = new FakeAspUserManager([readonlyUser, unconfirmedUser]);
             var sut = new UsersController(usersApi, fakeAspUserManager, new UserResponseToHalMapper(readonlyUser));
@@ -109,8 +110,8 @@ namespace AsyJob.Web.Tests.Auth
         {
             //Arrange
             var user = new Web.Auth.User("User");
-            var fakeUserRepo = new FakeUserRepository([_admin.GetDomainUser(), user.GetDomainUser()]);
-            var userManager = new UserManager(new AuthorizationManager(), fakeUserRepo, _admin.GetDomainUser());
+            var fakeUserRepo = new FakeUserRepository([_admin.ToDomainUser(), user.ToDomainUser()]);
+            var userManager = new UserManager(new AuthorizationManager(), fakeUserRepo, _admin.ToDomainUser());
             var usersApi = new UsersApi(userManager);
             var fakeAspUserManager = new FakeAspUserManager([_admin, user]);
             var sut = new UsersController(usersApi, fakeAspUserManager, new UserResponseToHalMapper(_admin));
@@ -131,8 +132,8 @@ namespace AsyJob.Web.Tests.Auth
         public void Update_UserDoesNotExist_ShouldThrowException()
         {
             //Arrange
-            var fakeUserRepo = new FakeUserRepository([_admin.GetDomainUser()]);
-            var userManager = new UserManager(new AuthorizationManager(), fakeUserRepo, _admin.GetDomainUser());
+            var fakeUserRepo = new FakeUserRepository([_admin.ToDomainUser()]);
+            var userManager = new UserManager(new AuthorizationManager(), fakeUserRepo, _admin.ToDomainUser());
             var usersApi = new UsersApi(userManager);
             var fakeAspUserManager = new FakeAspUserManager([_admin]);
             var sut = new UsersController(usersApi, fakeAspUserManager, new UserResponseToHalMapper(_admin));
@@ -152,8 +153,8 @@ namespace AsyJob.Web.Tests.Auth
             {
                 ConfirmedByAdmin = false
             };
-            var fakeUserRepo = new FakeUserRepository([_admin.GetDomainUser(), user.GetDomainUser()]);
-            var userManager = new UserManager(new AuthorizationManager(), fakeUserRepo, _admin.GetDomainUser());
+            var fakeUserRepo = new FakeUserRepository([_admin.ToDomainUser(), user.ToDomainUser()]);
+            var userManager = new UserManager(new AuthorizationManager(), fakeUserRepo, _admin.ToDomainUser());
             var usersApi = new UsersApi(userManager);
             var fakeAspUserManager = new FakeAspUserManager([_admin, user]);
             var sut = new UsersController(usersApi, fakeAspUserManager, new UserResponseToHalMapper(_admin));
@@ -167,6 +168,25 @@ namespace AsyJob.Web.Tests.Auth
                 Assert.That(response.Links.Any(l => l.Key == "users"), "users link missing");
                 Assert.That(response.Links.Any(l => l.Key == "confirm"), "confirm link missing");
             });
+        }
+
+        [Test]
+        public async Task GetUnconfirmedUsers_HasUsers_ShouldReturnUsers()
+        {
+            //Arrange
+            var unconfirmed = new Web.Auth.User("unconfirmed")
+            {
+                ConfirmedByAdmin = false
+            };
+            var fakeUserRepo = new FakeUserRepository([_admin.ToDomainUser(), unconfirmed.ToDomainUser()]);
+            var userManager = new UserManager(new AuthorizationManager(), fakeUserRepo, _admin.ToDomainUser());
+            var usersApi = new UsersApi(userManager);
+            var fakeAspUserManager = new FakeAspUserManager([_admin, unconfirmed]);
+            var sut = new UsersController(usersApi, fakeAspUserManager, new UserResponseToHalMapper(_admin));
+            //Act
+            var response = await sut.GetUnconfirmedUsers();
+            //Assert
+            Assert.That(response.Single().Username, Is.EqualTo(unconfirmed.UserName));
         }
     }
 }
