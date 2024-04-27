@@ -22,7 +22,7 @@ namespace AsyJob.Web.Auth
             return response;
         }
 
-        private bool CanWrite(UserResponse? user)
+        private static bool CanWrite(UserResponse? user)
         {
             if (user == null)
                 return false;
