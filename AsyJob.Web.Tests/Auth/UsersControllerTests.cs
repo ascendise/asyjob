@@ -1,5 +1,6 @@
 ﻿using AsyJob.Lib.Auth;
 using AsyJob.Lib.Auth.Users;
+using AsyJob.Lib.Client.Abstract.Users;
 using AsyJob.Lib.Client.Users;
 using AsyJob.Lib.Tests.TestDoubles;
 using AsyJob.Web.Auth;
@@ -102,5 +103,27 @@ namespace AsyJob.Web.Tests.Auth
                 "confirm link is present, but user does not have required rights");
         }
 
+        [Test]
+        public async Task Update_UserExists_ShouldUpdateUser()
+        {
+            //Arrange
+            var user = new Web.Auth.User("User");
+            var fakeUserRepo = new FakeUserRepository([_admin.GetDomainUser(), user.GetDomainUser()]);
+            var userManager = new UserManager(new AuthorizationManager(), fakeUserRepo, _admin.GetDomainUser());
+            var usersApi = new UsersApi(userManager);
+            var fakeAspUserManager = new FakeAspUserManager([_admin, user]);
+            var sut = new UsersController(usersApi, fakeAspUserManager, new UserResponseToHalMapper(_admin));
+            //Act
+            var updateRequest = new UserUpdateRequest(user.Id, "NewUsername", ["Test_rwx"]);
+            var response = await sut.Update(user.Id, updateRequest);
+            //Assert
+            var newUser = fakeUserRepo.Users.Single(u => u.Id == user.Id);
+            Assert.That(newUser.Username, Is.EqualTo("NewUsername"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(newUser.Rights.Single().Resource, Is.EqualTo("Test"));
+                Assert.That(newUser.Rights.Single().Ops, Is.EqualTo(Operation.Read | Operation.Write | Operation.Execute));
+            });
+        }
     }
 }
