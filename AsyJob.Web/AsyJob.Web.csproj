@@ -22,4 +22,8 @@
     <ProjectReference Include="..\Jobs\AsyJob.Lib.Client\AsyJob.Lib.Client.csproj" />
   </ItemGroup>
 
+	<ItemGroup>
+		<InternalsVisibleTo Include="AsyJob.IntegrationTests"/>	
+	</ItemGroup>
+
 </Project>
