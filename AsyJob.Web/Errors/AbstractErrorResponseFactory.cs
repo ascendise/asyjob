@@ -4,7 +4,7 @@ namespace AsyJob.Web.Errors
 {
     internal abstract class AbstractErrorResponseFactory(IEnumerable<Type> supportedTypes) : IErrorResponseFactory
     {
-        public IEnumerable<Type> SupportedTypes { get; }  = supportedTypes;
+        public IEnumerable<Type> SupportedTypes { get; } = supportedTypes;
 
         public HttpStatusCode Create(Exception ex)
         {
