@@ -1,10 +1,12 @@
-﻿namespace AsyJob.Web.Errors
+﻿using System.Net;
+
+namespace AsyJob.Web.Errors
 {
     internal abstract class AbstractErrorResponseFactory(IEnumerable<Type> supportedTypes) : IErrorResponseFactory
     {
         public IEnumerable<Type> SupportedTypes { get; }  = supportedTypes;
 
-        public ErrorResponse Create(Exception ex)
+        public HttpStatusCode Create(Exception ex)
         {
             if (!Supports(ex))
                 throw new ArgumentException("Unsupported type", nameof(ex));
@@ -17,7 +19,7 @@
         /// </summary>
         /// <param name="ex"></param>
         /// <returns></returns>
-        protected abstract ErrorResponse OnCreate(Exception ex);
+        protected abstract HttpStatusCode OnCreate(Exception ex);
 
         public bool Supports(Exception ex)
             => SupportedTypes.Any(t => t == ex.GetType());

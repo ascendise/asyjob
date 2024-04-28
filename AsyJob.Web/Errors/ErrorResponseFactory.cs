@@ -1,4 +1,4 @@
-﻿using Amazon.Runtime;
+﻿using System.Net;
 
 namespace AsyJob.Web.Errors
 {
@@ -7,7 +7,7 @@ namespace AsyJob.Web.Errors
     {
         private readonly IEnumerable<IErrorResponseFactory> _errorResponseFactories = errorResponseFactories;
 
-        protected override ErrorResponse OnCreate(Exception ex)
+        protected override HttpStatusCode OnCreate(Exception ex)
         {
             var factory = _errorResponseFactories.Single(f => f.Supports(ex));
             return factory.Create(ex);

@@ -1,8 +1,10 @@
-﻿namespace AsyJob.Web.Errors
+﻿using System.Net;
+
+namespace AsyJob.Web.Errors
 {
     internal class InternalServerErrorFactory() : AbstractErrorResponseFactory([typeof(Exception)])
     {
-        protected override ErrorResponse OnCreate(Exception ex)
-            => new("Internal Server Error", "Server could not complete process because of an unhandled error", 500);
+        protected override HttpStatusCode OnCreate(Exception ex)
+            => HttpStatusCode.InternalServerError;
     }
 }
