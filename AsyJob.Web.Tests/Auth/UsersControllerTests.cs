@@ -219,5 +219,29 @@ namespace AsyJob.Web.Tests.Auth
             Assert.That(userResponse.Links.Any(l => l.Key == "users"), "users is missing");
             Assert.That(userResponse.Links.Any(l => l.Key == "confirm"), "confirm is missing");
         }
+
+        [Test]
+        public async Task ConfirmUser_UserExists_ShouldActivateUser()
+        {
+            //Arrange
+            var unconfirmed = new Web.Auth.User("unconfirmed")
+            {
+                ConfirmedByAdmin = false
+            };
+            var userManager = new UserManager(null!, null!, null!);
+            var usersApi = new UsersApi(userManager);
+            var fakeAspUserManager = new FakeAspUserManager([_admin, unconfirmed]);
+            var sut = new UsersController(usersApi, fakeAspUserManager,  
+                new UserToUserResponseMapper(),new UserResponseToHalMapper(_admin));
+            //Act
+            await sut.ConfirmUser(unconfirmed.Id, new(["Test_x"]));
+            //Assert
+            Assert.That(unconfirmed, Is.Not.Null);
+            Assert.Multiple(() =>
+            {
+                Assert.That(unconfirmed.ConfirmedByAdmin);
+                Assert.That(unconfirmed.Rights.Single(), Is.EqualTo(new Right("Test", Operation.Execute)));
+            });
+        }
     }
 }
