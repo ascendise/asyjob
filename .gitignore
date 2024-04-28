@@ -399,3 +399,6 @@ FodyWeavers.xsd
 
 # Additional Files
 appsettings.Development.json
+
+# Docs
+docs/

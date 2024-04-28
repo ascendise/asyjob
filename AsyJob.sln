@@ -5,7 +5,12 @@ VisualStudioVersion = 17.8.34511.84
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FFA1AA4F-12CB-4C03-BC47-5556C44252D9}"
 	ProjectSection(SolutionItems) = preProject
+		.dockerignore = .dockerignore
+		.gitignore = .gitignore
 		.runsettings = .runsettings
+		Doxyfile = Doxyfile
+		LICENSE = LICENSE
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AsyJob.Lib", "Jobs\AsyJob.Lib\AsyJob.Lib.csproj", "{1B631660-3A46-4136-AAC3-E80CF2BBB3EF}"
@@ -36,14 +41,6 @@ Global
 		{9D6E7678-64A1-4F8D-B0D6-30D75AB9AFA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9D6E7678-64A1-4F8D-B0D6-30D75AB9AFA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9D6E7678-64A1-4F8D-B0D6-30D75AB9AFA4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BEE34B6D-11B5-4570-9971-88BE052C86D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BEE34B6D-11B5-4570-9971-88BE052C86D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BEE34B6D-11B5-4570-9971-88BE052C86D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BEE34B6D-11B5-4570-9971-88BE052C86D7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D38BE96A-5880-49BD-8CED-B454A2C54E0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D38BE96A-5880-49BD-8CED-B454A2C54E0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D38BE96A-5880-49BD-8CED-B454A2C54E0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D38BE96A-5880-49BD-8CED-B454A2C54E0F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B7D48CD1-6BC2-4271-AC6C-951C1A3DF33F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B7D48CD1-6BC2-4271-AC6C-951C1A3DF33F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7D48CD1-6BC2-4271-AC6C-951C1A3DF33F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -52,6 +49,14 @@ Global
 		{A917DA8C-D3FF-41B9-B73D-68CA037D41A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A917DA8C-D3FF-41B9-B73D-68CA037D41A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A917DA8C-D3FF-41B9-B73D-68CA037D41A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEE34B6D-11B5-4570-9971-88BE052C86D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEE34B6D-11B5-4570-9971-88BE052C86D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEE34B6D-11B5-4570-9971-88BE052C86D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEE34B6D-11B5-4570-9971-88BE052C86D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D38BE96A-5880-49BD-8CED-B454A2C54E0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D38BE96A-5880-49BD-8CED-B454A2C54E0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D38BE96A-5880-49BD-8CED-B454A2C54E0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D38BE96A-5880-49BD-8CED-B454A2C54E0F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
