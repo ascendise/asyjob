@@ -58,9 +58,8 @@ namespace AsyJob.Web.Auth
         [HasRights("Users_w")]
         public async Task<ActionResult> ConfirmUser(Guid userId, ConfirmUserRequest request) 
         {
-            var user = await _userManager.FindByIdAsync(userId);
-            if(user is null)
-                return NotFound(); 
+            var user = await _userManager.FindByIdAsync(userId) 
+                ?? throw new KeyNotFoundException();
             user.ConfirmedByAdmin = true; 
             user.Rights = request.Rights.Select(r => new Right(r));
             await _userManager.UpdateAsync(user);

@@ -243,5 +243,21 @@ namespace AsyJob.Web.Tests.Auth
                 Assert.That(unconfirmed.Rights.Single(), Is.EqualTo(new Right("Test", Operation.Execute)));
             });
         }
+
+        [Test]
+        public void ConfirmUser_UserDoesNotExist_ShouldActivateUser()
+        {
+            //Arrange
+            var userManager = new UserManager(null!, null!, null!);
+            var usersApi = new UsersApi(userManager);
+            var fakeAspUserManager = new FakeAspUserManager([_admin]);
+            var sut = new UsersController(usersApi, fakeAspUserManager,  
+                new UserToUserResponseMapper(),new UserResponseToHalMapper(_admin));
+            //Act
+            var update = async ()
+                => await sut.ConfirmUser(Guid.Parse("191f1ad0-5360-4f86-8fcd-8099981a4ce2"), new(["Test_x"]));
+            //Assert
+            Assert.ThrowsAsync<KeyNotFoundException>(() => update());
+        }
     }
 }
