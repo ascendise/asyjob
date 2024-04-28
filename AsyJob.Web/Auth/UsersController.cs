@@ -19,10 +19,12 @@ namespace AsyJob.Web.Auth
     public class UsersController(
         IUsersApi usersApi, 
         IAspUserManager userManager,
+        IMapper<User, UserResponse> userToUserResponseMapper,
         IMapper<UserResponse, HalUserResponse> userToHalMapper) : ControllerBase
     {
         private readonly IUsersApi _usersApi = usersApi;
         private readonly IAspUserManager _userManager = userManager;
+        private readonly IMapper<User, UserResponse> _userToUserResponseMapper = userToUserResponseMapper;
         private readonly IMapper<UserResponse, HalUserResponse> _userToHalMapper = userToHalMapper;
 
         [HttpGet]
@@ -47,7 +49,8 @@ namespace AsyJob.Web.Auth
         public Task<IEnumerable<HalUserResponse>> GetUnconfirmedUsers()
         {
             var users = _userManager.Users.Where(u => !u.ConfirmedByAdmin).ToList();
-            var response = users.Select(u => new HalUserResponse(u.Id, u.UserName ?? u.Email ?? u.Id.ToString(), u.Rights.Select(r => r.ToString())));
+            var response = users.Select(_userToUserResponseMapper.Map)
+                .Select(_userToHalMapper.Map);
             return Task.FromResult(response.AsEnumerable());
         }
 
