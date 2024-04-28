@@ -15,7 +15,7 @@ namespace AsyJob.Lib.Client.Users
     {
         public UserResponse Map(User user)
             => new(
-                user.Id, user.Username, 
+                user.Id, user.Username,
                 user.Rights.Select(r => r.ToString()),
                 user.Active);
 

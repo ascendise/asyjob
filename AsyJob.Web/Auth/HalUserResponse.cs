@@ -8,8 +8,8 @@ namespace AsyJob.Web.Auth
 {
     public class HalUserResponse(Guid id, string username, IEnumerable<string> rights) : HalDocument
     {
-        public HalUserResponse(User user) 
-            : this(user.Id, 
+        public HalUserResponse(User user)
+            : this(user.Id,
                   user.UserName ?? user.Email ?? user.Id.ToString(),
                   user.Rights.Select(r => r.ToString()))
         {

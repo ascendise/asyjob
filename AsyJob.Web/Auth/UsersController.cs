@@ -17,7 +17,7 @@ namespace AsyJob.Web.Auth
     [ApiController]
     [Produces("application/hal+json")]
     public class UsersController(
-        IUsersApi usersApi, 
+        IUsersApi usersApi,
         IAspUserManager userManager,
         IMapper<User, UserResponse> userToUserResponseMapper,
         IMapper<UserResponse, HalUserResponse> userToHalMapper) : ControllerBase
@@ -38,7 +38,7 @@ namespace AsyJob.Web.Auth
 
         [HttpPatch("{userId}")]
         [HasRights("Users_rw")]
-        public async Task<HalUserResponse> Update(Guid userId, UserUpdateRequest request) 
+        public async Task<HalUserResponse> Update(Guid userId, UserUpdateRequest request)
         {
             var result = await _usersApi.Update(new(userId, request.Username, request.Rights));
             return _userToHalMapper.Map(result);
@@ -56,11 +56,11 @@ namespace AsyJob.Web.Auth
 
         [HttpPost("/unconfirmed/{userId}/confirm")]
         [HasRights("Users_w")]
-        public async Task<ActionResult> ConfirmUser(Guid userId, ConfirmUserRequest request) 
+        public async Task<ActionResult> ConfirmUser(Guid userId, ConfirmUserRequest request)
         {
-            var user = await _userManager.FindByIdAsync(userId) 
+            var user = await _userManager.FindByIdAsync(userId)
                 ?? throw new KeyNotFoundException();
-            user.ConfirmedByAdmin = true; 
+            user.ConfirmedByAdmin = true;
             user.Rights = request.Rights.Select(r => new Right(r));
             await _userManager.UpdateAsync(user);
             return NoContent();

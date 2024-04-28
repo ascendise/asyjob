@@ -119,10 +119,10 @@ builder.Services.AddScoped(sp =>
     var id = user?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
     var anonymous = new User();
     if (id is null)
-        return anonymous; 
+        return anonymous;
     var userManager = sp.GetRequiredService<UserManager<User>>();
     return userManager.FindByIdAsync(id).Result ?? anonymous;
-    
+
 });
 builder.Services.AddScoped(sp =>
 {

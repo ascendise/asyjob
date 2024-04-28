@@ -18,7 +18,7 @@ namespace AsyJob.Web.Auth
                         nameof(UsersController.ConfirmUser),
                         new() { { "userId", user.Id } })
                     .Build()
-               );            
+               );
             return response;
         }
 
