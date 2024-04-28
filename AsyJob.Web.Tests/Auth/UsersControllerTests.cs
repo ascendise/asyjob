@@ -16,7 +16,7 @@ namespace AsyJob.Web.Tests.Auth
 {
     internal class UsersControllerTests
     {
-        private Web.Auth.User _admin = new("admin")
+        private readonly Web.Auth.User _admin = new("admin")
         {
             ConfirmedByAdmin = true,
             Rights = [
@@ -33,7 +33,7 @@ namespace AsyJob.Web.Tests.Auth
             var userManager = new UserManager(new AuthorizationManager(), fakeUserRepo, _admin.ToDomainUser());
             var usersApi = new UsersApi(userManager);
             var fakeAspUserManager = new FakeAspUserManager([_admin, user]);
-            var sut = new UsersController(usersApi, fakeAspUserManager, 
+            var sut = new UsersController(usersApi, fakeAspUserManager,
                 new UserToUserResponseMapper(), new UserResponseToHalMapper(_admin));
             //Act
             var users = await sut.GetUsers();
@@ -49,14 +49,17 @@ namespace AsyJob.Web.Tests.Auth
             var userManager = new UserManager(new AuthorizationManager(), fakeUserRepo, _admin.ToDomainUser());
             var usersApi = new UsersApi(userManager);
             var fakeAspUserManager = new FakeAspUserManager([_admin]);
-            var sut = new UsersController(usersApi, fakeAspUserManager,  
-                new UserToUserResponseMapper(),new UserResponseToHalMapper(_admin));
+            var sut = new UsersController(usersApi, fakeAspUserManager,
+                new UserToUserResponseMapper(), new UserResponseToHalMapper(_admin));
             //Act
             var response = await sut.GetUsers();
             //Assert
             var userResponse = response.Single();
-            Assert.That(userResponse.Links.Any(l => l.Key == "users"), "users link missing");
-            Assert.That(userResponse.Links.Any(l => l.Key == "self"), "user link missing");
+            Assert.Multiple(() =>
+            {
+                Assert.That(userResponse.Links.Any(l => l.Key == "users"), "users link missing");
+                Assert.That(userResponse.Links.Any(l => l.Key == "self"), "user link missing");
+            });
         }
 
         [Test]
@@ -71,8 +74,8 @@ namespace AsyJob.Web.Tests.Auth
             var userManager = new UserManager(new AuthorizationManager(), fakeUserRepo, _admin.ToDomainUser());
             var usersApi = new UsersApi(userManager);
             var fakeAspUserManager = new FakeAspUserManager([_admin, unconfirmedUser]);
-            var sut = new UsersController(usersApi, fakeAspUserManager,  
-                new UserToUserResponseMapper(),new UserResponseToHalMapper(_admin));
+            var sut = new UsersController(usersApi, fakeAspUserManager,
+                new UserToUserResponseMapper(), new UserResponseToHalMapper(_admin));
             //Act
             var response = await sut.GetUsers();
             //Assert
@@ -99,13 +102,13 @@ namespace AsyJob.Web.Tests.Auth
             var userManager = new UserManager(new AuthorizationManager(), fakeUserRepo, readonlyUser.ToDomainUser());
             var usersApi = new UsersApi(userManager);
             var fakeAspUserManager = new FakeAspUserManager([readonlyUser, unconfirmedUser]);
-            var sut = new UsersController(usersApi, fakeAspUserManager,  
-                new UserToUserResponseMapper(),new UserResponseToHalMapper(readonlyUser));
+            var sut = new UsersController(usersApi, fakeAspUserManager,
+                new UserToUserResponseMapper(), new UserResponseToHalMapper(readonlyUser));
             //Act
             var response = await sut.GetUsers();
             //Assert
             var userResponse = response.Single(u => u.Username == "Unconfirmed");
-            Assert.That(!userResponse.Links.Any(l => l.Key == "confirm"), 
+            Assert.That(!userResponse.Links.Any(l => l.Key == "confirm"),
                 "confirm link is present, but user does not have required rights");
         }
 
@@ -118,8 +121,8 @@ namespace AsyJob.Web.Tests.Auth
             var userManager = new UserManager(new AuthorizationManager(), fakeUserRepo, _admin.ToDomainUser());
             var usersApi = new UsersApi(userManager);
             var fakeAspUserManager = new FakeAspUserManager([_admin, user]);
-            var sut = new UsersController(usersApi, fakeAspUserManager,  
-                new UserToUserResponseMapper(),new UserResponseToHalMapper(_admin));
+            var sut = new UsersController(usersApi, fakeAspUserManager,
+                new UserToUserResponseMapper(), new UserResponseToHalMapper(_admin));
             //Act
             var updateRequest = new UserUpdateRequest(user.Id, "NewUsername", ["Test_rwx"]);
             var response = await sut.Update(user.Id, updateRequest);
@@ -141,12 +144,12 @@ namespace AsyJob.Web.Tests.Auth
             var userManager = new UserManager(new AuthorizationManager(), fakeUserRepo, _admin.ToDomainUser());
             var usersApi = new UsersApi(userManager);
             var fakeAspUserManager = new FakeAspUserManager([_admin]);
-            var sut = new UsersController(usersApi, fakeAspUserManager,  
-                new UserToUserResponseMapper(),new UserResponseToHalMapper(_admin));
+            var sut = new UsersController(usersApi, fakeAspUserManager,
+                new UserToUserResponseMapper(), new UserResponseToHalMapper(_admin));
             //Act
             var userId = Guid.Parse("686131d6-2bf2-4d7e-8700-405fdd7ccd57");
             var updateRequest = new UserUpdateRequest(userId, "NewUsername", ["Test_rwx"]);
-            var update = async () => await sut.Update(userId, updateRequest);
+            async Task<HalUserResponse> update() => await sut.Update(userId, updateRequest);
             //Assert
             Assert.ThrowsAsync<KeyNotFoundException>(() => update());
         }
@@ -163,8 +166,8 @@ namespace AsyJob.Web.Tests.Auth
             var userManager = new UserManager(new AuthorizationManager(), fakeUserRepo, _admin.ToDomainUser());
             var usersApi = new UsersApi(userManager);
             var fakeAspUserManager = new FakeAspUserManager([_admin, user]);
-            var sut = new UsersController(usersApi, fakeAspUserManager,  
-                new UserToUserResponseMapper(),new UserResponseToHalMapper(_admin));
+            var sut = new UsersController(usersApi, fakeAspUserManager,
+                new UserToUserResponseMapper(), new UserResponseToHalMapper(_admin));
             //Act
             var updateRequest = new UserUpdateRequest(user.Id, "NewUsername", ["Test_rwx"]);
             var response = await sut.Update(user.Id, updateRequest);
@@ -189,8 +192,8 @@ namespace AsyJob.Web.Tests.Auth
             var userManager = new UserManager(new AuthorizationManager(), fakeUserRepo, _admin.ToDomainUser());
             var usersApi = new UsersApi(userManager);
             var fakeAspUserManager = new FakeAspUserManager([_admin, unconfirmed]);
-            var sut = new UsersController(usersApi, fakeAspUserManager,  
-                new UserToUserResponseMapper(),new UserResponseToHalMapper(_admin));
+            var sut = new UsersController(usersApi, fakeAspUserManager,
+                new UserToUserResponseMapper(), new UserResponseToHalMapper(_admin));
             //Act
             var response = await sut.GetUnconfirmedUsers();
             //Assert
@@ -209,15 +212,18 @@ namespace AsyJob.Web.Tests.Auth
             var userManager = new UserManager(new AuthorizationManager(), fakeUserRepo, _admin.ToDomainUser());
             var usersApi = new UsersApi(userManager);
             var fakeAspUserManager = new FakeAspUserManager([_admin, unconfirmed]);
-            var sut = new UsersController(usersApi, fakeAspUserManager,  
-                new UserToUserResponseMapper(),new UserResponseToHalMapper(_admin));
+            var sut = new UsersController(usersApi, fakeAspUserManager,
+                new UserToUserResponseMapper(), new UserResponseToHalMapper(_admin));
             //Act
             var response = await sut.GetUnconfirmedUsers();
             //Assert
             var userResponse = response.Single();
-            Assert.That(userResponse.Links.Any(l => l.Key == "self"), "self is missing");
-            Assert.That(userResponse.Links.Any(l => l.Key == "users"), "users is missing");
-            Assert.That(userResponse.Links.Any(l => l.Key == "confirm"), "confirm is missing");
+            Assert.Multiple(() =>
+            {
+                Assert.That(userResponse.Links.Any(l => l.Key == "self"), "self is missing");
+                Assert.That(userResponse.Links.Any(l => l.Key == "users"), "users is missing");
+                Assert.That(userResponse.Links.Any(l => l.Key == "confirm"), "confirm is missing");
+            });
         }
 
         [Test]
@@ -231,8 +237,8 @@ namespace AsyJob.Web.Tests.Auth
             var userManager = new UserManager(null!, null!, null!);
             var usersApi = new UsersApi(userManager);
             var fakeAspUserManager = new FakeAspUserManager([_admin, unconfirmed]);
-            var sut = new UsersController(usersApi, fakeAspUserManager,  
-                new UserToUserResponseMapper(),new UserResponseToHalMapper(_admin));
+            var sut = new UsersController(usersApi, fakeAspUserManager,
+                new UserToUserResponseMapper(), new UserResponseToHalMapper(_admin));
             //Act
             await sut.ConfirmUser(unconfirmed.Id, new(["Test_x"]));
             //Assert
@@ -251,10 +257,10 @@ namespace AsyJob.Web.Tests.Auth
             var userManager = new UserManager(null!, null!, null!);
             var usersApi = new UsersApi(userManager);
             var fakeAspUserManager = new FakeAspUserManager([_admin]);
-            var sut = new UsersController(usersApi, fakeAspUserManager,  
-                new UserToUserResponseMapper(),new UserResponseToHalMapper(_admin));
+            var sut = new UsersController(usersApi, fakeAspUserManager,
+                new UserToUserResponseMapper(), new UserResponseToHalMapper(_admin));
             //Act
-            var update = async ()
+            async Task<Microsoft.AspNetCore.Mvc.ActionResult> update()
                 => await sut.ConfirmUser(Guid.Parse("191f1ad0-5360-4f86-8fcd-8099981a4ce2"), new(["Test_x"]));
             //Assert
             Assert.ThrowsAsync<KeyNotFoundException>(() => update());
