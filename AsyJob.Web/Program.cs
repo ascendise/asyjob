@@ -12,6 +12,8 @@ using AsyJob.Lib.Runner;
 using AsyJob.Web;
 using AsyJob.Web.Auth;
 using AsyJob.Web.Auth.Rights;
+using AsyJob.Web.Errors;
+using AsyJob.Web.Errors.NotFound;
 using AsyJob.Web.HAL.Json;
 using AsyJob.Web.Jobs;
 using Microsoft.AspNetCore.Authorization;
@@ -26,8 +28,14 @@ builder.Services.AddControllers().AddNewtonsoftJson(o =>
 {
     o.SerializerSettings.Converters = JsonHal.Converters;
 });
+//Mapping
 builder.Services.AddTransient<IMapper<UserResponse, HalUserResponse>, UserResponseToHalMapper>();
 builder.Services.AddTransient<IMapper<User, UserResponse>, UserToUserResponseMapper>();
+
+//Error Handling
+builder.Services.AddTransient<ErrorResponseFactory>();
+builder.Services.AddTransient<IErrorResponseFactory, NotFoundErrorFactory>();
+
 
 //Jobs
 builder.Services.AddTransient<IJobRepository, JobMongoRepository>();

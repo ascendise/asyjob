@@ -7,10 +7,9 @@ namespace AsyJob.Web.Errors
     {
         private readonly IEnumerable<IErrorResponseFactory> _errorResponseFactories = errorResponseFactories;
 
-        public override ErrorResponse Create(Exception ex)
+        protected override ErrorResponse OnCreate(Exception ex)
         {
-            var factory = _errorResponseFactories.SingleOrDefault(f => f.Supports(ex))
-                ?? throw new ArgumentException("Exception is not supported", nameof(ex));
+            var factory = _errorResponseFactories.Single(f => f.Supports(ex));
             return factory.Create(ex);
         }
     }
