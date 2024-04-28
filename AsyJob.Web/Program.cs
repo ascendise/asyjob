@@ -35,7 +35,8 @@ builder.Services.AddTransient<IMapper<User, UserResponse>, UserToUserResponseMap
 //Error Handling
 builder.Services.AddTransient<ErrorResponseFactory>();
 builder.Services.AddTransient<IErrorResponseFactory, NotFoundErrorFactory>();
-
+builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<ExceptionHandler>();
 
 //Jobs
 builder.Services.AddTransient<IJobRepository, JobMongoRepository>();
@@ -139,6 +140,7 @@ builder.Services.AddScoped(sp =>
 });
 
 var app = builder.Build();
+app.UseExceptionHandler();
 app.AddAdminUser().Wait();
 
 // Configure the HTTP request pipeline.

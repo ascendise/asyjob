@@ -9,12 +9,11 @@ namespace AsyJob.Web.Errors
 
         public ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
         {
-            if(exception is KeyNotFoundException)
-            {
-                httpContext.Response.StatusCode = 404;
+            if (!_errorFactory.Supports(exception))
                 return ValueTask.FromResult(false);
-            }
-            return ValueTask.FromResult(false);
+            var statusCode = _errorFactory.Create(exception);
+            httpContext.Response.StatusCode = (int)statusCode;
+            return ValueTask.FromResult(true);
         }
     }
 }
