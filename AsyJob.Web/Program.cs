@@ -26,6 +26,8 @@ builder.Services.AddControllers().AddNewtonsoftJson(o =>
 {
     o.SerializerSettings.Converters = JsonHal.Converters;
 });
+builder.Services.AddTransient<IMapper<UserResponse, HalUserResponse>, UserResponseToHalMapper>();
+builder.Services.AddTransient<IMapper<User, UserResponse>, UserToUserResponseMapper>();
 
 //Jobs
 builder.Services.AddTransient<IJobRepository, JobMongoRepository>();
