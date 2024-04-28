@@ -19,19 +19,6 @@ namespace AsyJob.Lib.Client.Abstract.Users
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        Task Whitelist(WhitelistRequest request);
-        /// <summary>
-        /// Bans email from accessing api
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        Task Ban(BanRequest request);
-        /// <summary>
-        /// Updates user
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
         Task<UserResponse> Update(UserUpdateRequest request);
-        Task<UserAccessResponse> GetUserAccessRights(GetUserAccessRightsRequest request);
     }
 }

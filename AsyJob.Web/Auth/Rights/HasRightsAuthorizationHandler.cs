@@ -36,7 +36,7 @@ namespace AsyJob.Web.Auth.Rights
                 ?? throw new AuthorizationFailedException("User has no id");
             var mongoUser = await _userStore.FindByIdAsync(userId, CancellationToken.None)
                 ?? throw new AuthorizationFailedException("No user with matching id found");
-            return mongoUser.GetDomainUser();
+            return mongoUser.ToDomainUser();
         }
 
         private class AuthorizationFailedException(string message) : Exception(message)
