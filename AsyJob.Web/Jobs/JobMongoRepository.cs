@@ -30,7 +30,7 @@ namespace AsyJob.Web.Jobs
         {
             var connectionString = _config.GetConnectionString("MongoDB");
             var client = new MongoClient(connectionString);
-            return client.GetDatabase("asyJob").GetCollection<Job>("jobs");
+            return client.GetDatabase(_config["DatabaseName"] ?? "asyJob").GetCollection<Job>("jobs");
         }
 
         public async Task<IEnumerable<Job>> FetchAllJobs()

@@ -96,7 +96,7 @@ internal partial class Program
             MongoDbSettings = new MongoDbSettings
             {
                 ConnectionString = builder.Configuration.GetConnectionString("MongoDB")!,
-                DatabaseName = "asyJob"
+                DatabaseName = builder.Configuration["DatabaseName"] ?? "asyJob"
             },
             IdentityOptionsAction = options =>
             {
