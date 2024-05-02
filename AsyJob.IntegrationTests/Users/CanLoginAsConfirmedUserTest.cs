@@ -13,32 +13,12 @@ using System.Threading.Tasks;
 
 namespace AsyJob.IntegrationTests.Users
 {
-    internal class UserRegistrationTests
+    internal class CanLoginAsConfirmedUserTest
     {
         private readonly WebApplicationTestFactory<Program> _webAppFactory = new();
 
         [Test]
-        public async Task RegisterUser_NotConfirmed_ShouldNotBeAbleToLogin()
-        {
-            //Arrange
-            var sut = _webAppFactory.CreateClient();
-            //Act
-            await sut.PostAsJsonAsync("/register", new
-            {
-                Email = "username@email.com",
-                Password = "MyPassword-123"
-            });
-            var loginResponse = await sut.PostAsJsonAsync("/login", new
-            {
-                Email = "username@email.com",
-                Password = "PyPassword-123"
-            });
-            //Assert
-            Assert.That(loginResponse.StatusCode, Is.EqualTo(HttpStatusCode.Unauthorized));
-        }
-
-        [Test]
-        public async Task RegisterUser_ConfirmedByAdmin_ShouldBeAbleToLogin()
+        public async Task UserRegisters_IsConfirmedByAdmin_ShouldBeAbleToLogin()
         {
             //Arrange
             var sut = _webAppFactory.CreateClient();
