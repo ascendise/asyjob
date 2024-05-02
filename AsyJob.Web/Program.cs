@@ -80,6 +80,7 @@ internal partial class Program
         //Tell BsonMapper which Subtypes for Job exist for deserialization
         //https://stackoverflow.com/a/24344620/10281237
         //TODO: Load all jobs dynamically
+        var map = BsonClassMap.GetRegisteredClassMaps();
         BsonClassMap.RegisterClassMap<Job>();
         BsonClassMap.RegisterClassMap<DiceRollJob>();
         BsonClassMap.RegisterClassMap<TimerJob>();

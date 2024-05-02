@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace AsyJob.IntegrationTests.Users
 {
-    internal class CanLoginAsConfirmedUserTest
+    internal class CanLoginAsConfirmedUserTest : DefaultIntegrationTestHarness
     {
         private readonly WebApplicationTestFactory<Program> _webAppFactory = new();
 
