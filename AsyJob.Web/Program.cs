@@ -19,11 +19,13 @@ using AsyJob.Web.Jobs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using MongoDB.Bson.Serialization;
+using MongoDB.Driver;
 using System.Security.Claims;
 using User = AsyJob.Web.Auth.User;
 
 internal partial class Program
 {
+    private static int i = 2;
     private static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
@@ -77,15 +79,27 @@ internal partial class Program
         builder.Services.AddHostedService<JobPoolBackgroundService>();
 
         //MongoDB
+        builder.Services.AddTransient(sp =>
+        {
+            var config = sp.GetRequiredService<IConfiguration>();
+            var connectionString = config.GetConnectionString("MongoDB");
+            var client = new MongoClient(connectionString);
+            return client.GetDatabase("asyJob");
+        });
         //Tell BsonMapper which Subtypes for Job exist for deserialization
         //https://stackoverflow.com/a/24344620/10281237
         //TODO: Load all jobs dynamically
         var map = BsonClassMap.GetRegisteredClassMaps();
-        BsonClassMap.RegisterClassMap<Job>();
-        BsonClassMap.RegisterClassMap<DiceRollJob>();
-        BsonClassMap.RegisterClassMap<TimerJob>();
-        BsonClassMap.RegisterClassMap<RNGJob>();
-        BsonClassMap.RegisterClassMap<CounterJob>();
+        //FIXME: Hack for getting integration tests to work.
+        //Find way to add this information by injecting it into the MongoClient or something
+        if(!map.Any())
+        {
+            BsonClassMap.RegisterClassMap<Job>();
+            BsonClassMap.RegisterClassMap<DiceRollJob>();
+            BsonClassMap.RegisterClassMap<TimerJob>();
+            BsonClassMap.RegisterClassMap<RNGJob>();
+            BsonClassMap.RegisterClassMap<CounterJob>();
+        }
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();

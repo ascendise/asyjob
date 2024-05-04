@@ -9,9 +9,9 @@ namespace AsyJob.Web.Jobs
     /// Repository for persisting jobs using the MongoDB.Driver
     /// </summary>
     /// <param name="config"></param>
-    public class JobMongoRepository(IConfiguration config) : IJobRepository
+    public class JobMongoRepository(IMongoDatabase database) : IJobRepository
     {
-        private readonly IConfiguration _config = config;
+        private readonly IMongoDatabase _database = database;
 
         public async Task SaveJob(Job job)
         {
@@ -26,12 +26,8 @@ namespace AsyJob.Web.Jobs
             }
         }
 
-        private IMongoCollection<Job> GetJobCollection()
-        {
-            var connectionString = _config.GetConnectionString("MongoDB");
-            var client = new MongoClient(connectionString);
-            return client.GetDatabase(_config["DatabaseName"] ?? "asyJob").GetCollection<Job>("jobs");
-        }
+        private IMongoCollection<Job> GetJobCollection() 
+            => _database.GetCollection<Job>("jobs");
 
         public async Task<IEnumerable<Job>> FetchAllJobs()
         {
