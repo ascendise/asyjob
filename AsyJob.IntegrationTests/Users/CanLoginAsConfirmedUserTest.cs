@@ -20,14 +20,14 @@ namespace AsyJob.IntegrationTests.Users
         [Test]
         public async Task UserRegisters_IsConfirmedByAdmin_ShouldBeAbleToLogin()
         {
-            //Arrange
             var sut = _webAppFactory.CreateClient();
-            //Act + Assert
+            //Register new user
             await sut.PostAsJsonAsync("/register", new
             {
                 Email = "username@email.com",
                 Password = "MyPassword-123"
             });
+            //Login as admin
             var adminLoginResponse = await sut.PostAsJsonAsync("/login", new
             {
                 Email = "admin",
@@ -36,15 +36,19 @@ namespace AsyJob.IntegrationTests.Users
             Assert.That(adminLoginResponse.IsSuccessStatusCode, "Failed to login admin");
             var adminToken = await adminLoginResponse.ReadProperty(o => (string)o.accessToken);
             sut.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", adminToken);
+            //Fetch unconfirmed user
+            //expecting it to include our newly registered User
             var unconfirmedUsersResponse = await sut.GetAsync("/api/users/unconfirmed");
             var registeredUser = JsonConvert.DeserializeObject<IEnumerable<UnconfirmedUserResponse>>(
                 await unconfirmedUsersResponse.Content.ReadAsStringAsync())
                 ?.Single();
+            //Confirm user through link
             var confirmResponse = await sut.PostAsJsonAsync(registeredUser?.Links?.Confirm!.Href, new
             {
                 Rights = Array.Empty<object>()
             });
             Assert.That(confirmResponse.IsSuccessStatusCode, "Failed to confirm user");
+            //Try login as new user
             var loginResponse = await sut.PostAsJsonAsync("/login", new
             {
                 Email = "username@email.com",

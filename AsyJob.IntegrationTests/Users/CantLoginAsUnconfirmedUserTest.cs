@@ -20,20 +20,19 @@ namespace AsyJob.IntegrationTests.Users
         [Test]
         public async Task RegisterUser_NotConfirmed_ShouldNotBeAbleToLogin()
         {
-            //Arrange
             var sut = _webAppFactory.CreateClient();
-            //Act
+            //Register new user
             await sut.PostAsJsonAsync("/register", new
             {
                 Email = "username@email.com",
                 Password = "MyPassword-123"
             });
+            //Try to login with new user without being confirmed
             var loginResponse = await sut.PostAsJsonAsync("/login", new
             {
                 Email = "username@email.com",
                 Password = "PyPassword-123"
             });
-            //Assert
             Assert.That(loginResponse.StatusCode, Is.EqualTo(HttpStatusCode.Unauthorized));
         }
     }
