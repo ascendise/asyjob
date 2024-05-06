@@ -17,12 +17,12 @@ namespace AsyJob.Web
             Links.Add("docs", LinkBuilder.New("swagger/index.html")
                 .SetType(MediaTypeNames.Text.Html)
                 .Build());
-            Links.Add("register", LinkBuilder.New("/api/register")
+            Links.Add("register", LinkBuilder.New("register")
                 .Build());
-            Links.Add("login", LinkBuilder.New("/api/login")
+            Links.Add("login", LinkBuilder.New("login")
                 .Build());
             Links.Add("jobs", LinkBuilder.New()
-                .FromController(typeof(JobController), nameof(JobController.FetchJob))
+                .FromController(typeof(JobController), nameof(JobController.RunJob))
                 .Build());
             Links.Add("users", LinkBuilder.New()
                 .FromController(typeof(UsersController), nameof(UsersController.GetUsers))

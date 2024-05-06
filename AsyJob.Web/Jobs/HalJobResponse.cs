@@ -43,7 +43,10 @@ namespace AsyJob.Web.Jobs
         private void AddDefaultLinks()
         {
             Links.Add("jobs", LinkBuilder.New()
-                .FromController(typeof(JobController), nameof(JobController.FetchJob))
+                .FromController(typeof(JobController), nameof(JobController.RunJob))
+                .Build());
+            Links.Add("self", LinkBuilder.New()
+                .FromController(typeof(JobController), nameof(JobController.FetchJob), new() { { "jobId", Id } })
                 .Build());
         }
     }

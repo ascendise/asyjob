@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using Amazon.Runtime.Internal;
+using Microsoft.CSharp.RuntimeBinder;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,11 +11,12 @@ namespace AsyJob.IntegrationTests
 {
     internal static class HttpResponseMessageTestUtils
     {
-        public static async Task<T?> ReadProperty<T>(this HttpResponseMessage message, Func<dynamic, T> func)
+        public static async Task<T?> ReadProperty<T>(this HttpResponseMessage message, string key) where T : class
         {
-            dynamic response = JsonConvert.DeserializeObject(await message.Content.ReadAsStringAsync()) 
+            var response = JObject.Parse(await message.Content.ReadAsStringAsync())
                 ?? throw new ArgumentException("Response has no body");
-            return func(response);
+            var value = response[key];
+            return value?.ToObject<T?>();
         }
     }
 }

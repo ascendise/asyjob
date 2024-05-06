@@ -34,7 +34,7 @@ namespace AsyJob.IntegrationTests.Users
                 Password = "HiMom-123"
             });
             Assert.That(adminLoginResponse.IsSuccessStatusCode, "Failed to login admin");
-            var adminToken = await adminLoginResponse.ReadProperty(o => (string)o.accessToken);
+            var adminToken = await adminLoginResponse.ReadProperty<string>("accessToken");
             sut.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", adminToken);
             //Fetch unconfirmed user
             //expecting it to include our newly registered User

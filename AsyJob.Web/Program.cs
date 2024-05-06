@@ -84,7 +84,7 @@ internal partial class Program
             var config = sp.GetRequiredService<IConfiguration>();
             var connectionString = config.GetConnectionString("MongoDB");
             var client = new MongoClient(connectionString);
-            return client.GetDatabase("asyJob");
+            return client.GetDatabase(config["DatabaseName"]);
         });
         //Tell BsonMapper which Subtypes for Job exist for deserialization
         //https://stackoverflow.com/a/24344620/10281237

@@ -15,10 +15,22 @@ namespace AsyJob.IntegrationTests
     /// </summary>
     internal class DefaultIntegrationTestHarness
     {
+        protected IConfiguration Configuration { get; private set; }
+
+        public DefaultIntegrationTestHarness()
+        {
+            Configuration = GetConfiguration();
+        }
+
+        private static IConfiguration GetConfiguration() => new ConfigurationBuilder()
+                .AddJsonFile("appsettings.Tests.json")
+                .Build();
+
         [SetUp]
-        public void SetUp() 
+        public virtual Task SetUp() 
         {
             ClearDatabase();
+            return Task.CompletedTask;
         }
 
         private void ClearDatabase()
@@ -32,23 +44,19 @@ namespace AsyJob.IntegrationTests
             }
         }
 
-        private static IMongoDatabase ConnectToDatabase()
+        private IMongoDatabase ConnectToDatabase()
         {
-            var config = GetConfiguration();
-            var connectionString = config.GetConnectionString("MongoDB");
+            var connectionString = Configuration.GetConnectionString("MongoDB");
             var client = new MongoClient(connectionString);
-            var database = config["DatabaseName"];
+            var database = Configuration["DatabaseName"];
             return client.GetDatabase(database);
         }
 
-        private static IConfiguration GetConfiguration() => new ConfigurationBuilder()
-                .AddJsonFile("appsettings.Tests.json")
-                .Build();
-
         [TearDown]
-        public void TearDown() 
+        public virtual Task TearDown() 
         {
             ClearDatabase();
+            return Task.CompletedTask;
         }
     }
 }
