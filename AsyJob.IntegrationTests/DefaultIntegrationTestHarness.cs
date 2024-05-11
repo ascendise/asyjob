@@ -10,15 +10,35 @@ using System.Threading.Tasks;
 namespace AsyJob.IntegrationTests
 {
     /// <summary>
-    /// Test harness that handles general cleanup between tests.
-    /// For example: Removes all collections created between test runs
+    /// Test harness that handles running all SetUp/TearDown tasks
     /// </summary>
-    internal class DefaultIntegrationTestHarness(IEnumerable<ISetUp>? setUps = null, IEnumerable<ITearDown>? tearDowns = null)
+    /// <remarks>The test assumes that there is ONE test run in the class</remarks>
+    internal class DefaultIntegrationTestHarness
     {
         protected IConfiguration Configuration { get; private set; } = GetConfiguration();
 
-        private readonly IEnumerable<ISetUp> _setUps = setUps ?? [];
-        private readonly IEnumerable<ITearDown> _tearDowns = tearDowns ?? [];
+        private readonly List<ISetUp> _setUps = [];
+        private readonly List<ITearDown> _tearDowns = [];
+
+        public DefaultIntegrationTestHarness(IEnumerable<ISetUp>? setUps = null, IEnumerable<ITearDown>? tearDowns = null)
+        {
+            ConfigureSetUp(setUps);
+            ConfigureTearDown(tearDowns);
+        }
+
+        private void ConfigureSetUp(IEnumerable<ISetUp>? setUps)
+        {
+            _setUps.Add(new ClearMongoDbSetUpTearDown(Configuration));
+            if (setUps is not null)
+                _setUps.AddRange(setUps);
+        }
+
+        private void ConfigureTearDown(IEnumerable<ITearDown>? tearDowns)
+        {
+            _tearDowns.Add(new ClearMongoDbSetUpTearDown(Configuration));
+            if (tearDowns is not null)
+                _tearDowns.AddRange(tearDowns);
+        }
 
         private static IConfiguration GetConfiguration() 
             => new ConfigurationBuilder()
@@ -32,26 +52,6 @@ namespace AsyJob.IntegrationTests
             {
                 await setUp.SetUp();
             }
-            ClearDatabase();
-        }
-
-        private void ClearDatabase()
-        {
-            var database = ConnectToDatabase();
-            var collectionsCursor = database.ListCollectionNames();
-            while(collectionsCursor.MoveNext())
-            {
-                foreach (var  collection in collectionsCursor.Current)
-                    database.DropCollection(collection);
-            }
-        }
-
-        private IMongoDatabase ConnectToDatabase()
-        {
-            var connectionString = Configuration.GetConnectionString("MongoDB");
-            var client = new MongoClient(connectionString);
-            var database = Configuration["DatabaseName"];
-            return client.GetDatabase(database);
         }
 
         [TearDown]
@@ -61,7 +61,6 @@ namespace AsyJob.IntegrationTests
             {
                 await tearDown.TearDown();
             }
-            ClearDatabase();
         }
     }
 }
