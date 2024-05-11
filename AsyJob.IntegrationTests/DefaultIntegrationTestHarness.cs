@@ -13,24 +13,26 @@ namespace AsyJob.IntegrationTests
     /// Test harness that handles general cleanup between tests.
     /// For example: Removes all collections created between test runs
     /// </summary>
-    internal class DefaultIntegrationTestHarness
+    internal class DefaultIntegrationTestHarness(IEnumerable<ISetUp>? setUps = null, IEnumerable<ITearDown>? tearDowns = null)
     {
-        protected IConfiguration Configuration { get; private set; }
+        protected IConfiguration Configuration { get; private set; } = GetConfiguration();
 
-        public DefaultIntegrationTestHarness()
-        {
-            Configuration = GetConfiguration();
-        }
+        private readonly IEnumerable<ISetUp> _setUps = setUps ?? [];
+        private readonly IEnumerable<ITearDown> _tearDowns = tearDowns ?? [];
 
-        private static IConfiguration GetConfiguration() => new ConfigurationBuilder()
+        private static IConfiguration GetConfiguration() 
+            => new ConfigurationBuilder()
                 .AddJsonFile("appsettings.Tests.json")
                 .Build();
 
         [SetUp]
-        public virtual Task SetUp() 
+        public async virtual Task SetUp() 
         {
+            foreach(var setUp in _setUps)
+            {
+                await setUp.SetUp();
+            }
             ClearDatabase();
-            return Task.CompletedTask;
         }
 
         private void ClearDatabase()
@@ -53,10 +55,13 @@ namespace AsyJob.IntegrationTests
         }
 
         [TearDown]
-        public virtual Task TearDown() 
+        public async virtual Task TearDown() 
         {
+            foreach(var tearDown in _tearDowns)
+            {
+                await tearDown.TearDown();
+            }
             ClearDatabase();
-            return Task.CompletedTask;
         }
     }
 }
