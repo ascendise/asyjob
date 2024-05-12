@@ -1,4 +1,5 @@
-﻿using AsyJob.Web.Auth;
+﻿using AsyJob.IntegrationTests.TestHarness;
+using AsyJob.Web.Auth;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AsyJob.IntegrationTests
+namespace AsyJob.IntegrationTests.TestHarness
 {
     /// <summary>
     /// SetUp routine that fetches the Sitemap used to get the links for the test

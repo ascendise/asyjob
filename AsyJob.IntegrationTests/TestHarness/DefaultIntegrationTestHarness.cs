@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AsyJob.IntegrationTests
+namespace AsyJob.IntegrationTests.TestHarness
 {
     /// <summary>
     /// Test harness that handles running all SetUp/TearDown tasks
@@ -49,24 +49,24 @@ namespace AsyJob.IntegrationTests
             _systemUnderTestSetUp.SetUp();
         }
 
-        private static IConfiguration GetConfiguration() 
+        private static IConfiguration GetConfiguration()
             => new ConfigurationBuilder()
                 .AddJsonFile("appsettings.Tests.json")
                 .Build();
 
         [SetUp]
-        public async virtual Task SetUp() 
+        public async virtual Task SetUp()
         {
-            foreach(var setUp in SetUps)
+            foreach (var setUp in SetUps)
             {
                 await setUp.SetUp();
             }
         }
 
         [TearDown]
-        public async virtual Task TearDown() 
+        public async virtual Task TearDown()
         {
-            foreach(var tearDown in TearDowns)
+            foreach (var tearDown in TearDowns)
             {
                 await tearDown.TearDown();
             }

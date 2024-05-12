@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AsyJob.IntegrationTests
+namespace AsyJob.IntegrationTests.TestHarness
 {
     internal class ClearMongoDbSetUpTearDown(IConfiguration configuration) : ISetUp, ITearDown
     {
@@ -22,9 +22,9 @@ namespace AsyJob.IntegrationTests
         {
             var database = ConnectToDatabase();
             var collectionsCursor = database.ListCollectionNames();
-            while(collectionsCursor.MoveNext())
+            while (collectionsCursor.MoveNext())
             {
-                foreach (var  collection in collectionsCursor.Current)
+                foreach (var collection in collectionsCursor.Current)
                     database.DropCollection(collection);
             }
         }

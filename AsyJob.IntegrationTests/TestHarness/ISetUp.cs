@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AsyJob.IntegrationTests
+namespace AsyJob.IntegrationTests.TestHarness
 {
     /// <summary>
     /// Responsible for running a SetUp task before an integration test is run

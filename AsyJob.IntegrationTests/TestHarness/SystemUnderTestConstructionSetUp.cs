@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AsyJob.IntegrationTests
+namespace AsyJob.IntegrationTests.TestHarness
 {
     internal class SystemUnderTestConstructionSetUp : ISetUp
     {
