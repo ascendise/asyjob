@@ -16,28 +16,37 @@ namespace AsyJob.IntegrationTests
     internal class DefaultIntegrationTestHarness
     {
         protected IConfiguration Configuration { get; private set; } = GetConfiguration();
+        protected HttpClient Sut { get => _systemUnderTestSetUp.Sut; }
+        protected List<ISetUp> SetUps { get; private set; } = [];
+        protected List<ITearDown> TearDowns { get; private set; } = [];
 
-        private readonly List<ISetUp> _setUps = [];
-        private readonly List<ITearDown> _tearDowns = [];
+        private readonly ClearMongoDbSetUpTearDown _clearDbSetUp = new(GetConfiguration());
+        private readonly SystemUnderTestConstructionSetUp _systemUnderTestSetUp = new();
 
         public DefaultIntegrationTestHarness(IEnumerable<ISetUp>? setUps = null, IEnumerable<ITearDown>? tearDowns = null)
         {
             ConfigureSetUp(setUps);
             ConfigureTearDown(tearDowns);
+            PreSetUpConfiguration();
         }
 
         private void ConfigureSetUp(IEnumerable<ISetUp>? setUps)
         {
-            _setUps.Add(new ClearMongoDbSetUpTearDown(Configuration));
             if (setUps is not null)
-                _setUps.AddRange(setUps);
+                SetUps.AddRange(setUps);
         }
 
         private void ConfigureTearDown(IEnumerable<ITearDown>? tearDowns)
         {
-            _tearDowns.Add(new ClearMongoDbSetUpTearDown(Configuration));
+            TearDowns.Add(_clearDbSetUp);
             if (tearDowns is not null)
-                _tearDowns.AddRange(tearDowns);
+                TearDowns.AddRange(tearDowns);
+        }
+
+        private void PreSetUpConfiguration()
+        {
+            _clearDbSetUp.SetUp();
+            _systemUnderTestSetUp.SetUp();
         }
 
         private static IConfiguration GetConfiguration() 
@@ -48,7 +57,7 @@ namespace AsyJob.IntegrationTests
         [SetUp]
         public async virtual Task SetUp() 
         {
-            foreach(var setUp in _setUps)
+            foreach(var setUp in SetUps)
             {
                 await setUp.SetUp();
             }
@@ -57,7 +66,7 @@ namespace AsyJob.IntegrationTests
         [TearDown]
         public async virtual Task TearDown() 
         {
-            foreach(var tearDown in _tearDowns)
+            foreach(var tearDown in TearDowns)
             {
                 await tearDown.TearDown();
             }

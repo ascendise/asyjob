@@ -18,8 +18,15 @@ namespace AsyJob.IntegrationTests.Jobs
     {
         private static readonly string[] s_jobRights = ["Jobs_rwx"];
 
-        private HttpClient _sut = null!;
-        private SitemapResponse _sitemap = null!;
+        private readonly SitemapSetUp _sitemapSetUp;
+        private SitemapResponse Sitemap { get => _sitemapSetUp.Sitemap; }
+
+
+        public RunAJobAndPollForResponseTest() : base()
+        {
+            _sitemapSetUp = new(Sut);
+            SetUps.Add(_sitemapSetUp);
+        }
 
         /// <summary>
         /// Register and confirm new user for running the test
@@ -28,14 +35,8 @@ namespace AsyJob.IntegrationTests.Jobs
         public override async Task SetUp()
         {
             await base.SetUp();
-            _sut = new WebApplicationTestFactory<Program>().CreateClient();
-            var sitemapResponse = await _sut.GetAsync("api");
-            Assert.That(sitemapResponse.IsSuccessStatusCode, Is.True, "Failed to fetch Sitemap");
-            var sitemap = JsonConvert.DeserializeObject<SitemapResponse>(await sitemapResponse.Content.ReadAsStringAsync());
-            Assert.That(sitemap, Is.Not.Null, "Sitemap response is empty");
-            _sitemap = sitemap!;
             //Register user
-            var registerResponse = await _sut.PostAsJsonAsync(_sitemap.Links.Register.Href, new
+            var registerResponse = await Sut.PostAsJsonAsync(Sitemap.Links.Register.Href, new
             {
                 Email = "user@mail.com",
                 Password = "HiMom-123"
@@ -43,22 +44,22 @@ namespace AsyJob.IntegrationTests.Jobs
             Assert.That(registerResponse.IsSuccessStatusCode, "Failed to register new user");
             //Login as admin
             var adminConfig = Configuration.GetSection("Admin");
-            var adminLoginResponse = await _sut.PostAsJsonAsync(_sitemap.Links.Login.Href, new
+            var adminLoginResponse = await Sut.PostAsJsonAsync(Sitemap.Links.Login.Href, new
             {
                 Email = adminConfig["Username"],
                 Password = adminConfig["Password"]
             });
             Assert.That(adminLoginResponse.IsSuccessStatusCode, "Failed to login as admin for user confirmation");
             var accessToken = await adminLoginResponse.ReadProperty<string>("accessToken");
-            _sut.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            Sut.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             //Get unconfirmed user
-            var unconfirmedUsersResponse = await _sut.GetAsync(_sitemap.Links.UnconfirmedUsers.Href);
+            var unconfirmedUsersResponse = await Sut.GetAsync(Sitemap.Links.UnconfirmedUsers.Href);
             Assert.That(unconfirmedUsersResponse.IsSuccessStatusCode, "Failed to confirm user");
             var unconfirmedUsers = JsonConvert.DeserializeObject<IEnumerable<UnconfirmedUserResponse>>(await unconfirmedUsersResponse.Content.ReadAsStringAsync());
             Assert.That(unconfirmedUsers, Is.Not.Null, "No unconfirmed users found");
             var unconfirmedUser = unconfirmedUsers.Single();
             //Confirm user
-            var confirmResponse = await _sut.PostAsJsonAsync(unconfirmedUser.Links.Confirm.Href, new
+            var confirmResponse = await Sut.PostAsJsonAsync(unconfirmedUser.Links.Confirm.Href, new
             {
                 Rights = s_jobRights
             });
@@ -69,15 +70,15 @@ namespace AsyJob.IntegrationTests.Jobs
         public async Task LoginAsUser_RunACounterJob_PollForTheResponseUntilItIsFinished()
         {
             //Login as user
-            var loginResponse = await _sut.PostAsJsonAsync(_sitemap.Links.Login.Href, new
+            var loginResponse = await Sut.PostAsJsonAsync(Sitemap.Links.Login.Href, new
             {
                 Email = "user@mail.com",
                 Password = "HiMom-123"
             });
             Assert.That(loginResponse.IsSuccessStatusCode, "Failed to login as created user");
-            _sut.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await loginResponse.ReadProperty<string>("accessToken"));
+            Sut.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await loginResponse.ReadProperty<string>("accessToken"));
             //Run new job
-            var jobResponse = await _sut.PostAsJsonAsync(_sitemap.Links.Jobs.Href, new JobRequest(
+            var jobResponse = await Sut.PostAsJsonAsync(Sitemap.Links.Jobs.Href, new JobRequest(
                 jobtype: "CounterJob",
                 name: "My Counter Job",
                 description: "Test Counter Job",
@@ -95,7 +96,7 @@ namespace AsyJob.IntegrationTests.Jobs
             while (job.ProgressStatus != "Done" && job.ProgressStatus != "Error")
             {
                 await Task.Delay(100);
-                var pollJobResponse = await _sut.GetAsync(job.Links.Self.Href);
+                var pollJobResponse = await Sut.GetAsync(job.Links.Self.Href);
                 var s = pollJobResponse.Content.ReadAsStringAsync();
                 job = JsonConvert.DeserializeObject<JobResponse>(await pollJobResponse.Content.ReadAsStringAsync());
             }
