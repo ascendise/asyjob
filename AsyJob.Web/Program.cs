@@ -25,7 +25,7 @@ using User = AsyJob.Web.Auth.User;
 
 internal partial class Program
 {
-    private static int i = 2;
+    private static readonly int i = 2;
     private static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
@@ -92,7 +92,7 @@ internal partial class Program
         var map = BsonClassMap.GetRegisteredClassMaps();
         //FIXME: Hack for getting integration tests to work.
         //Find way to add this information by injecting it into the MongoClient or something
-        if(!map.Any())
+        if (!map.Any())
         {
             BsonClassMap.RegisterClassMap<Job>();
             BsonClassMap.RegisterClassMap<DiceRollJob>();

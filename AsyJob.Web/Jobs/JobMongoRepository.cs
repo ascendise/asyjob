@@ -26,7 +26,7 @@ namespace AsyJob.Web.Jobs
             }
         }
 
-        private IMongoCollection<Job> GetJobCollection() 
+        private IMongoCollection<Job> GetJobCollection()
             => _database.GetCollection<Job>("jobs");
 
         public async Task<IEnumerable<Job>> FetchAllJobs()

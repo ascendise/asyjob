@@ -13,11 +13,11 @@ namespace AsyJob.IntegrationTests
         [property: JsonProperty("_links")] SitemapLinks Links);
 
     internal record SitemapLinks(
-        Link Docs, 
-        Link Register, 
+        Link Docs,
+        Link Register,
         Link Login,
-        Link Jobs, 
-        Link Users, 
+        Link Jobs,
+        Link Users,
         Link UnconfirmedUsers);
 }
 

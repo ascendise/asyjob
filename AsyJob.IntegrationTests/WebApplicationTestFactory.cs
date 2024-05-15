@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace AsyJob.IntegrationTests
 {
-    internal class WebApplicationTestFactory<T> : WebApplicationFactory<T> where T : class    
+    internal class WebApplicationTestFactory<T> : WebApplicationFactory<T> where T : class
     {
         protected override IHost CreateHost(IHostBuilder builder)
         {

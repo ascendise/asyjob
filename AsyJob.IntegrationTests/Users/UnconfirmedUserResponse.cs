@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 namespace AsyJob.IntegrationTests.Users
 {
     internal record UnconfirmedUserResponse(
-        Guid Id, 
-        string Username, 
-        IEnumerable<string> Rights, 
+        Guid Id,
+        string Username,
+        IEnumerable<string> Rights,
         [property: JsonProperty("_links")] UnconfirmedUserLinks Links);
 }

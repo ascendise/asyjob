@@ -9,7 +9,7 @@ namespace AsyJob.Web.HAL
         public Link? this[string index]
         {
             get => Find(index);
-            set => Add(index, value ?? throw new ArgumentException("Link cannot ben null")); 
+            set => Add(index, value ?? throw new ArgumentException("Link cannot ben null"));
         }
 
         public IEnumerator<KeyValuePair<string, Link>> GetEnumerator()
