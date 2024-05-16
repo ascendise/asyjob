@@ -44,7 +44,7 @@ namespace AsyJob.Web.Auth
             return _userToHalMapper.Map(result);
         }
 
-        [HttpGet("/unconfirmed")]
+        [HttpGet("unconfirmed")]
         [HasRights("Users_r")]
         public Task<IEnumerable<HalUserResponse>> GetUnconfirmedUsers()
         {
@@ -54,7 +54,7 @@ namespace AsyJob.Web.Auth
             return Task.FromResult(response.AsEnumerable());
         }
 
-        [HttpPost("/unconfirmed/{userId}/confirm")]
+        [HttpPost("unconfirmed/{userId}/confirm")]
         [HasRights("Users_w")]
         public async Task<ActionResult> ConfirmUser(Guid userId, ConfirmUserRequest request)
         {

@@ -11,8 +11,7 @@ namespace AsyJob.Web
     {
         public static async Task AddAdminUser(this IApplicationBuilder appBuilder)
         {
-            using var scope = appBuilder.ApplicationServices.CreateScope();
-            var sp = scope.ServiceProvider;
+            using var scope = appBuilder.ApplicationServices.CreateScope(); var sp = scope.ServiceProvider;
             var config = sp.GetRequiredService<IConfiguration>();
             var adminConfig = new AdminConfig();
             config.GetSection("Admin").Bind(adminConfig);
