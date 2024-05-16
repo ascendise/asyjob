@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>AsyJob: Member List</title>
+<title>AsyJob: AsyJob.IntegrationTests.TestHarness Namespace Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -61,23 +61,33 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="namespaceAsyJob.html">AsyJob</a></li><li class="navelem"><a class="el" href="namespaceAsyJob_1_1Web.html">Web</a></li><li class="navelem"><a class="el" href="namespaceAsyJob_1_1Web_1_1HAL.html">HAL</a></li><li class="navelem"><a class="el" href="classAsyJob_1_1Web_1_1HAL_1_1Links.html">Links</a></li>  </ul>
+<li class="navelem"><a class="el" href="namespaceAsyJob.html">AsyJob</a></li><li class="navelem"><a class="el" href="namespaceAsyJob_1_1IntegrationTests.html">IntegrationTests</a></li><li class="navelem"><a class="el" href="namespaceAsyJob_1_1IntegrationTests_1_1TestHarness.html">TestHarness</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
+  <div class="summary">
+<a href="#nested-classes">Classes</a>  </div>
   <div class="headertitle">
-<div class="title">AsyJob.Web.HAL.Links Member List</div>  </div>
+<div class="title">AsyJob.IntegrationTests.TestHarness Namespace Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p>This is the complete list of members for <a class="el" href="classAsyJob_1_1Web_1_1HAL_1_1Links.html">AsyJob.Web.HAL.Links</a>, including all inherited members.</p>
-<table class="directory">
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>Add</b>(string resource, Link link) (defined in <a class="el" href="classAsyJob_1_1Web_1_1HAL_1_1Links.html">AsyJob.Web.HAL.Links</a>)</td><td class="entry"><a class="el" href="classAsyJob_1_1Web_1_1HAL_1_1Links.html">AsyJob.Web.HAL.Links</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>Find</b>(string linkName) (defined in <a class="el" href="classAsyJob_1_1Web_1_1HAL_1_1Links.html">AsyJob.Web.HAL.Links</a>)</td><td class="entry"><a class="el" href="classAsyJob_1_1Web_1_1HAL_1_1Links.html">AsyJob.Web.HAL.Links</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>GetEnumerator</b>() (defined in <a class="el" href="classAsyJob_1_1Web_1_1HAL_1_1Links.html">AsyJob.Web.HAL.Links</a>)</td><td class="entry"><a class="el" href="classAsyJob_1_1Web_1_1HAL_1_1Links.html">AsyJob.Web.HAL.Links</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>Remove</b>(string linkName) (defined in <a class="el" href="classAsyJob_1_1Web_1_1HAL_1_1Links.html">AsyJob.Web.HAL.Links</a>)</td><td class="entry"><a class="el" href="classAsyJob_1_1Web_1_1HAL_1_1Links.html">AsyJob.Web.HAL.Links</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>this[string index]</b> (defined in <a class="el" href="classAsyJob_1_1Web_1_1HAL_1_1Links.html">AsyJob.Web.HAL.Links</a>)</td><td class="entry"><a class="el" href="classAsyJob_1_1Web_1_1HAL_1_1Links.html">AsyJob.Web.HAL.Links</a></td><td class="entry"></td></tr>
-</table></div><!-- contents -->
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><b>DefaultIntegrationTestHarness</b></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test harness that handles running all SetUp/TearDown tasks <br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><b>ISetUp</b></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Responsible for running a SetUp task before an integration test is run <br  />
+ Any non-nullable properties may only be initialized after SetUp is run. To avoid NullReferenceException only access properties inside your test <br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><b>ITearDown</b></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Responsible for running a TearDown task before an integration test is run <br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><b>SystemUnderTestConstructionSetUp</b></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
