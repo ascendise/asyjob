@@ -1,4 +1,4 @@
-name: Build and test project
+name: Run integration tests
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build-test:
+  integration-test:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -23,5 +23,8 @@ jobs:
       uses: supercharge/mongodb-github-action@1.10.0
       with:
         mongodb-version: 7.0
+        mongodb-username: root
+        mongodb-password: root
+        mongodb-db: asyJob_test
     - name: Test
       run: dotnet test --no-build --verbosity normal --filter FullyQualifiedName~IntegrationTests
